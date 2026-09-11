@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto &amp; Asesoría Técnica — Comercializadora EL VECINO</title>
+  <meta name="description" content="Conecta directamente con nuestros ingenieros de equipamiento, cotizaciones por lotes y confirmación de cubicaje técnico.">
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-obsidian': '#0A0A0A',
+            'electric-blue': '#0800FF',
+            'neon-magenta': '#FF00A8',
+            'whatsapp-green': '#25D366',
+            'slate-surface': '#F4F6FB',
+            'slate-border': '#E2E6EE'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../../index.css">
+  <link rel="stylesheet" href="../../../components/navbar/navbar.css">
+  <link rel="stylesheet" href="../../../components/footer/footer.css">
+  <link rel="stylesheet" href="../../../components/cart-modal/cart-modal.css">
+  <link rel="stylesheet" href="../../../components/toast/toast.css">
+  <link rel="stylesheet" href="./contacto.css">
+</head>
+<body class="bg-[#FCF8F8] font-['Plus_Jakarta_Sans'] text-[#1C1B1B] antialiased">
+  <div id="navbar-mount"></div>
+
+  <main class="pt-20">
+    <!-- Hero Section -->
+    <section class="contact-hero">
+      <div class="max-w-[80rem] mx-auto px-6">
+        <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+          <a href="../../../index.html" class="hover:text-electric-blue">Inicio</a>
+          <span>/</span>
+          <span class="font-bold text-deep-obsidian">Asesoría Técnica &amp; Despacho</span>
+        </div>
+
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 text-neon-magenta text-xs font-bold uppercase tracking-widest mb-3">
+            <span class="w-2 h-2 rounded-full bg-neon-magenta animate-ping"></span>
+            <span>Soporte Directo de Bodega Central</span>
+          </div>
+          <h1 class="font-['Outfit'] font-extrabold text-3xl md:text-5xl text-deep-obsidian tracking-tight leading-tight">
+            Conecta con Nuestros Ingenieros y Asesores de Equipamiento
+          </h1>
+          <p class="text-sm md:text-base text-gray-600 mt-3 leading-relaxed">
+            Cotizaciones inmediatas por lotes, verificación de cubicaje técnico para espacios exigentes, lectura de planos hidrosanitarios y eléctricos, y coordinación de visitas técnicas en sitio.
+          </p>
+        </div>
+
+        <!-- Metrics Strip -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-border">
+          <div class="bg-white p-4 rounded-xl border border-slate-border flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 text-electric-blue flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[22px]">timer</span>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold">Respuesta Rápida</div>
+              <div class="font-['Outfit'] font-bold text-sm text-deep-obsidian">&lt; 4 minutos</div>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-border flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 text-electric-blue flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[22px]">engineering</span>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold">En Planta</div>
+              <div class="font-['Outfit'] font-bold text-sm text-deep-obsidian">14 ingenieros activos</div>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-border flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 text-electric-blue flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[22px]">verified</span>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400 uppercase font-bold">Transparencia</div>
+              <div class="font-['Outfit'] font-bold text-sm text-deep-obsidian">Garantía y factura legal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Channels & Contact Form Grid -->
+    <section class="max-w-[80rem] mx-auto px-6 py-12 pb-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Direct Channels (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <!-- WhatsApp Priority Card (Dark Theme) -->
+          <div class="contact-card contact-card-dark">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-2.5 py-1 rounded-full bg-blue-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+                  EN VIVO • DISPONIBLE
+                </span>
+                <span class="material-symbols-outlined text-cyan-400 text-[28px]">chat</span>
+              </div>
+              <h3 class="font-['Outfit'] font-bold text-xl text-white">Canal Prioritario WhatsApp</h3>
+              <p class="text-xs text-gray-300 mt-2 leading-relaxed">
+                Atención directa sin bots intermedios. Envío de fichas técnicas en PDF, disponibilidad en stock central y pre-liquidación con IVA desglosado.
+              </p>
+            </div>
+            <a
+              href="https://wa.me/573001234567?text=¡Hola%20EL%20VECINO!%20Deseo%20conectar%20con%20un%20ingeniero%20comercial."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-card-quote h-12 text-sm justify-center shadow-lg"
+            >
+              <span class="material-symbols-outlined text-[20px]">send</span>
+              <span>Iniciar Chat Inmediato</span>
+            </a>
+          </div>
+
+          <!-- Bodega & Horarios Card -->
+          <div class="contact-card">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-electric-blue flex items-center justify-center mb-3">
+                <span class="material-symbols-outlined text-[22px]">warehouse</span>
+              </div>
+              <h3 class="font-['Outfit'] font-bold text-lg text-deep-obsidian">Centro Logístico &amp; Despacho</h3>
+              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                Salidas programadas lunes a sábado. Retiro en punto de distribución con cita previa y revisión física de sellos de seguridad.
+              </p>
+              <div class="mt-4 text-xs text-gray-700 space-y-1 font-medium">
+                <div><strong>Horario:</strong> Lunes a Sábado 8:00 AM – 7:00 PM</div>
+                <div><strong>Soporte Técnico:</strong> Disponible 24/7 vía WhatsApp</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form (7 cols) -->
+        <div class="lg:col-span-7 bg-white border border-slate-border rounded-3xl p-6 md:p-8 shadow-sm">
+          <div class="mb-6">
+            <span class="text-xs font-bold text-electric-blue uppercase tracking-widest">Mesa de Ayuda B2B</span>
+            <h2 class="font-['Outfit'] font-extrabold text-2xl text-deep-obsidian">
+              Envía tu Requerimiento Técnico
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">
+              Diligencia este formulario si requieres cotizar proyectos por lotes, dotación inmobiliaria o asesoría de cubicaje.
+            </p>
+          </div>
+
+          <form id="contactForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre Completo *</label>
+                <input
+                  type="text"
+                  id="contactName"
+                  required
+                  placeholder="Ej. Ing. Carlos Restrepo"
+                  class="w-full h-11 px-3 rounded-xl border border-slate-border text-sm outline-none focus:border-electric-blue transition-colors"
+                >
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">WhatsApp de Contacto *</label>
+                <input
+                  type="tel"
+                  id="contactPhone"
+                  required
+                  placeholder="Ej. +57 300 123 4567"
+                  class="w-full h-11 px-3 rounded-xl border border-slate-border text-sm outline-none focus:border-electric-blue transition-colors"
+                >
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Correo Corporativo</label>
+                <input
+                  type="email"
+                  id="contactEmail"
+                  placeholder="carlos@empresa.com"
+                  class="w-full h-11 px-3 rounded-xl border border-slate-border text-sm outline-none focus:border-electric-blue transition-colors"
+                >
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tipo de Solicitud</label>
+                <select
+                  id="contactServiceType"
+                  class="w-full h-11 px-3 rounded-xl border border-slate-border text-sm outline-none focus:border-electric-blue bg-white"
+                >
+                  <option value="cotizacion-lote">Cotización por Lote / Volumen</option>
+                  <option value="cubicaje">Asesoría de Medidas y Cubicaje</option>
+                  <option value="garantia">Soporte Técnico / Garantías</option>
+                  <option value="otro">Consulta Comercial General</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descripción del Requerimiento *</label>
+              <textarea
+                id="contactMessage"
+                required
+                rows="4"
+                placeholder="Indica referencias de interés, ciudad de despacho o detalles específicos de tu proyecto..."
+                class="w-full p-3 rounded-xl border border-slate-border text-sm outline-none focus:border-electric-blue resize-none transition-colors"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full h-12 rounded-xl bg-electric-blue hover:bg-blue-700 text-white font-['Outfit'] font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md"
+            >
+              <span class="material-symbols-outlined text-[20px]">send</span>
+              <span>Enviar Solicitud a Bodega Central</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="../../../js/config.js"></script>
+  <script src="../../../js/storage.js"></script>
+  <script src="../../../js/api.js"></script>
+  <script src="../../../js/service/auth.service.js"></script>
+  <script src="../../../js/service/order.service.js"></script>
+  <script src="./contacto.api.js"></script>
+  <script src="../../../components/toast/toast.js"></script>
+  <script src="../../../components/navbar/navbar.js"></script>
+  <script src="../../../components/footer/footer.js"></script>
+  <script src="../../../components/cart-modal/cart-modal.js"></script>
+  <script src="../../../js/main.js"></script>
+  <script src="./contacto.js"></script>
+</body>
+</html>

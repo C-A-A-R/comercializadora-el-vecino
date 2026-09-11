@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos Destacados &amp; Alta Demanda — Comercializadora EL VECINO</title>
+  <meta name="description" content="Descubre las referencias con mayor demanda, mejor calificación y rotación de bodega en Comercializadora El Vecino.">
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-obsidian': '#0A0A0A',
+            'electric-blue': '#0800FF',
+            'neon-magenta': '#FF00A8',
+            'whatsapp-green': '#25D366',
+            'slate-surface': '#F4F6FB',
+            'slate-border': '#E2E6EE'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../../index.css">
+  <link rel="stylesheet" href="../../../components/navbar/navbar.css">
+  <link rel="stylesheet" href="../../../components/footer/footer.css">
+  <link rel="stylesheet" href="../../../components/cart-modal/cart-modal.css">
+  <link rel="stylesheet" href="../../../components/toast/toast.css">
+  <link rel="stylesheet" href="../../../components/product/product-card.css">
+  <link rel="stylesheet" href="../../../components/product/product-modal.css">
+  <link rel="stylesheet" href="./destacados.css">
+</head>
+<body class="bg-[#FCF8F8] font-['Plus_Jakarta_Sans'] text-[#1C1B1B] antialiased">
+  <div id="navbar-mount"></div>
+
+  <main class="pt-20">
+    <!-- Hero Section -->
+    <section class="featured-hero">
+      <div class="featured-hero-glow"></div>
+      <div class="max-w-[80rem] mx-auto px-6 relative z-10">
+        <div class="flex items-center gap-2 text-sm text-gray-400 mb-4">
+          <a href="../../../index.html" class="hover:text-cyan-400">Inicio</a>
+          <span>/</span>
+          <span class="font-bold text-white">Productos Destacados</span>
+        </div>
+
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-magenta/20 text-neon-magenta text-xs font-bold uppercase tracking-widest mb-3">
+            <span class="material-symbols-outlined text-[16px]">grade</span>
+            <span>Alta Demanda en Bodega</span>
+          </div>
+          <h1 class="font-['Outfit'] font-extrabold text-3xl md:text-5xl text-white tracking-tight leading-tight">
+            Los Equipos Más Cotizados
+          </h1>
+          <p class="text-sm md:text-base text-gray-300 mt-3 leading-relaxed">
+            Referencias preferidas por ingenieros, contratistas y hogares exigentes. Garantía 100% de fábrica, precio mayorista directo y despacho prioritario el mismo día.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid Section -->
+    <section class="max-w-[80rem] mx-auto px-6 py-12 pb-24">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="featuredProductsGrid">
+        <!-- Rendered dynamically by destacados.js -->
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="../../../js/config.js"></script>
+  <script src="../../../js/storage.js"></script>
+  <script src="../../../js/api.js"></script>
+  <script src="../../../js/service/auth.service.js"></script>
+  <script src="../../../js/service/order.service.js"></script>
+  <script src="../../../js/service/product.service.js"></script>
+  <script src="./destacados.api.js"></script>
+  <script src="../../../components/toast/toast.js"></script>
+  <script src="../../../components/navbar/navbar.js"></script>
+  <script src="../../../components/footer/footer.js"></script>
+  <script src="../../../components/cart-modal/cart-modal.js"></script>
+  <script src="../../../components/product/product-card.js"></script>
+  <script src="../../../components/product/product-modal.js"></script>
+  <script src="../../../js/main.js"></script>
+  <script src="./destacados.js"></script>
+</body>
+</html>

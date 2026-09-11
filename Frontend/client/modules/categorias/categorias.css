@@ -1,0 +1,48 @@
+/* Categories Module Styles */
+.categories-hero {
+  background: #F6F3F2;
+  border-bottom: 1px solid #E2E6EE;
+  padding: 3.5rem 0 3rem 0;
+}
+
+.category-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E6EE;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(10, 10, 10, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(8, 0, 255, 0.3);
+  box-shadow: 0 12px 32px rgba(8, 0, 255, 0.12);
+}
+
+.category-card-img-box {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #F4F6FB;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.category-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-card-img {
+  transform: scale(1.06);
+}

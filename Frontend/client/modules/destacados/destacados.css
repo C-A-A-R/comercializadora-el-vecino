@@ -1,0 +1,20 @@
+/* Featured Products Module Styles */
+.featured-hero {
+  background: #0A0A0A;
+  color: #FFFFFF;
+  padding: 4rem 0 3rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-hero-glow {
+  position: absolute;
+  top: -6rem;
+  right: 10%;
+  width: 25rem;
+  height: 25rem;
+  background: rgba(8, 0, 255, 0.25);
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+}

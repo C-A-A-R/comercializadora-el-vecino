@@ -1,0 +1,340 @@
+/* Navbar Component Styles */
+.navbar-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(226, 230, 238, 0.8);
+  transition: all 0.3s ease;
+}
+
+.navbar-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar-brand-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.875rem;
+  background: #0A0A0A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(8, 0, 255, 0.25);
+  color: #0800FF;
+}
+
+.navbar-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-brand-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #0A0A0A;
+}
+
+.navbar-brand-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FF00A8;
+  margin-top: 0.2rem;
+}
+
+.navbar-search {
+  flex: 1;
+  max-width: 20rem;
+  position: relative;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .navbar-search {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.navbar-search-input {
+  width: 100%;
+  height: 2.75rem;
+  padding: 0 1rem 0 2.75rem;
+  border-radius: 0.75rem;
+  background: #F4F6FB;
+  border: 1px solid transparent;
+  color: #0A0A0A;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8125rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.navbar-search-input:focus {
+  background: #FFFFFF;
+  border-color: rgba(8, 0, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(8, 0, 255, 0.1);
+}
+
+.navbar-search-icon {
+  position: absolute;
+  left: 0.875rem;
+  color: #757589;
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
+.navbar-nav {
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1120px) {
+  .navbar-nav {
+    display: flex;
+  }
+}
+
+.navbar-link {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #454558;
+  text-decoration: none;
+  padding: 0.5rem 0.25rem;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+  color: #0800FF;
+}
+
+.navbar-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0.25rem;
+  right: 0.25rem;
+  height: 2px;
+  background: #0800FF;
+  border-radius: 2px;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.btn-nav-cart {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: #F4F6FB;
+  border: 1px solid rgba(226, 230, 238, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0A0A0A;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-nav-cart:hover {
+  background: #EBE7E7;
+  color: #0800FF;
+}
+
+.nav-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #FF00A8;
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  box-shadow: 0 2px 6px rgba(255, 0, 168, 0.4);
+}
+
+.btn-nav-whatsapp {
+  height: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: 0.75rem;
+  background: #0800FF;
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(8, 0, 255, 0.32);
+  transition: all 0.2s;
+}
+
+.btn-nav-whatsapp:hover {
+  background: #0400bc;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(8, 0, 255, 0.45);
+}
+
+.btn-nav-admin {
+  height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 0.75rem;
+  background: #F4F6FB;
+  color: #0A0A0A;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-nav-admin:hover {
+  background: #EBE7E7;
+  color: #0800FF;
+}
+
+.btn-nav-hamburger {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: #F4F6FB;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #0A0A0A;
+}
+
+@media (min-width: 1120px) {
+  .btn-nav-hamburger {
+    display: none;
+  }
+}
+
+/* Mobile Navigation Drawer */
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20rem;
+  max-width: 85vw;
+  background: #FFFFFF;
+  z-index: 1002;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-nav-backdrop.open .mobile-nav-drawer {
+  transform: translateX(0);
+}
+
+.mobile-nav-header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E2E6EE;
+}
+
+.mobile-nav-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #1C1B1B;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: #F4F6FB;
+  color: #0800FF;
+}
+
+.mobile-nav-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #E2E6EE;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

@@ -1,0 +1,33 @@
+/* Contact Module Styles */
+.contact-hero {
+  background: #F6F3F2;
+  border-bottom: 1px solid #E2E6EE;
+  padding: 3.5rem 0 3rem 0;
+}
+
+.contact-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E6EE;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-shadow: 0 4px 16px rgba(10, 10, 10, 0.04);
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(8, 0, 255, 0.3);
+  box-shadow: 0 12px 32px rgba(8, 0, 255, 0.1);
+}
+
+.contact-card-dark {
+  background: #0A0A0A;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}

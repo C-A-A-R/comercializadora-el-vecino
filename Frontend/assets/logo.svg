@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60" fill="none">
+  <defs>
+    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#FF007F"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon Mark: Modern stylized Home & Tech Node -->
+  <rect x="6" y="8" width="44" height="44" rx="12" fill="#0B0F19"/>
+  <path d="M28 17L16 26V39C16 40.1 16.9 41 18 41H38C39.1 41 40 40.1 40 39V26L28 17Z" stroke="url(#neonGrad)" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+  <path d="M24 33L28 29L32 33" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="28" cy="36" r="1.5" fill="#FF007F"/>
+  <!-- Typography -->
+  <text x="60" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="20" fill="#0B0F19" letter-spacing="1">EL VECINO</text>
+  <text x="61" y="44" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="9" fill="#FF007F" letter-spacing="2">HOGAR &amp; TECNOLOGÍA</text>
+</svg>

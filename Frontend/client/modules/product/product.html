@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo General — Comercializadora EL VECINO</title>
+  <meta name="description" content="Explora el catálogo completo de electrodomésticos de alta gama, pantallas 4K y gaming directo de bodega sin intermediarios.">
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-obsidian': '#0A0A0A',
+            'electric-blue': '#0800FF',
+            'neon-magenta': '#FF00A8',
+            'whatsapp-green': '#25D366',
+            'slate-surface': '#F4F6FB',
+            'slate-border': '#E2E6EE'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Global & Component Styles -->
+  <link rel="stylesheet" href="../../../index.css">
+  <link rel="stylesheet" href="../../../components/navbar/navbar.css">
+  <link rel="stylesheet" href="../../../components/footer/footer.css">
+  <link rel="stylesheet" href="../../../components/cart-modal/cart-modal.css">
+  <link rel="stylesheet" href="../../../components/toast/toast.css">
+  <link rel="stylesheet" href="../../../components/product/product-card.css">
+  <link rel="stylesheet" href="../../../components/product/product-modal.css">
+  <link rel="stylesheet" href="./product.css">
+</head>
+<body class="bg-[#FCF8F8] font-['Plus_Jakarta_Sans'] text-[#1C1B1B] antialiased">
+  <!-- Navbar Mount Target -->
+  <div id="navbar-mount"></div>
+
+  <!-- Main Catalog Content -->
+  <main class="catalog-page">
+    <!-- Hero Header Strip -->
+    <section class="catalog-hero">
+      <div class="catalog-hero-container">
+        <!-- Breadcrumb & Notice -->
+        <div class="flex items-center justify-between gap-4 mb-4 flex-wrap text-sm text-gray-500">
+          <nav class="flex items-center gap-2">
+            <a href="../../../index.html" class="hover:text-electric-blue flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">home</span>
+              <span>Inicio</span>
+            </a>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="font-bold text-deep-obsidian">Catálogo General</span>
+          </nav>
+
+          <div class="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-border text-xs font-bold text-deep-obsidian shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-whatsapp-green animate-ping"></span>
+            <span>INVENTARIO CENTRAL ACTUALIZADO</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+          <div class="max-w-2xl">
+            <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-electric-blue text-xs font-bold uppercase tracking-widest mb-2">
+              Equipamiento Directo de Fábrica
+            </span>
+            <h1 class="font-['Outfit'] font-extrabold text-3xl md:text-4xl text-deep-obsidian tracking-tight">
+              Explora Nuestro Catálogo
+            </h1>
+            <p class="text-sm md:text-base text-gray-600 mt-2">
+              Descubre especificaciones técnicas, cubicaje y cotiza al instante por WhatsApp sin intermediarios ni costos ocultos.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-slate-border shadow-sm shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-[24px]">verified</span>
+            </div>
+            <div>
+              <div class="font-['Outfit'] font-bold text-sm text-deep-obsidian">Garantía Directa</div>
+              <div class="text-xs text-gray-500">Facturación oficial DIAN</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search & Category Tabs -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-4 border-t border-slate-border">
+          <!-- Search Box -->
+          <div class="relative flex-1 max-w-lg">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input
+              type="text"
+              id="catalogSearchInput"
+              class="w-full h-11 pl-10 pr-4 bg-white rounded-xl border border-slate-border text-sm outline-none focus:border-electric-blue focus:ring-2 focus:ring-blue-100 transition-all"
+              placeholder="Buscar por SKU, marca o modelo (ej. Bespoke, OLED, PS5)..."
+            >
+          </div>
+
+          <!-- Category Pills -->
+          <div class="category-tabs-bar" id="categoryTabs">
+            <!-- Rendered dynamically by product.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Layout: Filters Aside + Product Grid -->
+    <section class="catalog-layout">
+      <!-- Filter Sidebar -->
+      <aside class="catalog-filters-aside">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-border">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-electric-blue text-[20px]">tune</span>
+            <h2 class="font-['Outfit'] font-bold text-sm uppercase text-deep-obsidian">Filtros Activos</h2>
+          </div>
+          <button id="btnResetFilters" class="text-xs font-bold text-neon-magenta hover:underline">
+            Limpiar
+          </button>
+        </div>
+
+        <!-- Disponibilidad -->
+        <div>
+          <div class="filter-section-title">
+            <span>Disponibilidad</span>
+            <span class="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+          </div>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" id="filterInStock" class="rounded accent-electric-blue">
+            <span>Disponibilidad Inmediata</span>
+          </label>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" id="filterFeatured" class="rounded accent-electric-blue">
+            <span>Líneas Destacadas</span>
+          </label>
+        </div>
+
+        <!-- Cobertura de Entrega -->
+        <div>
+          <div class="filter-section-title">
+            <span>Despacho</span>
+            <span class="material-symbols-outlined text-[16px] text-gray-400">local_shipping</span>
+          </div>
+          <div class="p-3 bg-slate-surface rounded-xl text-xs text-gray-600 space-y-1.5">
+            <div class="flex items-center gap-1.5 text-deep-obsidian font-semibold">
+              <span class="material-symbols-outlined text-[16px] text-electric-blue">inventory</span>
+              <span>Bodega Sellada</span>
+            </div>
+            <p>Salidas diarias programadas con seguro de transporte directo a toda Colombia.</p>
+          </div>
+        </div>
+
+        <!-- Callout Asesoría -->
+        <div class="p-4 rounded-xl bg-deep-obsidian text-white flex flex-col gap-2">
+          <div class="flex items-center gap-2 text-neon-magenta text-xs font-bold uppercase">
+            <span class="w-2 h-2 rounded-full bg-neon-magenta animate-ping"></span>
+            <span>Guardia Técnica</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            ¿Requieres cotizar por volumen o necesitas confirmación de cubicaje?
+          </p>
+          <a
+            href="../../../client/modules/contacto/contacto.html"
+            class="mt-1 text-xs text-electric-blue bg-white py-2 px-3 rounded-lg font-bold text-center hover:bg-gray-100 transition-colors"
+          >
+            Hablar con un Ingeniero
+          </a>
+        </div>
+      </aside>
+
+      <!-- Right Column: Toolbar + Product Grid -->
+      <div class="flex flex-col gap-6">
+        <!-- Results Toolbar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-border">
+          <div class="text-sm font-semibold text-deep-obsidian" id="resultsCount">
+            Cargando productos...
+          </div>
+
+          <div class="flex items-center gap-3">
+            <label for="catalogSortSelect" class="text-xs text-gray-500 uppercase font-bold shrink-0">Ordenar por:</label>
+            <select id="catalogSortSelect" class="bg-slate-surface text-xs font-bold text-deep-obsidian h-9 px-3 rounded-lg border border-slate-border outline-none focus:border-electric-blue">
+              <option value="default">Relevancia de Bodega</option>
+              <option value="popular">Más Cotizados</option>
+              <option value="price-asc">Precio: Menor a Mayor</option>
+              <option value="price-desc">Precio: Mayor a Menor</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Products Container -->
+        <div class="catalog-grid" id="productsContainer">
+          <!-- Dynamic Products injected by product.js -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Mount Target -->
+  <div id="footer-mount"></div>
+
+  <!-- Core Scripts -->
+  <script src="../../../js/config.js"></script>
+  <script src="../../../js/storage.js"></script>
+  <script src="../../../js/api.js"></script>
+  <script src="../../../js/service/auth.service.js"></script>
+  <script src="../../../js/service/order.service.js"></script>
+  <script src="../../../js/service/product.service.js"></script>
+  <script src="./product.api.js"></script>
+  <script src="../../../components/toast/toast.js"></script>
+  <script src="../../../components/navbar/navbar.js"></script>
+  <script src="../../../components/footer/footer.js"></script>
+  <script src="../../../components/cart-modal/cart-modal.js"></script>
+  <script src="../../../components/product/product-card.js"></script>
+  <script src="../../../components/product/product-modal.js"></script>
+  <script src="../../../js/main.js"></script>
+  <script src="./product.js"></script>
+</body>
+</html>
