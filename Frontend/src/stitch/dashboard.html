@@ -1,0 +1,841 @@
+<header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter-mobile flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-primary-container text-[22px]">storefront</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xxs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">EL VECINO</span><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-label-tag text-label-tag uppercase">Admin</span></div><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-label-tag text-label-tag text-on-surface-variant uppercase tracking-wider">Live Sync</span></div></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notificaciones" class="w-11 h-11 relative rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-secondary-container"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full px-gutter-mobile pt-16 pb-24 bg-surface flex-grow"><div class="flex flex-col w-full gap-y-space-lg pb-12">
+<!-- 1. BARRA SUPERIOR DE SINCRONIZACIÓN Y ACCIONES PRINCIPALES -->
+<section class="flex flex-col gap-space-sm pt-space-xs">
+<!-- Status Ticker Banner -->
+<div class="flex items-center justify-between px-space-sm py-2 rounded-xl bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="relative flex h-2.5 w-2.5 flex-shrink-0">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary"></span>
+</span>
+<div class="flex items-center gap-1.5 truncate">
+<span class="font-label-tag text-label-tag text-primary uppercase font-bold tracking-wider">Consola 2.4</span>
+<span class="text-outline text-[10px]">•</span>
+<span class="font-label-tag text-label-tag text-on-surface-variant truncate">Sincronización en tiempo real: Bodega &amp; Muelle 14</span>
+</div>
+</div>
+<span class="font-label-tag text-label-tag text-tertiary bg-tertiary-fixed px-2 py-0.5 rounded-full flex-shrink-0 font-bold">ONLINE</span>
+</div>
+<!-- Title & Subtitle Block -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">Panel de Control</h1>
+<span class="px-2 py-0.5 rounded-md bg-primary-fixed-dim text-on-primary-fixed font-label-tag text-label-tag font-bold">PRO</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        Monitoreo de catálogo, conversiones directas a WhatsApp y flujo comercial sin fricción.
+      </p>
+</div>
+<!-- Quick Action Bar -->
+<div class="flex flex-col gap-2 pt-1">
+<button class="w-full py-3 px-4 rounded-xl bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-[0.99] transition-transform">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>+ Nuevo Producto</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2.5 px-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm active:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px]">analytics</span>
+<span class="truncate">Reporte Cotizaciones</span>
+</button>
+<button class="py-2.5 px-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm active:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px]">create_new_folder</span>
+<span class="truncate">+ Nueva Categoría</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 2. MÓDULO 1: MÉTRICAS Y KPIS CLAVE (Horizontal Scroll Snap) -->
+<section class="flex flex-col gap-space-xs -mx-gutter-mobile px-gutter-mobile">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">query_stats</span>
+<span class="font-label-lg text-label-lg text-on-surface">Rendimiento Operativo</span>
+</div>
+<span class="font-label-tag text-label-tag text-on-surface-variant">Actualizado hace 2m</span>
+</div>
+<div class="flex gap-space-sm overflow-x-auto pb-2 pt-1 snap-x snap-mandatory">
+<!-- Card 1 -->
+<div class="min-w-[210px] flex-shrink-0 snap-start rounded-2xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-primary-fixed/20 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase">Productos Registrados</span>
+<span class="p-1.5 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[18px]">inventory_2</span>
+</div>
+<div class="mt-2">
+<div class="font-headline-md text-headline-md text-on-surface leading-tight">148</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">136 activos <span class="text-outline">•</span> 12 borradores</p>
+</div>
+</div>
+<!-- Card 2: WA Today (Highlighted) -->
+<div class="min-w-[210px] flex-shrink-0 snap-start rounded-2xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 w-20 h-20 bg-tertiary-container/20 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase">Cotizaciones Hoy</span>
+<span class="p-1.5 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed font-bold material-symbols-outlined text-[18px]">chat</span>
+</div>
+<div class="mt-2">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">84</span>
+<span class="font-label-tag text-label-tag text-on-tertiary-container bg-tertiary-container/30 px-1.5 py-0.5 rounded-full font-bold flex items-center">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +18%
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Solicitudes directas vía WhatsApp</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="min-w-[210px] flex-shrink-0 snap-start rounded-2xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase">En Vitrina</span>
+<span class="p-1.5 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[18px]">view_carousel</span>
+</div>
+<div class="mt-2">
+<div class="font-headline-md text-headline-md text-on-surface leading-tight">16</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">10.8% del inventario visible</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="min-w-[210px] flex-shrink-0 snap-start rounded-2xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase">Promociones</span>
+<span class="p-1.5 rounded-lg bg-surface-container text-secondary material-symbols-outlined text-[18px]">local_offer</span>
+</div>
+<div class="mt-2">
+<div class="font-headline-md text-headline-md text-on-surface leading-tight">6 Activas</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Mensajería directa habilitada</p>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="min-w-[210px] flex-shrink-0 snap-start rounded-2xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase">Top Demanda</span>
+<span class="p-1.5 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[18px]">local_fire_department</span>
+</div>
+<div class="mt-2">
+<div class="font-headline-sm text-headline-sm text-on-surface truncate">Neveras &amp; TVs</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">64% del tráfico global</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. MÓDULO 2: GESTIÓN DE CATÁLOGO & VISIBILIDAD -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Gestión de Catálogo</h2>
+<span class="font-label-tag text-label-tag bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full font-bold">148 SKUs</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Controla visibilidad en vitrina y estado activo por producto.</p>
+</div>
+<!-- Search & Filters -->
+<div class="flex flex-col gap-2">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm outline-none placeholder:text-outline focus:bg-surface-bright" placeholder="Buscar por SKU o modelo..." type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="relative">
+<select class="w-full h-10 px-3 pr-8 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm appearance-none outline-none">
+<option>Todas las Categorías</option>
+<option>Refrigeración</option>
+<option>Smart TVs &amp; Audio</option>
+<option>Lavado &amp; Secado</option>
+<option>Gaming &amp; Tech</option>
+<option>Pequeños Electro</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+<div class="relative">
+<select class="w-full h-10 px-3 pr-8 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm appearance-none outline-none">
+<option>Todos los Estados</option>
+<option>Activos (136)</option>
+<option>En Pausa (12)</option>
+<option>Solo en Vitrina (16)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">filter_list</span>
+</div>
+</div>
+</div>
+<!-- Product List -->
+<div class="flex flex-col gap-space-sm pt-1">
+<!-- Item 1 -->
+<div class="flex flex-col gap-3 p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex gap-space-sm items-start">
+<img class="w-20 h-20 rounded-xl object-cover bg-surface-container-low flex-shrink-0" data-alt="Modern Samsung SpaceMax double-door refrigerator standing in a bright minimalist kitchen with metallic stainless steel finish, crisp lighting and contemporary styling, high-ticket home appliance aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKcveaMJ1uaHBkqa0zSJXcGv5hH71x3ojhtwBGMU9KB4mfmLQuaGGMTkOEdt8EL6GzI0jebb165hd_MoC5zBukF-v8fH2Qz8kZ3_4yTVmkdpQNaohlzYG3ZHulYrhEMmZEhwl0Q5AKb__0sXRaH_OQ6RAlaq_7tnUYzjqJa-jOr_RgrYGMEg3j_rnH59fTlfn5oITOmqtQluvqbydUrULe_3M6gGcfmUv3qTt4-9umPGtWIdx6YtA5KA"/>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-tag text-label-tag text-primary bg-primary-fixed/30 px-1.5 py-0.5 rounded uppercase">Refrigeración</span>
+<span class="font-label-tag text-label-tag text-outline">SKU: SM-602L</span>
+</div>
+<h3 class="font-headline-sm text-[16px] leading-5 text-on-surface font-semibold mt-1 truncate">Nevera Samsung SpaceMax 602L</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span> 342 clicks WA
+              </span>
+<span class="font-label-tag text-label-tag text-tertiary-container bg-tertiary-fixed px-1.5 rounded-full font-bold">+24 hoy</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-low/50 px-3 py-2 rounded-xl">
+<div class="flex items-center gap-3">
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary relative"></div>
+<span class="font-label-tag text-label-tag text-on-surface">Activo</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary relative"></div>
+<span class="font-label-tag text-label-tag text-primary font-bold">Vitrina</span>
+</label>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors" title="Editar"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors" title="Duplicar"><span class="material-symbols-outlined text-[18px]">content_copy</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container text-error transition-colors" title="Eliminar"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col gap-3 p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex gap-space-sm items-start">
+<img class="w-20 h-20 rounded-xl object-cover bg-surface-container-low flex-shrink-0" data-alt="Ultra-thin LG OLED 65 inch evo C3 4K TV mounted on sleek dark graphite studio wall showing radiant colorful high-contrast landscape, premium electronic showroom ambiance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5D1pI8MLjLnUfwRSjR0lWdzJbv1aSMkJMttmYaRXJcRQfZ3dbqWQIhWob-_2e47lOH8CIhAQcRoAWDKoinLCDhw5IuidQSnIBVPCujMVDKRgf5lzdpL6d4O7FChCQx_VNiigO-Kn5GMFldrzHmLzwTWfar-FSeygDBI-Nctb9XyCqJk4Apepn50KEkAl86ORBNz-nbTrdXp2kDQSHKCkkQ7XHxPGkAZ-WpLjB-UTk3k2I0Z-ewrz2xA"/>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-tag text-label-tag text-primary bg-primary-fixed/30 px-1.5 py-0.5 rounded uppercase">Smart TVs &amp; Audio</span>
+<span class="font-label-tag text-label-tag text-outline">SKU: OLED-65C3</span>
+</div>
+<h3 class="font-headline-sm text-[16px] leading-5 text-on-surface font-semibold mt-1 truncate">Smart TV LG OLED 65" evo C3 4K</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span> 289 clicks WA
+              </span>
+<span class="font-label-tag text-label-tag text-tertiary-container bg-tertiary-fixed px-1.5 rounded-full font-bold">+19 hoy</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-low/50 px-3 py-2 rounded-xl">
+<div class="flex items-center gap-3">
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary relative"></div>
+<span class="font-label-tag text-label-tag text-on-surface">Activo</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary relative"></div>
+<span class="font-label-tag text-label-tag text-primary font-bold">Vitrina</span>
+</label>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col gap-3 p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex gap-space-sm items-start">
+<img class="w-20 h-20 rounded-xl object-cover bg-surface-container-low flex-shrink-0" data-alt="High tech top-load modern LG 22kg TurboWash washing machine with polished chrome details and digital smart touch panel, sleek clean laundry room interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN7D0wX2SMLJZmLhrZSeiNH10T1A2pUjhbqrsKw22VP9e2IC3YXVlLHjPrs1H17RUiLqxJNN8I5cQ_RlfT-Ry6a5tuHpD8awqSfHepo7GiwRZgLqRfFcIdPLJ5tAq5amheGBNSlNyhOCZzVKhrzMmkQz8oSD0-sU2ansZQVMr2D_XJhVHihjPYjU9QqWA84NgOJo5eM5K8EUuYjUTXDqEmwiGblPEAgwH4bFHeqeyhmpdArKTkp3i5WQ"/>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-tag text-label-tag text-primary bg-primary-fixed/30 px-1.5 py-0.5 rounded uppercase">Lavado &amp; Secado</span>
+<span class="font-label-tag text-label-tag text-outline">SKU: LG-TW22</span>
+</div>
+<h3 class="font-headline-sm text-[16px] leading-5 text-on-surface font-semibold mt-1 truncate">Lavadora LG 22kg TurboWash 3D</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span> 195 clicks WA
+              </span>
+<span class="font-label-tag text-label-tag text-tertiary-container bg-tertiary-fixed px-1.5 rounded-full font-bold">+8 hoy</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-low/50 px-3 py-2 rounded-xl">
+<div class="flex items-center gap-3">
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary relative"></div>
+<span class="font-label-tag text-label-tag text-on-surface">Activo</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary relative"></div>
+<span class="font-label-tag text-label-tag text-primary font-bold">Vitrina</span>
+</label>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex flex-col gap-3 p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex gap-space-sm items-start">
+<img class="w-20 h-20 rounded-xl object-cover bg-surface-container-low flex-shrink-0" data-alt="PlayStation 5 Slim 1TB video game console with dual white futuristic curves and glowing blue accent light on modern acrylic pedestal, ultra tech look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm7OVy5bK-1RnjaaDVCISOIkV7Rop7Ux6oPVGncCjTAiGuGMVbNcRMLg8ZZFlOfcm0jBFftbq2KZaPlLF3DmbKII0x5qILmNM_AhtK50Kerjlh1e4qXD6LuYfChfzA2s3eFObSsnJbnxJScd-kQMPgLAy7AvZbZh_SB1EXe5MFOFgRNWmgbGdiMj5Qh6APxhdDy63fMiE-nx7A0fSvhBCT1REtzYGEAV6gr7KyVlyNETE_8IMRR6Qt_w"/>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-tag text-label-tag text-primary bg-primary-fixed/30 px-1.5 py-0.5 rounded uppercase">Gaming &amp; Tech</span>
+<span class="font-label-tag text-label-tag text-outline">SKU: PS5-SLIM</span>
+</div>
+<h3 class="font-headline-sm text-[16px] leading-5 text-on-surface font-semibold mt-1 truncate">Consola Sony PlayStation 5 Slim 1TB</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span> 178 clicks WA
+              </span>
+<span class="font-label-tag text-label-tag text-tertiary-container bg-tertiary-fixed px-1.5 rounded-full font-bold">+15 hoy</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-low/50 px-3 py-2 rounded-xl">
+<div class="flex items-center gap-3">
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary relative"></div>
+<span class="font-label-tag text-label-tag text-on-surface">Activo</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary relative"></div>
+<span class="font-label-tag text-label-tag text-primary font-bold">Vitrina</span>
+</label>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Item 5: Paused -->
+<div class="flex flex-col gap-3 p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm opacity-90">
+<div class="flex gap-space-sm items-start">
+<div class="relative w-20 h-20 rounded-xl overflow-hidden bg-surface-container-low flex-shrink-0">
+<img class="w-full h-full object-cover grayscale" data-alt="Panasonic Inverter stainless steel microwave 32L with LED touch screen on dark granite countertop, professional kitchen appliance styling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrw_EfzIrWh-uGn3N3ibmgyLwQEeBhfme0VDSD7Qx_EE7NzlGcJ8hrkRj_8H2YE5B24IZ9QEbvybTmOQeFA4eaewKDD4hSUnzSbOWDBG8Sr8MI7AsLDfKzgCzx2owXjRnKtIgZynOa6-PWNWRWXcyKzKlS8d_Tt0dlqhIdCenWQ0f5LkRRp9NmRNSI7S4goTpQrSxbcCDmCw4HTmPZZzPDi2LuU3mxsksSgrGe0s1haMsj4-Av_GOZKw"/>
+<span class="absolute inset-0 bg-on-surface/20 flex items-center justify-center font-label-tag text-[9px] text-surface font-bold uppercase tracking-wider">Pausado</span>
+</div>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-tag text-label-tag text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded uppercase">Pequeños Electro</span>
+<span class="font-label-tag text-label-tag text-outline">SKU: PAN-32INV</span>
+</div>
+<h3 class="font-headline-sm text-[16px] leading-5 text-on-surface font-semibold mt-1 truncate">Microondas Panasonic Inverter 32L</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="font-label-tag text-label-tag text-on-surface-variant font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span> 63 clicks WA
+              </span>
+<span class="font-label-tag text-label-tag text-error font-bold">Sin Stock</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-low/50 px-3 py-2 rounded-xl">
+<div class="flex items-center gap-3">
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary relative"></div>
+<span class="font-label-tag text-label-tag text-outline">En Pausa</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary relative"></div>
+<span class="font-label-tag text-label-tag text-outline">Vitrina</span>
+</label>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button>
+<button class="p-1 rounded-lg hover:bg-surface-container text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination Summary -->
+<div class="flex items-center justify-between px-2 py-1">
+<span class="font-label-tag text-label-tag text-on-surface-variant">Mostrando 5 de 148 electrodomésticos</span>
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-outline"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+<span class="font-label-tag text-label-tag font-bold text-primary px-1">1 / 30</span>
+<button class="w-7 h-7 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+</div>
+</div>
+</section>
+<!-- 4. MÓDULO 3: FLUJO DE CONVERSIÓN DIRECTA (Métricas WhatsApp) -->
+<section class="flex flex-col gap-space-sm p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-tag text-label-tag text-tertiary font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Conversión Directa
+        </span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Clicks a WhatsApp</h2>
+</div>
+<div class="flex items-center bg-surface-container rounded-lg p-0.5">
+<button class="px-2.5 py-1 rounded-md bg-surface-container-lowest text-primary font-label-tag text-label-tag font-bold shadow-xs">7D</button>
+<button class="px-2.5 py-1 rounded-md text-on-surface-variant font-label-tag text-label-tag">30D</button>
+</div>
+</div>
+<!-- Stats Callout -->
+<div class="grid grid-cols-2 gap-space-xs pt-1">
+<div class="p-3 rounded-xl bg-surface-container-low">
+<span class="font-label-tag text-label-tag text-on-surface-variant">Total Últimos 7 Días</span>
+<div class="flex items-baseline gap-1.5 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface">545</span>
+<span class="font-label-tag text-label-tag text-tertiary font-bold">+22.4%</span>
+</div>
+</div>
+<div class="p-3 rounded-xl bg-surface-container-low">
+<span class="font-label-tag text-label-tag text-on-surface-variant">Tasa de Respuesta WA</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-primary">3.2</span>
+<span class="font-label-md text-label-md text-on-surface-variant">min prom.</span>
+</div>
+</div>
+</div>
+<!-- Interactive Bar Chart -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="h-36 flex items-end justify-between gap-2 px-1 pt-4 pb-1">
+<!-- Lun: 58 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">58</span>
+<div class="w-full bg-primary/20 hover:bg-primary-container rounded-t-lg transition-all" style="height: 51%;"></div>
+<span class="font-label-tag text-label-tag text-on-surface-variant mt-1">Lun</span>
+</div>
+<!-- Mar: 64 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">64</span>
+<div class="w-full bg-primary/20 hover:bg-primary-container rounded-t-lg transition-all" style="height: 57%;"></div>
+<span class="font-label-tag text-label-tag text-on-surface-variant mt-1">Mar</span>
+</div>
+<!-- Mie: 72 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">72</span>
+<div class="w-full bg-primary/30 hover:bg-primary-container rounded-t-lg transition-all" style="height: 64%;"></div>
+<span class="font-label-tag text-label-tag text-on-surface-variant mt-1">Mié</span>
+</div>
+<!-- Jue: 81 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">81</span>
+<div class="w-full bg-primary/40 hover:bg-primary-container rounded-t-lg transition-all" style="height: 72%;"></div>
+<span class="font-label-tag text-label-tag text-on-surface-variant mt-1">Jue</span>
+</div>
+<!-- Vie: 96 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">96</span>
+<div class="w-full bg-primary/60 hover:bg-primary-container rounded-t-lg transition-all" style="height: 85%;"></div>
+<span class="font-label-tag text-label-tag text-on-surface-variant mt-1">Vie</span>
+</div>
+<!-- Sab: 112 (Peak) -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-tertiary font-bold">112</span>
+<div class="w-full bg-tertiary-container hover:bg-tertiary-fixed rounded-t-lg shadow-sm transition-all" style="height: 100%;"></div>
+<span class="font-label-tag text-label-tag text-on-surface font-bold mt-1">Sáb</span>
+</div>
+<!-- Hoy: 84 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+<span class="font-label-tag text-[10px] text-primary font-bold">84</span>
+<div class="w-full bg-primary hover:bg-primary-container rounded-t-lg shadow-sm transition-all" style="height: 75%;"></div>
+<span class="font-label-tag text-label-tag text-primary font-bold mt-1">Hoy</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t-0 bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="font-body-sm text-[12px] text-on-surface-variant">Pico más alto: Sábado 112 cotizaciones</span>
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center">
+<span class="w-2 h-2 rounded-full bg-tertiary inline-block mr-1"></span> Canal Fluido
+        </span>
+</div>
+</div>
+</section>
+<!-- 5. MÓDULO 4: DEMANDA REAL EN CHAT (Top 5 más cotizados) -->
+<section class="flex flex-col gap-space-sm p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Demanda Real en Chat</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Top 5 productos con mayor intención de compra.</p>
+</div>
+<span class="material-symbols-outlined text-primary text-[22px]">trending_up</span>
+</div>
+<div class="flex flex-col gap-3 pt-1">
+<!-- 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-label-tag text-label-tag font-bold flex items-center justify-center flex-shrink-0">1</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Nevera Samsung SpaceMax 602L</span>
+</div>
+<span class="font-label-tag text-label-tag text-on-surface font-bold flex-shrink-0">342 chats</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag font-bold flex items-center justify-center flex-shrink-0">2</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Smart TV LG OLED 65" evo C3</span>
+</div>
+<span class="font-label-tag text-label-tag text-on-surface font-bold flex-shrink-0">289 chats</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 84.5%;"></div>
+</div>
+</div>
+<!-- 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag font-bold flex items-center justify-center flex-shrink-0">3</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Lavadora LG 22kg TurboWash</span>
+</div>
+<span class="font-label-tag text-label-tag text-on-surface font-bold flex-shrink-0">195 chats</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 57%;"></div>
+</div>
+</div>
+<!-- 4 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag font-bold flex items-center justify-center flex-shrink-0">4</span>
+<span class="font-label-md text-label-md text-on-surface truncate">PlayStation 5 Slim 1TB</span>
+</div>
+<span class="font-label-tag text-label-tag text-on-surface font-bold flex-shrink-0">178 chats</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 52%;"></div>
+</div>
+</div>
+<!-- 5 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag font-bold flex items-center justify-center flex-shrink-0">5</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Xiaomi 13T 256GB Leica Tech</span>
+</div>
+<span class="font-label-tag text-label-tag text-on-surface font-bold flex-shrink-0">144 chats</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 42%;"></div>
+</div>
+</div>
+</div>
+<a class="pt-2 text-center font-label-md text-label-md text-primary hover:text-primary-container font-semibold flex items-center justify-center gap-1" href="#">
+      Ver reporte de productos completo <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</section>
+<!-- 6. MÓDULO 5: GESTIÓN RÁPIDA DE PROMOCIONES -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Promociones Activas</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Campañas activas con mensaje directo.</p>
+</div>
+<button class="py-2 px-3 rounded-xl bg-secondary text-on-secondary font-label-tag text-label-tag font-bold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">add</span> + Crear Promo
+      </button>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Promo 1 -->
+<div class="p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="flex items-start justify-between gap-2 pl-1">
+<div>
+<span class="font-label-tag text-label-tag text-primary bg-primary-fixed/30 px-1.5 py-0.5 rounded font-bold uppercase">Hogar &amp; Estilo</span>
+<h3 class="font-headline-sm text-[16px] text-on-surface font-bold mt-1">Combo Línea Blanca</h3>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-1">
+          Nevera + Lavadora con despacho prioritario bonificado y asesoría técnica directa.
+        </p>
+<div class="flex items-center justify-between pt-1 pl-1">
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">send</span> Mensajería Activa
+          </span>
+<button class="font-label-tag text-label-tag text-primary font-bold hover:underline">
+            Modificar mensaje WhatsApp
+          </button>
+</div>
+</div>
+<!-- Promo 2 -->
+<div class="p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container"></div>
+<div class="flex items-start justify-between gap-2 pl-1">
+<div>
+<span class="font-label-tag text-label-tag text-secondary bg-secondary-fixed/40 px-1.5 py-0.5 rounded font-bold uppercase">Entretenimiento</span>
+<h3 class="font-headline-sm text-[16px] text-on-surface font-bold mt-1">Especial Pantallas 4K</h3>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-1">
+          Descuentos de temporada en OLED &amp; QLED seleccionados de 55" y 65".
+        </p>
+<div class="flex items-center justify-between pt-1 pl-1">
+<span class="font-label-tag text-label-tag text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">send</span> Mensajería Activa
+          </span>
+<button class="font-label-tag text-label-tag text-primary font-bold hover:underline">
+            Modificar mensaje
+          </button>
+</div>
+</div>
+<!-- Promo 3: Inactive -->
+<div class="p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-2 opacity-75 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-outline-variant"></div>
+<div class="flex items-start justify-between gap-2 pl-1">
+<div>
+<span class="font-label-tag text-label-tag text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded font-bold uppercase">Temporada Tech</span>
+<h3 class="font-headline-sm text-[16px] text-on-surface font-bold mt-1">Temporada Gamer</h3>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-1">
+          Consolas PS5 y monitores 144Hz con periférico de regalo.
+        </p>
+<div class="flex items-center justify-between pt-1 pl-1">
+<span class="font-label-tag text-label-tag text-outline font-bold">Campaña en Pausa</span>
+<button class="font-label-tag text-label-tag text-outline font-bold hover:underline">
+            Configurar activación
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. MÓDULO 6: CONTROL DE VITRINA Y EXPOSICIÓN (Simulador en Vivo) -->
+<section class="flex flex-col gap-space-sm p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">view_carousel</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Control de Vitrina</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Simulador de experiencia para el cliente final.</p>
+</div>
+<button class="p-2 rounded-xl bg-surface-container text-primary hover:bg-primary hover:text-on-primary transition-colors" title="Vista Previa">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+<!-- Live Performance KPIs -->
+<div class="grid grid-cols-2 gap-2">
+<div class="p-3 rounded-xl bg-surface-container-low flex flex-col">
+<span class="font-label-tag text-label-tag text-on-surface-variant">Vistas Totales Vitrina</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface">28.4K</span>
+<span class="font-label-tag text-label-tag text-tertiary font-bold">+34.2%</span>
+</div>
+</div>
+<div class="p-3 rounded-xl bg-surface-container-low flex flex-col">
+<span class="font-label-tag text-label-tag text-on-surface-variant">Tasa Clic a WhatsApp</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-tertiary">12.8%</span>
+<span class="font-label-tag text-label-tag text-outline">alto impacto</span>
+</div>
+</div>
+</div>
+<!-- Toggles for Experience -->
+<div class="flex flex-col gap-2 p-3 rounded-xl bg-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Fijar Precios con Botón WA</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Modo Demostración en Video</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+</div>
+<!-- Showcase Cards Carousel -->
+<div class="flex flex-col gap-1.5 pt-1">
+<span class="font-label-tag text-label-tag text-outline uppercase font-bold tracking-wider">Simulador de Vitrina en Vivo</span>
+<div class="flex gap-3 overflow-x-auto pb-2 snap-x">
+<!-- Vitrina Item 1 -->
+<div class="min-w-[170px] snap-start rounded-xl bg-surface-container-low p-2.5 flex flex-col justify-between shadow-xs">
+<div class="relative w-full h-24 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Samsung SpaceMax refrigerator showroom frame display with subtle neon reflection and clean white modern background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4hF8DotxM8-5NkYOPWv9Y6_aoV5ftUCVuGwUZBDu8GLwZgkWneKQfp2O8RRPdU48aQqZ6C590_e5tMdI0FOugEO6pE3keADxFWwZl06KE3zVVl7xs5BklNqm5C4jfBIYP9ip6gdnhscVWqRnHk1A4v5FowrxzCpbrg1jfFn68vDpwRbG4IpMryW8kR1o1ZLc6_LX4b9wod-6-Clpv3at5dH-Jz74SYcudyOs1HSgPa9m9EFO_7CcogA"/>
+<span class="absolute top-1 right-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded text-[10px] font-bold text-primary">Destacado</span>
+</div>
+<span class="font-label-md text-[13px] text-on-surface font-semibold mt-2 truncate">Samsung SpaceMax</span>
+<button class="mt-2 w-full py-1.5 rounded-lg bg-[#25D366] text-surface-container-lowest font-label-tag text-label-tag font-bold flex items-center justify-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]">chat</span> Cotizar WA
+          </button>
+</div>
+<!-- Vitrina Item 2 -->
+<div class="min-w-[170px] snap-start rounded-xl bg-surface-container-low p-2.5 flex flex-col justify-between shadow-xs">
+<div class="relative w-full h-24 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="LG OLED 65 inch evo TV showcasing high contrast vivid graphics in illuminated electronics gallery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNCFTuOjBe4kxSsVhId-8YKiU3DpVw9buopTMdsElfASiPy_ma2Z89LvhpW5hXa-cOKwTT3qGJn74hSP8oV2BKsIN33k9Cdjo9lCzDcHp0pTwmFPv0ph9R6kkJryOxa1c6lO7q5Lsbd4N2c6eykGwH3rU_ZB9OhQgGj83uQ64TlZGasLg9l9lGb3hmheZBNcGPKnosOxFRi0z2mPZIFNXV8qBlz299EUWFxeWCic1kfltfUevTJrYj4w"/>
+<span class="absolute top-1 right-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded text-[10px] font-bold text-primary">Destacado</span>
+</div>
+<span class="font-label-md text-[13px] text-on-surface font-semibold mt-2 truncate">LG OLED 65" evo</span>
+<button class="mt-2 w-full py-1.5 rounded-lg bg-[#25D366] text-surface-container-lowest font-label-tag text-label-tag font-bold flex items-center justify-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]">chat</span> Cotizar WA
+          </button>
+</div>
+<!-- Vitrina Item 3 -->
+<div class="min-w-[170px] snap-start rounded-xl bg-surface-container-low p-2.5 flex flex-col justify-between shadow-xs">
+<div class="relative w-full h-24 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="PlayStation 5 Slim modern angle gaming display stand showcase" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArbFCvpGB5u0OAd3CcrKNXCKtpmhyzDqL3FUMqBqPDVDH9EdLCfV1Xqhy3f4qwrZtT1fv0WLSy4qv-milo_1Lprix9Awhmuzo6b_WP65UynsqGd0v9_4988zAT1sWCxcN2lpXmIVe51WXtVGGpRN4Z9jqtZLSqldQLsQTn7U9bZLqKjyOqvDuQCTEtfzB3CAzgYkCsCpb-suOox3s-UWGtMGqnd5K8XKoTkeZF8xpGm3cRTx5EkfEbPQ"/>
+<span class="absolute top-1 right-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded text-[10px] font-bold text-primary">Destacado</span>
+</div>
+<span class="font-label-md text-[13px] text-on-surface font-semibold mt-2 truncate">PS5 Slim 1TB</span>
+<button class="mt-2 w-full py-1.5 rounded-lg bg-[#25D366] text-surface-container-lowest font-label-tag text-label-tag font-bold flex items-center justify-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]">chat</span> Cotizar WA
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 8. MÓDULO 7: GESTIÓN Y MODERACIÓN DE COMENTARIOS & PREGUNTAS -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Preguntas &amp; Reseñas</h2>
+<span class="px-2 py-0.5 rounded-full bg-error text-on-error font-label-tag text-label-tag font-bold">14 pendientes</span>
+</div>
+<button class="font-label-tag text-label-tag text-primary font-bold">Marcar leídos</button>
+</div>
+<!-- Filter Tabs (Horizontal Scroll) -->
+<div class="flex gap-2 overflow-x-auto pb-1 -mx-gutter-mobile px-gutter-mobile">
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface font-label-tag text-label-tag font-semibold flex-shrink-0 shadow-xs">
+        Todos (42)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-tag text-label-tag font-bold flex-shrink-0 shadow-sm">
+        Pendientes (14)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-tag text-label-tag font-semibold flex-shrink-0 shadow-xs">
+        Aprobados (22)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-tag text-label-tag font-semibold flex-shrink-0 shadow-xs">
+        Convertidos WA (6)
+      </button>
+</div>
+<!-- Review / Question Cards -->
+<div class="flex flex-col gap-space-sm pt-1">
+<!-- Card 1: Pending TikTok Question -->
+<div class="p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-9 h-9 rounded-full bg-primary-container/40 text-on-primary-fixed flex items-center justify-center font-bold font-headline-sm text-sm">
+              CR
+            </div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-bold">Carlos Restrepo</span>
+<span class="font-label-tag text-[10px] text-error bg-error-container/40 px-1.5 py-0.2 rounded font-bold">Pendiente</span>
+</div>
+<span class="font-label-tag text-label-tag text-outline">Hace 25 min • Pregunta TikTok</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]">brand_awareness</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+          "¿Tienen disponible la nevera Samsung SpaceMax en color negro mate y cuánto tarda el despacho prioritario a Medellín?"
+        </p>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="py-2 px-3 rounded-xl bg-[#25D366] text-surface-container-lowest font-label-md text-label-md font-bold flex items-center justify-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">chat</span> Responder WA
+          </button>
+<button class="py-2 px-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md font-semibold flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> Aprobar
+          </button>
+</div>
+</div>
+<!-- Card 2: Approved Review with 5 Stars -->
+<div class="p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold font-headline-sm text-sm">
+              VG
+            </div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-bold">Valentina Gómez</span>
+<span class="font-label-tag text-[10px] text-tertiary bg-tertiary-fixed px-1.5 py-0.2 rounded font-bold">En Vitrina</span>
+</div>
+<span class="font-label-tag text-label-tag text-outline">Hace 2 horas • Reseña Web</span>
+</div>
+</div>
+<div class="flex text-tertiary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+          "Compré la LG OLED C3 de 65" para mi estudio... entrega impecable en Bogotá y atención personalizada inmediata."
+        </p>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-tag text-label-tag text-on-surface-variant">Producto: LG OLED 65" evo</span>
+<button class="font-label-tag text-label-tag text-primary font-bold hover:underline">
+            Contactar cliente
+          </button>
+</div>
+</div>
+<!-- Card 3: Converted to WA -->
+<div class="p-space-sm rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-2.5 opacity-90">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold font-headline-sm text-sm">
+              AM
+            </div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-bold">Andrés Morales</span>
+<span class="font-label-tag text-[10px] text-tertiary bg-tertiary-fixed px-1.5 py-0.2 rounded font-bold">Convertido a WA</span>
+</div>
+<span class="font-label-tag text-label-tag text-outline">Hace 4 horas • Pregunta TikTok</span>
+</div>
+</div>
+<span class="font-label-tag text-label-tag text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">done_all</span> En seguimiento
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+          "¿La PlayStation 5 Slim viene con garantía oficial de fábrica y entrega el mismo día?"
+        </p>
+</div>
+</div>
+</section>
+<!-- 9. MÓDULO 8: CONEXIÓN Y ESTADO LOGÍSTICO EN VIVO -->
+<section class="p-space-sm rounded-2xl bg-primary text-on-primary shadow-md flex flex-col gap-3 relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-32 h-32 bg-primary-container/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary-container"></span>
+</span>
+<span class="font-label-lg text-label-lg font-bold">Bodega Central &amp; WhatsApp Live</span>
+</div>
+<span class="font-label-tag text-label-tag bg-surface-container-lowest/20 px-2 py-0.5 rounded-full">v2.4 Establo</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-primary/90 leading-relaxed">
+      Canal de ventas de WhatsApp sincronizado permanentemente. Todas las consultas de catálogo se direccionan sin fricción a tus asesores comerciales.
+    </p>
+<div class="pt-1">
+<a class="w-full py-2.5 px-4 rounded-xl bg-surface-container-lowest text-primary font-label-md text-label-md font-bold flex items-center justify-center gap-2 shadow-xs active:scale-[0.99] transition-transform" href="#">
+<span class="material-symbols-outlined text-[18px]">public</span>
+<span>Ver Catálogo Público en Vivo</span>
+</a>
+</div>
+</section>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] px-space-xxs transition-colors group text-primary font-semibold" data-path="resumen" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-tag text-label-tag">Resumen</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] px-space-xxs text-on-surface-variant transition-colors group" data-path="catalogo" href="#"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="font-label-tag text-label-tag">Catálogo</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] px-space-xxs text-on-surface-variant transition-colors group" data-path="promos" href="#"><span class="material-symbols-outlined text-[22px]">local_offer</span><span class="font-label-tag text-label-tag">Promos</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] px-space-xxs text-on-surface-variant transition-colors group" data-path="vitrina" href="#"><span class="material-symbols-outlined text-[22px]">view_carousel</span><span class="font-label-tag text-label-tag">Vitrina</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] px-space-xxs text-on-surface-variant transition-colors group" data-path="whatsapp-feedback" href="#"><span class="material-symbols-outlined text-[22px]">chat</span><span class="font-label-tag text-label-tag">WhatsApp</span></a></div></nav>

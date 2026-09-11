@@ -1,0 +1,96 @@
+{
+  "_comentario_general": "CONFIGURACIÓN DEL LAYOUT DEL CATÁLOGO PDF - Modifica las coordenadas según el diseño real del PDF base",
+  "page_size": "letter",
+  "items_per_page": 4,
+  "pages_config": {
+    "cover_page_index": 0,
+    "body_page_indices": [1, 2, 3, 4],
+    "closing_page_index": 5
+  },
+  "fonts": {
+    "name_font": "Helvetica-Bold",
+    "price_font": "Helvetica-Bold",
+    "score_font": "Helvetica",
+    "brand_font": "Helvetica"
+  },
+  "colors": {
+    "name_rgb": [0.08, 0.08, 0.08],
+    "price_rgb": [0.15, 0.55, 0.2],
+    "score_rgb": [0.35, 0.35, 0.35],
+    "brand_rgb": [0.5, 0.5, 0.5]
+  },
+  "text_limits": {
+    "name_max_chars": 35,
+    "brand_max_chars": 20
+  },
+  "slots": [
+    {
+      "slot_id": 1,
+      "description": "Producto Superior Izquierdo (Cuadrante 1)",
+      "img_x": 50,
+      "img_y": 460,
+      "img_w": 220,
+      "img_h": 180,
+      "name_x": 50,
+      "name_y": 440,
+      "name_font_size": 11,
+      "price_x": 50,
+      "price_y": 420,
+      "price_font_size": 10,
+      "score_x": 130,
+      "score_y": 420,
+      "score_font_size": 8
+    },
+    {
+      "slot_id": 2,
+      "description": "Producto Superior Derecho (Cuadrante 2)",
+      "img_x": 320,
+      "img_y": 460,
+      "img_w": 220,
+      "img_h": 180,
+      "name_x": 320,
+      "name_y": 440,
+      "name_font_size": 11,
+      "price_x": 320,
+      "price_y": 420,
+      "price_font_size": 10,
+      "score_x": 400,
+      "score_y": 420,
+      "score_font_size": 8
+    },
+    {
+      "slot_id": 3,
+      "description": "Producto Inferior Izquierdo (Cuadrante 3)",
+      "img_x": 50,
+      "img_y": 180,
+      "img_w": 220,
+      "img_h": 180,
+      "name_x": 50,
+      "name_y": 160,
+      "name_font_size": 11,
+      "price_x": 50,
+      "price_y": 140,
+      "price_font_size": 10,
+      "score_x": 130,
+      "score_y": 140,
+      "score_font_size": 8
+    },
+    {
+      "slot_id": 4,
+      "description": "Producto Inferior Derecho (Cuadrante 4)",
+      "img_x": 320,
+      "img_y": 180,
+      "img_w": 220,
+      "img_h": 180,
+      "name_x": 320,
+      "name_y": 160,
+      "name_font_size": 11,
+      "price_x": 320,
+      "price_y": 140,
+      "price_font_size": 10,
+      "score_x": 400,
+      "score_y": 140,
+      "score_font_size": 8
+    }
+  ]
+}

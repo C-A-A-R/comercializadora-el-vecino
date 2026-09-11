@@ -1,0 +1,38 @@
+# Entorno y variables sensibles
+.env
+.env.*
+!.env.example
+
+# Archivos de medios y estáticos subidos por usuarios
+media/
+media/*
+core/media/
+core/media/*
+staticfiles/
+core/staticfiles/
+
+# Bases de datos SQLite / locales
+*.sqlite3
+*.db
+db.sqlite3
+core/settings/db.sqlite3
+
+# Caché y archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+env/
+.virtualenvs/
+
+# Archivos de editores y sistemas operativos
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
