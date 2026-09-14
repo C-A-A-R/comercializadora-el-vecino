@@ -2,28 +2,31 @@ import { STORAGE_KEYS, ROLES } from './constants.js';
 
 export const AuthGuard = {
   isAuthenticated() {
-    // Busca la clave de constants.js o cualquiera de los tokens guardados por AuthService
     const token = 
       sessionStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || 
       localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) ||
       sessionStorage.getItem('auth_token') ||
       localStorage.getItem('auth_token') ||
+      sessionStorage.getItem('el_vecino_jwt_token') ||
       localStorage.getItem('el_vecino_jwt_token');
 
-    return Boolean(token);
+    return Boolean(token && token !== 'null' && token !== 'undefined');
   },
 
   getUser() {
-    // Corrige USER_INFO por USER_DATA y añade fallbacks para auth.service
     const rawUser = 
       sessionStorage.getItem(STORAGE_KEYS.USER_DATA) || 
       localStorage.getItem(STORAGE_KEYS.USER_DATA) ||
       sessionStorage.getItem('user_info') ||
       localStorage.getItem('user_info') ||
+      sessionStorage.getItem('el_vecino_user') ||
       localStorage.getItem('el_vecino_user');
 
+    if (!rawUser || rawUser === 'null' || rawUser === 'undefined') return null;
+
     try {
-      return rawUser ? JSON.parse(rawUser) : null;
+      if (typeof rawUser === 'object') return rawUser;
+      return JSON.parse(rawUser);
     } catch {
       return null;
     }
@@ -31,13 +34,28 @@ export const AuthGuard = {
 
   checkAccess(requiredRole = ROLES.ADMIN) {
     if (!this.isAuthenticated()) {
-      // Redirección absoluta considerando la estructura completa del proyecto
-      window.location.href = '/comercializadora-el-vecino/Frontend/loguin.html?redirect=admin';
+      console.warn('[AuthGuard] Usuario no autenticado. Redirigiendo a login...');
+      const redirectUrl = window.location.pathname.includes('/Frontend/')
+        ? window.location.pathname.replace(/\/admin\/.*$/, '/loguin.html?redirect=admin')
+        : '../loguin.html?redirect=admin';
+      window.location.href = redirectUrl;
       return false;
     }
 
     const user = this.getUser();
-    if (requiredRole && user?.role && user.role !== requiredRole) {
+    const isAdmin = user && (user.role === 'admin' || user.role === 'ADMIN' || Boolean(user.is_staff) || Boolean(user.is_superuser));
+
+    if (requiredRole === 'admin' || requiredRole === ROLES.ADMIN) {
+      if (!isAdmin) {
+        console.warn('[AuthGuard] Acceso denegado: El usuario no posee permisos de administrador.', user);
+        const redirectUrl = window.location.pathname.includes('/Frontend/')
+          ? window.location.pathname.replace(/\/admin\/.*$/, '/loguin.html?error=unauthorized')
+          : '../loguin.html?error=unauthorized';
+        window.location.href = redirectUrl;
+        return false;
+      }
+    } else if (requiredRole && user?.role && user.role !== requiredRole) {
+      console.warn(`[AuthGuard] Rol requerido "${requiredRole}" no coincide con "${user?.role}".`);
       return false;
     }
 

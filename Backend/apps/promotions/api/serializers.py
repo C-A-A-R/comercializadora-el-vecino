@@ -20,6 +20,7 @@ class PromotionProductSerializer(serializers.ModelSerializer):
 class DiscountedPromotionsSerializer(serializers.ModelSerializer):
     """
     Serializer para las promociones con descuento.
+    Soporta creación y actualización asociando productos mediante PromotionProduct.
     """
     is_active = serializers.BooleanField(read_only=True)
     promotion_products = PromotionProductSerializer(many=True, read_only=True)
@@ -31,6 +32,33 @@ class DiscountedPromotionsSerializer(serializers.ModelSerializer):
             'start_date', 'end_date', 'is_active', 'image', 'promotion_products'
         ]
         read_only_fields = ['id', 'is_active']
+
+    def create(self, validated_data):
+        raw_products = self.initial_data.get('products') or self.initial_data.get('product_ids')
+        if not raw_products and self.initial_data.get('product_id'):
+            raw_products = [self.initial_data.get('product_id')]
+
+        promo = super().create(validated_data)
+        if raw_products and isinstance(raw_products, list):
+            for prod_id in raw_products:
+                pid = prod_id.get('id') if isinstance(prod_id, dict) else prod_id
+                if pid:
+                    PromotionProduct.objects.get_or_create(discounted_promotions=promo, product_id=pid)
+        return promo
+
+    def update(self, instance, validated_data):
+        promo = super().update(instance, validated_data)
+        raw_products = self.initial_data.get('products') or self.initial_data.get('product_ids')
+        if not raw_products and self.initial_data.get('product_id'):
+            raw_products = [self.initial_data.get('product_id')]
+
+        if raw_products is not None and isinstance(raw_products, list):
+            PromotionProduct.objects.filter(discounted_promotions=promo).delete()
+            for prod_id in raw_products:
+                pid = prod_id.get('id') if isinstance(prod_id, dict) else prod_id
+                if pid:
+                    PromotionProduct.objects.get_or_create(discounted_promotions=promo, product_id=pid)
+        return promo
 
 
 class ProductComboSerializer(serializers.ModelSerializer):
@@ -46,6 +74,7 @@ class ProductComboSerializer(serializers.ModelSerializer):
 class PromotionComboSerializer(serializers.ModelSerializer):
     """
     Serializer para combos promocionales.
+    Soporta creación y actualización con lista de items anidados.
     """
     is_active = serializers.BooleanField(read_only=True)
     combo_products = ProductComboSerializer(many=True, read_only=True)
@@ -61,6 +90,33 @@ class PromotionComboSerializer(serializers.ModelSerializer):
             'savings', 'savings_percentage'
         ]
         read_only_fields = ['id', 'is_active', 'original_total_price', 'savings', 'savings_percentage']
+
+    def create(self, validated_data):
+        raw_items = self.initial_data.get('items') or self.initial_data.get('combo_products')
+        combo = super().create(validated_data)
+        if raw_items and isinstance(raw_items, list):
+            for item in raw_items:
+                pid = item.get('product_id') or item.get('product')
+                if isinstance(pid, dict):
+                    pid = pid.get('id')
+                qty = int(item.get('quantity', 1))
+                if pid:
+                    ProductCombo.objects.get_or_create(combo=combo, product_id=pid, defaults={'quantity': qty})
+        return combo
+
+    def update(self, instance, validated_data):
+        combo = super().update(instance, validated_data)
+        raw_items = self.initial_data.get('items') or self.initial_data.get('combo_products')
+        if raw_items is not None and isinstance(raw_items, list):
+            ProductCombo.objects.filter(combo=combo).delete()
+            for item in raw_items:
+                pid = item.get('product_id') or item.get('product')
+                if isinstance(pid, dict):
+                    pid = pid.get('id')
+                qty = int(item.get('quantity', 1))
+                if pid:
+                    ProductCombo.objects.get_or_create(combo=combo, product_id=pid, defaults={'quantity': qty})
+        return combo
 
 
 class PromotionImageSerializer(serializers.Serializer):

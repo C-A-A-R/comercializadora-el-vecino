@@ -6,7 +6,7 @@ from PIL import Image
 from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
-from apps.product.models import Category, ProductType, Product
+from apps.product.models import Category, Product
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp()
 
@@ -60,9 +60,7 @@ class ImageCompressionTest(TestCase):
         raw_bytes = self.create_dummy_image()
         uploaded_file = SimpleUploadedFile("product_photo.jpg", raw_bytes, content_type="image/jpeg")
 
-        product_type = ProductType.objects.create(product_type_name="Tipo General")
         product = Product.objects.create(
-            product_type=product_type,
             product_name="Producto Test",
             price=100.00,
             product_image=uploaded_file

@@ -10,6 +10,7 @@ import { PromotionListView } from './modules/promotions/promotion-list.view.js';
 import { PromotionFormView } from './modules/promotions/promotion-form.view.js';
 import { ComboListView } from './modules/combos/combo-list.view.js';
 import { ComboFormView } from './modules/combos/combo-form.view.js';
+import { ReportView } from './modules/reports/report.view.js';
 
 /**
  * Objeto de operaciones globales adaptado a la arquitectura modular
@@ -149,6 +150,14 @@ const routes = {
       ComboFormView.bindEvents();
     }
   },
+  '/reports': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => buildShell(await ReportView.render()),
+    afterRender: () => {
+      bindHeaderEvents();
+      ReportView.bindEvents();
+    }
+  },
   '403': {
     render: () => buildShell(`
       <div class="p-8 text-center space-y-4">
@@ -171,10 +180,18 @@ const routes = {
   }
 };
 
-// Inicialización del enrutador asíncrono
-document.addEventListener('DOMContentLoaded', () => {
+// Inicialización robusta del enrutador asíncrono
+function startAdminApp() {
+  console.log('[admin.js] Ejecutando bootstrap del panel...');
   if (AdminOps.init()) {
     const router = new AsyncRouter(routes, appTarget);
     router.init();
+    window.adminRouter = router;
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startAdminApp);
+} else {
+  startAdminApp();
+}

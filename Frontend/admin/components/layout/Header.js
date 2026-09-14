@@ -29,11 +29,23 @@ export function renderHeader() {
 export function bindHeaderEvents() {
   document.getElementById('logout-btn')?.addEventListener('click', () => {
     sessionStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-    sessionStorage.removeItem(STORAGE_KEYS.USER_INFO);
+    sessionStorage.removeItem(STORAGE_KEYS.USER_DATA);
+    sessionStorage.removeItem('auth_token');
+    sessionStorage.removeItem('user_info');
+    sessionStorage.removeItem('el_vecino_jwt_token');
+    sessionStorage.removeItem('el_vecino_user');
+
     localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.USER_INFO);
+    localStorage.removeItem(STORAGE_KEYS.USER_DATA);
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_info');
+    localStorage.removeItem('el_vecino_jwt_token');
+    localStorage.removeItem('el_vecino_user');
     
-    // Redirección relativa al cerrar sesión
-    window.location.href = '../loguin.html?redirect=admin';
+    // Redirección relativa calculada con precisión
+    const redirectUrl = window.location.pathname.includes('/Frontend/')
+      ? window.location.pathname.replace(/\/admin\/.*$/, '/loguin.html?redirect=admin')
+      : '../loguin.html?redirect=admin';
+    window.location.href = redirectUrl;
   });
 }

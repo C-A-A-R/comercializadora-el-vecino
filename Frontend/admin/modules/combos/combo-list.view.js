@@ -76,9 +76,14 @@ export const ComboListView = {
                   <span class="block text-xs text-gray-400">${calc.offerPriceCopFormatted}</span>
                 </div>
               </div>
-              <button data-toggle-id="${combo.id}" data-active="${combo.is_active}" class="w-full mt-2 py-1.5 text-xs border border-slate-border rounded-lg hover:bg-slate-50 font-medium">
-                ${combo.is_active ? 'Desactivar Combo' : 'Activar Combo'}
-              </button>
+              <div class="flex gap-2 mt-2">
+                <button data-toggle-id="${combo.id}" data-active="${combo.is_active}" class="flex-1 py-1.5 text-xs border border-slate-border rounded-lg hover:bg-slate-50 font-medium">
+                  ${combo.is_active ? 'Desactivar' : 'Activar'}
+                </button>
+                <button data-delete-id="${combo.id}" class="px-3 py-1.5 text-xs border border-red-200 text-red-600 rounded-lg hover:bg-red-50 font-medium">
+                  Eliminar
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -86,7 +91,8 @@ export const ComboListView = {
 
       this.bindCardActions();
     } catch (err) {
-      Toast.show({ message: 'Error al cargar la lista de combos', type: 'error' });
+      console.error(err);
+      Toast.show('Error al cargar la lista de combos', 'error');
     }
   },
 
@@ -97,10 +103,26 @@ export const ComboListView = {
         const currentActive = e.target.getAttribute('data-active') === 'true';
         try {
           await ComboService.toggleActive(id, !currentActive);
-          Toast.show({ message: `Estado del combo actualizado`, type: 'success' });
+          Toast.show(`Estado del combo actualizado`, 'success');
           await this.loadCombos();
         } catch (err) {
-          Toast.show({ message: 'No se pudo actualizar el estado', type: 'error' });
+          console.error(err);
+          Toast.show('No se pudo actualizar el estado', 'error');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-delete-id]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = e.target.getAttribute('data-delete-id');
+        if (!confirm('¿Desea eliminar este combo?')) return;
+        try {
+          await ComboService.delete(id);
+          Toast.show('Combo eliminado con éxito', 'success');
+          await this.loadCombos();
+        } catch (err) {
+          console.error(err);
+          Toast.show('No se pudo eliminar el combo', 'error');
         }
       });
     });

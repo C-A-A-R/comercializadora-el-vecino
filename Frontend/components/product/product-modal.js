@@ -43,11 +43,17 @@ const ProductModal = {
       return;
     }
 
+    product = window.Api?.normalizeProduct ? window.Api.normalizeProduct(product) : product;
+
     const content = document.getElementById('productModalContent');
-    const isModule = window.location.pathname.includes('/client/modules/');
-    const detailUrl = isModule
-      ? `detail.html?id=${product.id}`
-      : `./client/modules/product/detail.html?id=${product.id}`;
+    let detailUrl = `detail.html?id=${product.id}`;
+    if (window.location.pathname.includes('/client/modules/product/')) {
+      detailUrl = `detail.html?id=${product.id}`;
+    } else if (window.location.pathname.includes('/client/modules/')) {
+      detailUrl = `../product/detail.html?id=${product.id}`;
+    } else {
+      detailUrl = `./client/modules/product/detail.html?id=${product.id}`;
+    }
 
     const formattedPrice = window.CONFIG?.formatCurrency(product.price) || `$ ${product.price}`;
     const formattedOldPrice = product.originalPrice ? window.CONFIG?.formatCurrency(product.originalPrice) : null;

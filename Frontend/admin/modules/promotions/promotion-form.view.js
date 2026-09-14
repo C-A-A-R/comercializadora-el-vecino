@@ -153,13 +153,19 @@ export const PromotionFormView = {
     const endDate = new Date(document.getElementById('promo-end').value);
 
     if (startDate >= endDate) {
-      Toast.show({ message: 'La fecha de inicio debe ser estrictamente anterior a la fecha de fin', type: 'error' });
+      Toast.show('La fecha de inicio debe ser estrictamente anterior a la fecha de fin', 'error');
+      return;
+    }
+
+    if (!this.selectedProduct) {
+      Toast.show('Por favor seleccione un producto', 'error');
       return;
     }
 
     const payload = {
       name: document.getElementById('promo-name').value,
       product: this.selectedProduct,
+      product_id: this.selectedProduct.id,
       discount_type: document.querySelector('input[name="discount_type"]:checked').value,
       value: parseFloat(document.getElementById('promo-value').value),
       start_date: startDate.toISOString(),
@@ -169,10 +175,11 @@ export const PromotionFormView = {
 
     try {
       await PromotionService.create(payload);
-      Toast.show({ message: 'Promoción creada exitosamente', type: 'success' });
+      Toast.show('Promoción creada exitosamente', 'success');
       window.location.hash = '#/promotions';
     } catch (err) {
-      Toast.show({ message: 'No se pudo guardar la promoción', type: 'error' });
+      console.error(err);
+      Toast.show('No se pudo guardar la promoción', 'error');
     }
   }
 };

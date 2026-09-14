@@ -10,10 +10,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadFeatured() {
     try {
+      if (container) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-gray-500">
+            <span class="material-symbols-outlined text-4xl animate-spin text-electric-blue">progress_activity</span>
+            <p class="mt-2 font-medium">Consultando líneas destacadas en bodega...</p>
+          </div>
+        `;
+      }
       const products = await window.DestacadosApi.getFeaturedProducts();
       renderFeatured(products);
     } catch (error) {
       console.error('[destacados.js] Error al cargar destacados:', error);
+      if (container) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-red-500">
+            <span class="material-symbols-outlined text-4xl">error</span>
+            <p class="mt-2">No se pudieron cargar los productos destacados.</p>
+          </div>
+        `;
+      }
     }
   }
 

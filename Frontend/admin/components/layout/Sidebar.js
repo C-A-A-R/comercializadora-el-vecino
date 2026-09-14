@@ -29,6 +29,10 @@ export function renderSidebar(currentPath = '') {
           <span class="material-symbols-outlined">package_2</span>
           <span>Combos</span>
         </a>
+        <a href="#/reports" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition">
+          <span class="material-symbols-outlined">picture_as_pdf</span>
+          <span>Reportes PDF</span>
+        </a>
       </nav>
     </aside>
   `;

@@ -1,4 +1,4 @@
-from django.db.models import Prefetch, F, Q
+from django.db.models import Prefetch, F, Q, Count
 from django.http import HttpResponse
 from rest_framework import status, generics, permissions, filters
 from rest_framework.response import Response
@@ -10,7 +10,6 @@ from apps.base.api import BaseViewSet
 from apps.base.pagination import StandardResultsSetPagination
 from apps.product.models import (
     Category,
-    ProductType,
     Product,
     ProductFeature,
     ProductColorImage,
@@ -20,7 +19,6 @@ from apps.product.models import (
 )
 from apps.product.api.serializers import (
     CategorySerializer,
-    ProductTypeSerializer,
     ProductSerializer,
     ProductReviewSerializer,
     ProductReviewCreateSerializer
@@ -52,16 +50,7 @@ class CategoryViewSet(BaseViewSet):
     ordering = ['category_name']
 
 
-class ProductTypeViewSet(BaseViewSet):
-    """
-    ViewSet para la gestión CRUD de Tipos de Productos.
-    Soporta paginación, búsqueda y ordenamiento.
-    """
-    serializer_class = ProductTypeSerializer
-    permission_classes = [permissions.AllowAny]
-    search_fields = ['product_type_name', 'description']
-    ordering_fields = ['id', 'product_type_name', 'created_at']
-    ordering = ['product_type_name']
+
 
 
 class FeaturedProductsAPIView(generics.ListAPIView):
@@ -82,7 +71,7 @@ class FeaturedProductsAPIView(generics.ListAPIView):
             Prefetch('features', queryset=ProductFeature.objects.filter(is_deleted=False)),
             Prefetch('color_images', queryset=ProductColorImage.objects.filter(is_deleted=False)),
             Prefetch('angle_images', queryset=ProductAngleImage.objects.filter(is_deleted=False))
-        ).select_related('product_type')
+        )
 
 
 class ExportCatalogPDFAPIView(APIView):
@@ -91,7 +80,6 @@ class ExportCatalogPDFAPIView(APIView):
     
     Acepta parámetros GET opcionales para filtrar el catálogo:
     - category / cat: ID de categoría
-    - product_type / type: ID de tipo de producto
     - min_price: Precio mínimo (>=)
     - max_price: Precio máximo (<=)
     - min_score: Score de ranking mínimo (>=)
@@ -107,16 +95,12 @@ class ExportCatalogPDFAPIView(APIView):
             'categories',
             Prefetch('color_images', queryset=ProductColorImage.objects.filter(is_deleted=False)),
             Prefetch('angle_images', queryset=ProductAngleImage.objects.filter(is_deleted=False))
-        ).select_related('product_type')
+        )
 
-        # 1. Filtros de categoría y tipo
+        # 1. Filtro de categoría
         cat_param = request.query_params.get('category') or request.query_params.get('cat')
         if cat_param and cat_param.lower() != 'all':
             queryset = queryset.filter(categories__id=cat_param)
-
-        type_param = request.query_params.get('product_type') or request.query_params.get('type')
-        if type_param and type_param.lower() != 'all':
-            queryset = queryset.filter(product_type__id=type_param)
 
         # 2. Filtros de precio
         min_price = request.query_params.get('min_price')
@@ -191,14 +175,14 @@ class ExportCatalogPDFAPIView(APIView):
 class ProductViewSet(BaseViewSet):
     """
     ViewSet para la gestión CRUD de Productos.
-    - Soporta filtrado por categoría, tipo de producto, destacado, marca, voltaje.
+    - Soporta filtrado por categoría, destacado, marca, voltaje.
     - Soporta búsqueda por texto en nombre, descripción, marca, capacidad, voltaje, seguridad y relaciones.
     - Soporta ordenamiento por precio, fecha, nombre, marca, ranking_score y total_views.
     - Responde por defecto con paginación optimizada sin cuellos de botella (evita N+1 con prefetch).
     """
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
-    filterset_fields = ['categories', 'product_type', 'is_feature_product', 'brand', 'voltage']
+    filterset_fields = ['categories', 'is_feature_product', 'brand', 'voltage']
     search_fields = [
         'product_name',
         'description',
@@ -206,27 +190,39 @@ class ProductViewSet(BaseViewSet):
         'capacity',
         'voltage',
         'security',
-        'product_type__product_type_name',
         'categories__category_name'
     ]
-    ordering_fields = ['id', 'product_name', 'price', 'created_at', 'brand', 'ranking_score', 'total_views']
+    ordering_fields = [
+        'id', 'product_name', 'price', 'created_at', 'brand',
+        'ranking_score', 'total_views', 'sentiment_score'
+    ]
     ordering = ['-id']
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        top_5_ids = list(
+            Product.objects.filter(is_deleted=False)
+            .order_by('-ranking_score', '-total_views')
+            .values_list('id', flat=True)[:5]
+        )
+        context['top_5_product_ids'] = set(top_5_ids)
+        return context
+
     def get_queryset(self):
-        queryset = Product.objects.filter(is_deleted=False).prefetch_related(
+        queryset = Product.objects.filter(is_deleted=False).annotate(
+            negative_reviews_count=Count('reviews', filter=Q(reviews__sentiment_label='negative', reviews__is_deleted=False), distinct=True),
+            positive_reviews_count=Count('reviews', filter=Q(reviews__sentiment_label='positive', reviews__is_deleted=False), distinct=True)
+        ).prefetch_related(
             'categories',
             Prefetch('features', queryset=ProductFeature.objects.filter(is_deleted=False)),
             Prefetch('color_images', queryset=ProductColorImage.objects.filter(is_deleted=False)),
             Prefetch('angle_images', queryset=ProductAngleImage.objects.filter(is_deleted=False))
-        ).select_related('product_type')
+        )
 
         cat_param = self.request.query_params.get('category') or self.request.query_params.get('cat')
-        type_param = self.request.query_params.get('type')
 
         if cat_param and cat_param.lower() != 'all':
             queryset = queryset.filter(categories__id=cat_param)
-        if type_param and type_param.lower() != 'all':
-            queryset = queryset.filter(product_type__id=type_param)
 
         return queryset.distinct()
 
@@ -256,14 +252,10 @@ class ProductViewSet(BaseViewSet):
             categories = Category.objects.filter(is_deleted=False)
             categories_serializer = CategorySerializer(categories, many=True)
 
-            product_types = ProductType.objects.filter(is_deleted=False)
-            product_types_serializer = ProductTypeSerializer(product_types, many=True)
-
             custom_data = {
                 'pagination_data': response.data if isinstance(response.data, dict) else None,
                 'products': response.data.get('results', response.data) if isinstance(response.data, dict) else response.data,
                 'categories': categories_serializer.data,
-                'product_types': product_types_serializer.data
             }
             return Response(custom_data, status=status.HTTP_200_OK)
 
@@ -284,13 +276,9 @@ class ProductViewSet(BaseViewSet):
             categories = Category.objects.filter(is_deleted=False)
             categories_serializer = CategorySerializer(categories, many=True)
 
-            product_types = ProductType.objects.filter(is_deleted=False)
-            product_types_serializer = ProductTypeSerializer(product_types, many=True)
-
             custom_data = {
                 'product': response.data,
                 'categories': categories_serializer.data,
-                'product_types': product_types_serializer.data
             }
             return Response(custom_data, status=status.HTTP_200_OK)
 

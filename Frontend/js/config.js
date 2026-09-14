@@ -6,10 +6,10 @@
 export const CONFIG = {
   APP_NAME: 'EL VECINO',
   APP_TAGLINE: 'Electro & Hogar',
-  WHATSAPP_PHONE: '573001234567',
+  WHATSAPP_PHONE: '573001234567', // Reemplazar con el número oficial de atención
   DEFAULT_ADVISOR: 'Terminal Bodega Central',
-  API_BASE_URL: 'http://localhost:8000/api', // Ajustado a la base del backend Django
-  USE_MOCKS: true,                           // Cambiar a false al conectar backend
+  API_BASE_URL: 'http://localhost:8000/api', // Base API del backend Django
+  USE_MOCKS: false,                          // Desactiva mocks para conectar con backend real Django
   DEBUG: true,
   CURRENCY_LOCALE: 'es-CO',
   CURRENCY_CODE: 'COP',
@@ -107,7 +107,7 @@ export const CONFIG = {
       ],
       description: 'Tecnología Twin Cooling Plus™ con compresor Digital Inverter y acabado en cristal satinado de alta reflectividad arquitectónica.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4BzSlYuos4wRZUD1h0A976CFR0pmPQ5rrTlpc40DhyI8HEsUcM02wOT1wyAxMVqLhQn8sZtskycGG9tCx1R083jQ_56nPalMk7SfLy6FLboAplkbMHseOamUo0Rj-ib1mxX1xB_pIEz8GCtYAkqFVTcwHOXxBjF8rjZOlIleqYOyJizVshIN3cX6MtIRvWD4aHkr0AZugiYhx2jRc7ZO7wWQvJrDr_6RKbRobyacg8KSlpNva16VWAA',
-      warranty: '3 Años Oficial + Factura Legal DIAN'
+      warranty: 'Respaldo Certificado: factura oficial con garantía directa de fábrica'
     },
     {
       id: 'prod-002',
@@ -117,7 +117,7 @@ export const CONFIG = {
       categoryName: 'Smart TVs & Audio',
       price: 6499000,
       originalPrice: 7899000,
-      badge: 'OLED EVO MASTER',
+      badge: 'PANTALLA OLED 4K PREMIUM',
       status: 'Activo',
       featured: true,
       inStock: true,
@@ -128,9 +128,101 @@ export const CONFIG = {
         'Dolby Vision & Dolby Atmos integrado',
         '4 puertos HDMI 2.1 compatibles con G-Sync & FreeSync'
       ],
-      description: 'El referente mundial en imagen cinematográfica y gaming ultra responsivo.',
+      description: 'El referente mundial en imagen cinematográfica y gaming ultra responsivo. Negros absolutos y brillo repotenciado con Light Boosting Algorithm.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeBL4fPXDkLGZzWfh6YUrdanBDk7Ch9ssyVTtPMMZclrImzdpEliJIHtorDnnaCtxZSpUzitLKx9601fsRkEI-xGpHfAaDPRZwHp-XEu5-2O2vdPcuPYq3BvW8PKlWd_npd5uULz3bdSDlNeQCozIj7G_NfWkv0deXAbCksn6bBO4ZpQ4xXvLwkWtFtdKnh7UVV_ZfYinIVsnOhcx5S60iVHHMmEWVj3YMtQIkaw13-I0aTSbDtu1Iqg',
       warranty: '2 Años Directo con Marca LG'
+    },
+    {
+      id: 'prod-003',
+      sku: 'WT22VT6',
+      name: 'Lavadora Inteligente LG 22kg TurboWash 3D & AI DD',
+      category: 'lavado-secado',
+      categoryName: 'Lavado & Secado',
+      price: 3499000,
+      originalPrice: 4199000,
+      badge: 'TURBOWASH 3D',
+      status: 'Activo',
+      featured: false,
+      inStock: true,
+      clicks: 112,
+      specs: [
+        'Capacidad industrial de 22 Kilogramos',
+        'Motor LG Inverter Direct Drive de alta durabilidad',
+        'Tecnología 6 Motion DD con sensado automático de telas',
+        'Conectividad Wi-Fi vía LG ThinQ para monitoreo remoto'
+      ],
+      description: 'Lavado rápido y eficiente que reduce el desgaste de prendas hasta un 18% mediante inteligencia artificial de censado de carga.',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDx1q9S6Av-tDBuLVrI8_pSH4KN-w0zblvJgtZOz0ObFvrcVayRClJgQk1Eo5h3x5juq-taLxaK8vDgrvUiJi6wWmGgGxobjWTebpGaznzr8EiuasBbbfoPGXzOI37SX4dQfsxGBV-fv6zHRv96_zy2zB7JR9nrQzLey0cgwiFTHl7Dg7HESrvrygYEkPjMPCN6k_rV-bBeq8Dje9H_1rDzNrrG13ofgMxLa3wbdNagCWpcQzjLcA6bWQ',
+      warranty: '10 Años en Motor Smart Inverter'
+    },
+    {
+      id: 'prod-004',
+      sku: 'CFI-2015',
+      name: 'Consola Sony PlayStation 5 Slim 1TB + Control DualSense',
+      category: 'gaming-tech',
+      categoryName: 'Gaming & Tech',
+      price: 2499000,
+      originalPrice: 2899000,
+      badge: 'MEJOR PRODUCTO GAMER',
+      status: 'Activo',
+      featured: true,
+      inStock: true,
+      clicks: 178,
+      specs: [
+        'Almacenamiento ultra rápido SSD 1TB NVMe',
+        'Audio 3D Tempest y gatillos adaptativos',
+        'Trazado de rayos y soporte hasta 120 FPS en 4K',
+        'Diseño un 30% más compacto y ligero'
+      ],
+      description: 'Edición oficial sellada con lector de disco Blu-ray Ultra HD. Compatible con todo el ecosistema de juegos PlayStation 5 y PlayStation 4.',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLJntVL6Pq_cbVBEVCJWEVZzXRt6A47GkBPZ5jlPyC3O3HnhjO0I0l0i3AwwERE6lHELrK5asiRjtQNR5z74b3JCF5NG2qUxx3Mt4K5tyl6-zG8Q6KcT0rsA1eGVTXlbxZ3jTGHaXC9UsPQOQJlcXn6yIzst7I8wU7m6nAXqejg_RwB1sN0bclt9MnsjGr9uRcsMT8Du8eCnlaQkOD82_53uArbvdBGG8EKsu7x_Szafv2iRnyMAXSPQ',
+      warranty: '1 Año Oficial Directo Sony Colombia'
+    },
+    {
+      id: 'prod-005',
+      sku: 'NN-ST65L',
+      name: 'Microondas Panasonic Inverter 32L Cyclonic Wave',
+      category: 'pequenos-electro',
+      categoryName: 'Pequeños Electro',
+      price: 849000,
+      originalPrice: 999000,
+      badge: 'LINEA DE COCCIÓN PREMIUM',
+      status: 'Activo',
+      featured: false,
+      inStock: true,
+      clicks: 63,
+      specs: [
+        'Capacidad espaciosa de 32 Litros',
+        'Potencia de cocción continua Inverter 1100W',
+        'Sensor Genius automático de temperatura',
+        'Diseño minimalista frontal con panel touch'
+      ],
+      description: 'Cocción y descongelado uniforme sin resecar los alimentos gracias al flujo continuo de microondas Inverter de precisión.',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAhpbyTv8mEuDuQyUBieR0mEKwf0N5zfQlg4C4ijPPm4k26xY1caDe6mK9L7BFw9LTEvxNy7kyzLr7SkoKlJ_1YZ6LRn1m6GL3roHjkoRfiDf0AIGuNzMdP9AzZtOLuJZ2m0m7gkIuRE-W5F7djkur90h6L0O-jTeTfePXdu3zwOoLsnCZRCiRo3RwqZY3CpPSUg2XqV-TdQGTt7N_ms8JRrOGO5bamEDKpWrSMh1ieMDiqFGVZEBiH1g',
+      warranty: '1 Año Garantía de Fábrica'
+    },
+    {
+      id: 'prod-006',
+      sku: 'XIAOMI-13T-256',
+      name: 'Smartphone Xiaomi 13T 256GB Óptica Leica 50MP 144Hz',
+      category: 'gaming-tech',
+      categoryName: 'Gaming & Tech',
+      price: 2199000,
+      originalPrice: 2599000,
+      badge: 'CÁMARA LEICA PRO',
+      status: 'Activo',
+      featured: true,
+      inStock: true,
+      clicks: 144,
+      specs: [
+        'Sistema de cámaras co-diseñado con Leica',
+        'Pantalla CrystalRes AMOLED de 144Hz',
+        'Carga Turbo rápida de 67W (5000 mAh)',
+        'Resistencia al agua y polvo IP68'
+      ],
+      description: 'Fotografía profesional de nivel insignia y rendimiento Snapdragon fluido para multitasking y captura de video en 4K.',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJhUDV6weDKxxuqy-9W-sqkfg6uGb6vtSk-O0FFqnx8eJ2unkozm60gZ3bmO3qCvv11WPqO1SqdJHfI1fiY9RmJH9SjbGzMJSGusZ1I4nPgxIu9wV9tEaE0TTVbJ4xAI1kLIzZTmLgwJMqTjF19PXjryuE0ebTcHi8BUmPxeSh4bddK4D_SPoqHCzzPo-v7GCHKwi7qQGtrClu1hTnEpLeADcJSO6hdjpsbVLkGC7RAEwBaohAjhVCPQ',
+      warranty: '2 Años con Factura y Homologación CRC'
     }
   ],
 
@@ -141,20 +233,76 @@ export const CONFIG = {
       category: 'HOGAR & ESTILO',
       badge: 'COMBO ESTRELLA DEL MES',
       stockNote: 'ÚLTIMAS 5 UNIDADES EN BODEGA',
-      description: 'Paquete de alta gama: Nevera Samsung SpaceMax 602L + Microondas Panasonic Inverter.',
+      description: 'Paquete de alta gama: Nevera Samsung SpaceMax 602L + Microondas Panasonic Inverter con despacho prioritario y kit de instalación sin costo.',
       originalPrice: 7198000,
       promoPrice: 5890000,
       saving: 1308000,
       active: true,
-      whatsappMessage: '¡Hola EL VECINO! Me interesa adquirir el Combo Dúo Cocina Chef.',
+      whatsappMessage: '¡Hola EL VECINO! Me interesa adquirir el Combo Dúo Cocina Chef (Nevera Samsung SpaceMax + Microondas Inverter). ¿Tienen disponibilidad y despacho inmediato?',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4BzSlYuos4wRZUD1h0A976CFR0pmPQ5rrTlpc40DhyI8HEsUcM02wOT1wyAxMVqLhQn8sZtskycGG9tCx1R083jQ_56nPalMk7SfLy6FLboAplkbMHseOamUo0Rj-ib1mxX1xB_pIEz8GCtYAkqFVTcwHOXxBjF8rjZOlIleqYOyJizVshIN3cX6MtIRvWD4aHkr0AZugiYhx2jRc7ZO7wWQvJrDr_6RKbRobyacg8KSlpNva16VWAA'
+    },
+    {
+      id: 'promo-002',
+      title: 'Especial Cine en Casa Pantallas 4K OLED',
+      category: 'ENTRETENIMIENTO',
+      badge: 'DESCUENTO CINEFILO',
+      stockNote: '8 PANTALLAS DISPONIBLES',
+      description: 'Smart TV LG OLED 65" evo C3 con soporte de pared multidireccional premium de regalo y calibración de fábrica certificada.',
+      originalPrice: 7899000,
+      promoPrice: 6499000,
+      saving: 1400000,
+      active: true,
+      whatsappMessage: '¡Hola! Deseo cotizar disponibilidad del Especial Pantallas 4K con la LG OLED 65" evo C3 y confirmar cobertura de envío.',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeBL4fPXDkLGZzWfh6YUrdanBDk7Ch9ssyVTtPMMZclrImzdpEliJIHtorDnnaCtxZSpUzitLKx9601fsRkEI-xGpHfAaDPRZwHp-XEu5-2O2vdPcuPYq3BvW8PKlWd_npd5uULz3bdSDlNeQCozIj7G_NfWkv0deXAbCksn6bBO4ZpQ4xXvLwkWtFtdKnh7UVV_ZfYinIVsnOhcx5S60iVHHMmEWVj3YMtQIkaw13-I0aTSbDtu1Iqg'
+    },
+    {
+      id: 'promo-003',
+      title: 'Temporada Gamer Pro PS5 Slim + Juego Exclusivo',
+      category: 'TEMPORADA TECH',
+      badge: 'PACK GAMER SELLADO',
+      stockNote: '12 CONSOLAS EN STOCK',
+      description: 'Consola Sony PlayStation 5 Slim 1TB con DualSense inalámbrico adicional incluido y entrega inmediata en ciudades principales.',
+      originalPrice: 3299000,
+      promoPrice: 2799000,
+      saving: 500000,
+      active: true,
+      whatsappMessage: '¡Hola EL VECINO! Quisiera apartar el Pack Temporada Gamer Pro con la consola PS5 Slim 1TB. ¿Qué medios de pago reciben?',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLJntVL6Pq_cbVBEVCJWEVZzXRt6A47GkBPZ5jlPyC3O3HnhjO0I0l0i3AwwERE6lHELrK5asiRjtQNR5z74b3JCF5NG2qUxx3Mt4K5tyl6-zG8Q6KcT0rsA1eGVTXlbxZ3jTGHaXC9UsPQOQJlcXn6yIzst7I8wU7m6nAXqejg_RwB1sN0bclt9MnsjGr9uRcsMT8Du8eCnlaQkOD82_53uArbvdBGG8EKsu7x_Szafv2iRnyMAXSPQ'
     }
   ],
 
-  TIKTOK_REELS: []
+  TIKTOK_REELS: [
+    {
+      id: 'reel-01',
+      title: 'Review a fondo: Nevera Samsung SpaceMax Bespoke',
+      views: '12.4K',
+      author: '@elvecinocolombia',
+      likes: '3.8K',
+      productId: 'prod-001',
+      thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJhUDV6weDKxxuqy-9W-sqkfg6uGb6vtSk-O0FFqnx8eJ2unkozm60gZ3bmO3qCvv11WPqO1SqdJHfI1fiY9RmJH9SjbGzMJSGusZ1I4nPgxIu9wV9tEaE0TTVbJ4xAI1kLIzZTmLgwJMqTjF19PXjryuE0ebTcHi8BUmPxeSh4bddK4D_SPoqHCzzPo-v7GCHKwi7qQGtrClu1hTnEpLeADcJSO6hdjpsbVLkGC7RAEwBaohAjhVCPQ'
+    },
+    {
+      id: 'reel-02',
+      title: 'Probando el panel OLED LG evo C3 a 120Hz con PS5',
+      views: '24.1K',
+      author: '@elvecinocolombia',
+      likes: '8.4K',
+      productId: 'prod-002',
+      thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTkDgQ3H7ngH4us6kFfgvC35UGTI08qCmt9r6-MH1EprjcXblrHq-mdj3s2ttDjsLY1e7QxC96GBCFP3WLEHDseF-XpKuxuOhlPGYwAZKhciBB5vDz_JiOOFnYqRQX2CkAc4SIzzZOnAkymVzkGIVxj67ZVR8uyPyVitwl3zPNme1kYUim7gaJmwC2fKgyJf-Aljj22xsghoiziH_HpECXfO-Z9L4KFhN0GGQTRxGLWwo_M3WEzgJjOg'
+    },
+    {
+      id: 'reel-03',
+      title: 'Unboxing PS5 Slim 1TB: ¿Vale la pena renovar?',
+      views: '35.9K',
+      author: '@elvecinocolombia',
+      likes: '12.3K',
+      productId: 'prod-004',
+      thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDDrVTzGN2YkqXvj04Ub-YL1AWVu_1m6eQqi3Zd71XHqfX_gOiLIFTA0b7srm2V5luoDtj5sPK0Vpi-EwUhoDQHubnRJS5Dnbh12yyInDv7aiHvmVK4pY0mJ44Dc3rtRGh3EIKSP0qh9hVuZtp3CLo_qPRVUv2ckseHN_7A8wMLEuEWW333WWtx3blz5VqtcwHSxNlIKJ_K5PX4Z4iaCresU3qtotZfpbyv8ld-5wZrOY26ofqOE52SOA'
+    }
+  ]
 };
 
-// Auxiliares de formateo exportados individualmente
+// Auxiliares de formateo numérico y de moneda
 export const formatUSD = (amount) => {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount || 0);
 };
@@ -163,7 +311,15 @@ export const formatCOP = (amount) => {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount || 0);
 };
 
-// Vinculación global para scripts legacy
+// Vinculación global para scripts legacy del navegador
 if (typeof window !== 'undefined') {
   window.CONFIG = CONFIG;
+  window.formatUSD = formatUSD;
+  window.formatCOP = formatCOP;
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { CONFIG, formatUSD, formatCOP };
+}
+
+export default CONFIG;

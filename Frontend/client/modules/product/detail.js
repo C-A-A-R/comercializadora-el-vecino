@@ -52,11 +52,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     localStorage.setItem(commentStorageKey, JSON.stringify(comments.slice(0, 12)));
   }
 
-  function renderComments() {
+  async function renderComments() {
     const listEl = document.getElementById('commentsList');
     if (!listEl) return;
 
-    const comments = getProductComments();
+    let comments = [];
+    if (currentProduct?.id) {
+      try {
+        const backendReviews = await window.ProductApi.getReviews(currentProduct.id);
+        if (Array.isArray(backendReviews) && backendReviews.length > 0) {
+          comments = backendReviews.map(r => ({
+            name: 'Cliente Verificado',
+            rating: 5,
+            text: r.comment,
+            date: r.created_at ? new Date(r.created_at).toLocaleDateString() : 'Reciente'
+          }));
+        }
+      } catch (e) {
+        console.warn('[detail.js] Fallback a comentarios locales:', e);
+      }
+    }
+
+    if (!comments.length) {
+      comments = getProductComments();
+    }
+
     if (!comments.length) {
       listEl.innerHTML = '<p class="comment-empty">Sé el primero en dejar un comentario sobre este producto.</p>';
       return;
@@ -85,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const commentForm = document.getElementById('productCommentForm');
   if (commentForm) {
-    commentForm.addEventListener('submit', (event) => {
+    commentForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
       const nameInput = document.getElementById('commentName');
@@ -98,6 +118,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (!text) return;
 
+      // Enviar reseña a backend si hay producto activo
+      if (currentProduct?.id) {
+        try {
+          await window.ProductApi.createReview(currentProduct.id, text);
+          if (window.Toast) {
+            window.Toast.success('Tu comentario ha sido registrado con éxito.');
+          }
+        } catch (e) {
+          console.warn('[detail.js] Error al enviar reseña a API, guardando en local:', e);
+        }
+      }
+
       const comments = getProductComments();
       comments.unshift({
         name,
@@ -107,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       saveProductComments(comments);
-      renderComments();
+      await renderComments();
 
       commentForm.reset();
       if (ratingInput) ratingInput.value = '5';
@@ -121,8 +153,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const all = await window.ProductApi.getProducts();
         currentProduct = all[0];
       }
+      if (currentProduct?.id) {
+        window.ProductApi.registerView(currentProduct.id);
+      }
       renderProductDetail(currentProduct);
-      renderComments();
+      await renderComments();
       loadRelatedProducts(currentProduct);
     } catch (error) {
       console.error('[detail.js] Error al cargar producto:', error);

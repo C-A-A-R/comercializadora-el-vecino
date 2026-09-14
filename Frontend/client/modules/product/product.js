@@ -71,9 +71,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
 
     categories.forEach(cat => {
-      const count = allProducts.filter(p => p.category === cat.slug || p.category === cat.id).length;
+      const count = allProducts.filter(p =>
+        String(p.category) === String(cat.id) ||
+        p.category === cat.slug ||
+        (Array.isArray(p.categories) && p.categories.map(String).includes(String(cat.id)))
+      ).length;
+      const isMatch = String(currentCategory) === String(cat.id) || currentCategory === cat.slug;
       tabsHtml += `
-        <button class="category-tab-btn ${currentCategory === cat.slug || currentCategory === cat.id ? 'active' : ''}" data-cat="${cat.slug || cat.id}">
+        <button class="category-tab-btn ${isMatch ? 'active' : ''}" data-cat="${cat.id}">
           <span class="material-symbols-outlined text-[18px]">${cat.icon || 'inventory_2'}</span>
           <span>${cat.name}</span>
           <span class="text-xs opacity-75">(${count})</span>
@@ -98,7 +103,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 1. Categoría
     if (currentCategory && currentCategory !== 'all') {
-      filtered = filtered.filter(p => p.category === currentCategory);
+      filtered = filtered.filter(p =>
+        String(p.category) === String(currentCategory) ||
+        p.category === currentCategory ||
+        (Array.isArray(p.categories) && p.categories.map(String).includes(String(currentCategory)))
+      );
     }
 
     // 2. Búsqueda por texto

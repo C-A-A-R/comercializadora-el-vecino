@@ -243,7 +243,7 @@ export const ComboFormView = {
     const calc = ComboBuilder.calculateTotals(this.selectedItems, comboPriceUsd);
 
     if (!calc.isValid) {
-      Toast.show({ message: 'El combo no cumple con las validaciones requeridas (mínimo 2 productos y precio menor al regular)', type: 'error' });
+      Toast.show('El combo no cumple con las validaciones requeridas (mínimo 2 productos y precio menor al regular)', 'error');
       return;
     }
 
@@ -252,6 +252,7 @@ export const ComboFormView = {
       description: document.getElementById('combo-description').value,
       image_url: document.getElementById('combo-image-url').value,
       price_combo_usd: comboPriceUsd,
+      price: comboPriceUsd * 4200,
       start_date: new Date(document.getElementById('combo-start').value).toISOString(),
       end_date: new Date(document.getElementById('combo-end').value).toISOString(),
       items: this.selectedItems.map(i => ({ product_id: i.product.id, quantity: i.quantity })),
@@ -260,10 +261,11 @@ export const ComboFormView = {
 
     try {
       await ComboService.create(payload);
-      Toast.show({ message: 'Combo promocional creado exitosamente', type: 'success' });
+      Toast.show('Combo promocional creado exitosamente', 'success');
       window.location.hash = '#/combos';
     } catch (err) {
-      Toast.show({ message: 'No se pudo guardar el combo promocional', type: 'error' });
+      console.error(err);
+      Toast.show('No se pudo guardar el combo promocional', 'error');
     }
   }
 };

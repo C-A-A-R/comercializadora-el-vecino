@@ -19,8 +19,19 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+from apps.base.auth_views import LoginView, CurrentUserView
+from rest_framework_simplejwt.views import TokenRefreshView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Authentication Endpoints (JWT)
+    path('api/auth/login/', LoginView.as_view(), name='auth-login'),
+    path('api/auth/refresh/', TokenRefreshView.as_view(), name='auth-refresh'),
+    path('api/auth/me/', CurrentUserView.as_view(), name='auth-current-user'),
+    path('api/token/', LoginView.as_view(), name='token-obtain-pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+
     path('api/', include('apps.product.api.routers')),
     path('api/promotions/', include('apps.promotions.api.routers')),
 

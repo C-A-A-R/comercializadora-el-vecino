@@ -1,31 +1,53 @@
 import { ProductService } from '../../services/product.service.js';
+import { CategoryService } from '../../services/category.service.js';
 import { formatCOP } from '../../../js/config.js';
+import { Toast } from '../../components/ui/Toast.js';
 
 export const ProductFormView = {
+  categories: [],
+
   async render(productId = null) {
     const isEdit = Boolean(productId);
     let product = {
       name: '',
       description: '',
       price_usd: '',
-      stock: 0,
+      stock: 10,
       brand: '',
       model: '',
       voltage: '110V',
       capacity: '',
-      dimensions: '',
       category_id: '',
-      product_type_id: '',
       is_active: true,
-      is_featured: false,
-      variants: [],
-      images: []
+      is_featured: false
     };
 
-    if (isEdit) {
-      const data = await ProductService.getById(productId);
-      if (data) product = data;
+    // Cargar categorías del backend
+    try {
+      const catData = await CategoryService.listCategories();
+      this.categories = catData.results || [];
+    } catch (err) {
+      console.warn('[ProductFormView] Error al cargar categorías:', err);
+      this.categories = [];
     }
+
+    if (isEdit) {
+      try {
+        const data = await ProductService.getById(productId);
+        if (data) {
+          product = {
+            ...product,
+            ...data,
+            category_id: data.category?.id || (data.categories && data.categories[0]) || ''
+          };
+        }
+      } catch (err) {
+        console.error('[ProductFormView] Error al cargar producto para edición:', err);
+        Toast.show('Error al cargar datos del producto', 'error');
+      }
+    }
+
+    const currentCatId = product.category_id || (product.category && product.category.id) || '';
 
     return `
       <div class="space-y-6 max-w-4xl mx-auto">
@@ -34,7 +56,7 @@ export const ProductFormView = {
             <h2 class="font-display text-2xl font-bold text-deep-obsidian">
               ${isEdit ? 'Editar Producto' : 'Nuevo Producto'}
             </h2>
-            <p class="text-sm text-gray-500">Complete la información general, especificaciones técnicas, variantes e imágenes.</p>
+            <p class="text-sm text-gray-500">Complete la información general y especificaciones técnicas para el catálogo.</p>
           </div>
           <a href="#/products" class="px-4 py-2 border border-slate-border text-gray-700 rounded-lg text-sm font-medium hover:bg-slate-surface transition flex items-center gap-1">
             <span class="material-symbols-outlined text-base">arrow_back</span>
@@ -49,55 +71,67 @@ export const ProductFormView = {
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nombre del Producto *</label>
-              <input type="text" id="prod-name" required value="${product.name}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej. Nevera Samsung 200L No Frost">
+              <input type="text" id="prod-name" required value="${product.name || product.product_name || ''}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej. Nevera Samsung 200L No Frost">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Categoría *</label>
+              <select id="prod-category" required class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none bg-white">
+                <option value="">-- Seleccione una categoría --</option>
+                ${this.categories.map(cat => `
+                  <option value="${cat.id}" ${String(cat.id) === String(currentCatId) ? 'selected' : ''}>
+                    ${cat.name || cat.category_name}
+                  </option>
+                `).join('')}
+              </select>
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Marca *</label>
-              <input type="text" id="prod-brand" required value="${product.brand}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej. Samsung">
+              <input type="text" id="prod-brand" required value="${product.brand || ''}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej. Samsung">
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Modelo *</label>
-              <input type="text" id="prod-model" required value="${product.model}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej. RT20K5030S8">
+              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Capacidad / Modelo</label>
+              <input type="text" id="prod-capacity" value="${product.capacity || product.model || ''}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej. 600 Litros, 15 kg, etc.">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Voltaje</label>
+              <select id="prod-voltage" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none bg-white">
+                <option value="110V" ${product.voltage === '110V' ? 'selected' : ''}>110V</option>
+                <option value="220V" ${product.voltage === '220V' ? 'selected' : ''}>220V</option>
+                <option value="110V/220V" ${product.voltage === '110V/220V' || product.voltage === 'Dual' ? 'selected' : ''}>Dual (110V/220V)</option>
+              </select>
             </div>
 
             <!-- Precios y Multimoneda (RN-06) -->
             <div>
               <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Precio USD ($) *</label>
-              <input type="number" step="0.01" min="0" id="prod-price-usd" required value="${product.price_usd}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="0.00">
+              <input type="number" step="0.01" min="0" id="prod-price-usd" required value="${product.price_usd || ''}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="0.00">
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Precio Estimado COP (Calculado)</label>
-              <input type="text" id="prod-price-cop-preview" disabled value="${product.price_usd ? formatCOP(product.price_usd * 4200) : '$ 0'}" class="w-full px-3 py-2 bg-slate-surface border border-slate-border rounded-lg text-sm font-semibold text-gray-600 cursor-not-allowed">
+              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Precio Estimado COP (Calculado x 4,200)</label>
+              <input type="text" id="prod-price-cop-preview" disabled value="${product.price_usd ? formatCOP(Number(product.price_usd) * 4200) : '$ 0'}" class="w-full px-3 py-2 bg-slate-surface border border-slate-border rounded-lg text-sm font-semibold text-gray-600 cursor-not-allowed">
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Stock Disponible *</label>
-              <input type="number" min="0" id="prod-stock" required value="${product.stock}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none">
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Voltaje</label>
-              <select id="prod-voltage" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none">
-                <option value="110V" ${product.voltage === '110V' ? 'selected' : ''}>110V</option>
-                <option value="220V" ${product.voltage === '220V' ? 'selected' : ''}>220V</option>
-                <option value="Dual" ${product.voltage === 'Dual' ? 'selected' : ''}>Dual (110V/220V)</option>
-              </select>
+              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Stock Referencial</label>
+              <input type="number" min="0" id="prod-stock" value="${product.stock ?? 10}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none">
             </div>
           </div>
 
           <!-- Descripción -->
           <div>
             <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Descripción</label>
-            <textarea id="prod-description" rows="3" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Descripción corta comercial...">${product.description}</textarea>
+            <textarea id="prod-description" rows="3" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Descripción comercial...">${product.description || ''}</textarea>
           </div>
 
           <!-- Toggles Destacado / Activo -->
           <div class="flex items-center gap-6 pt-2">
             <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
-              <input type="checkbox" id="prod-active" ${product.is_active ? 'checked' : ''} class="w-4 h-4 text-electric-blue rounded border-gray-300">
+              <input type="checkbox" id="prod-active" ${product.is_active !== false ? 'checked' : ''} class="w-4 h-4 text-electric-blue rounded border-gray-300">
               Producto Activo en Catálogo
             </label>
 
@@ -110,7 +144,7 @@ export const ProductFormView = {
           <!-- Acciones -->
           <div class="pt-4 border-t border-slate-border flex justify-end gap-3">
             <a href="#/products" class="px-4 py-2 border border-slate-border text-gray-600 rounded-lg text-sm font-medium hover:bg-slate-surface transition">Cancelar</a>
-            <button type="submit" class="px-5 py-2 bg-electric-blue text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+            <button type="submit" id="btn-save-product" class="px-5 py-2 bg-electric-blue text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">
               ${isEdit ? 'Actualizar Producto' : 'Guardar Producto'}
             </button>
           </div>
@@ -127,6 +161,56 @@ export const ProductFormView = {
       inputUsd.addEventListener('input', (e) => {
         const usd = parseFloat(e.target.value) || 0;
         previewCop.value = formatCOP(usd * 4200);
+      });
+    }
+
+    const form = document.getElementById('product-form');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('product-id').value;
+        const catVal = document.getElementById('prod-category').value;
+        const usdVal = parseFloat(document.getElementById('prod-price-usd').value) || 0;
+
+        const payload = {
+          name: document.getElementById('prod-name').value.trim(),
+          product_name: document.getElementById('prod-name').value.trim(),
+          brand: document.getElementById('prod-brand').value.trim(),
+          capacity: document.getElementById('prod-capacity').value.trim(),
+          voltage: document.getElementById('prod-voltage').value,
+          price_usd: usdVal,
+          price: usdVal * 4200,
+          stock: parseInt(document.getElementById('prod-stock').value, 10) || 0,
+          description: document.getElementById('prod-description').value.trim(),
+          is_active: document.getElementById('prod-active').checked,
+          is_featured: document.getElementById('prod-featured').checked,
+          is_feature_product: document.getElementById('prod-featured').checked,
+          category_id: catVal ? parseInt(catVal, 10) : undefined,
+          categories: catVal ? [parseInt(catVal, 10)] : []
+        };
+
+        if (id) {
+          payload.id = parseInt(id, 10) || id;
+        }
+
+        const submitBtn = document.getElementById('btn-save-product');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerText = 'Guardando...';
+        }
+
+        try {
+          await ProductService.save(payload);
+          Toast.show(id ? 'Producto actualizado con éxito' : 'Producto creado con éxito', 'success');
+          window.location.hash = '#/products';
+        } catch (err) {
+          console.error(err);
+          Toast.show('Error al guardar producto: ' + (err.message || 'Error del servidor'), 'error');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = id ? 'Actualizar Producto' : 'Guardar Producto';
+          }
+        }
       });
     }
   }
