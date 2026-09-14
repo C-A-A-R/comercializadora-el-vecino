@@ -1,0 +1,119 @@
+/* Product Quick-View Modal Styles */
+.product-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.product-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.product-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 54rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  transform: scale(0.95);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.product-modal-backdrop.open .product-modal-dialog {
+  transform: scale(1);
+}
+
+.btn-close-product-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: #F4F6FB;
+  border: 1px solid #E2E6EE;
+  color: #0A0A0A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.btn-close-product-modal:hover {
+  background: #0A0A0A;
+  color: #FFFFFF;
+}
+
+.product-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .product-modal-grid {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
+
+.product-modal-gallery {
+  background: #F4F6FB;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.product-modal-img {
+  width: 100%;
+  max-height: 22rem;
+  object-fit: contain;
+}
+
+.product-modal-details {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.product-modal-specs-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-modal-spec-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #454558;
+}
+
+.product-modal-spec-row .material-symbols-outlined {
+  color: #0800FF;
+  font-size: 1.125rem;
+}

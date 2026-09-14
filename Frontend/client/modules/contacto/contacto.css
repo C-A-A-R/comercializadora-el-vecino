@@ -1,0 +1,572 @@
+/* =========================================================
+   EL VECINO — SECCIÓN DE CONTACTO
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   VARIABLES DE COLOR
+--------------------------------------------------------- */
+
+:root {
+    --contact-primary: #0800FF;
+    --contact-secondary: #FF00A8;
+    --contact-tertiary: #9D0700;
+    --contact-quaternary: #25D366;
+    --contact-neutral: #0A0A0A;
+
+    --contact-background: #F5F5F8;
+    --contact-white: #FFFFFF;
+    --contact-text: #1F1F1F;
+    --contact-text-light: #5F636D;
+    --contact-border: #E5E7EB;
+    --contact-shadow: rgba(10, 10, 10, 0.08);
+}
+
+/* ---------------------------------------------------------
+   HERO / CABECERA GLOBAL DEL BLOQUE
+--------------------------------------------------------- */
+
+.contact-hero {
+    background: #F5F5F8;
+    padding: 30px 0 16px;
+}
+
+/* ---------------------------------------------------------
+   SECCIÓN PRINCIPAL
+--------------------------------------------------------- */
+
+.contact-section {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 34px 30px 70px;
+
+    background: var(--contact-background);
+}
+
+
+/* ---------------------------------------------------------
+   CONTENEDOR
+--------------------------------------------------------- */
+
+.contact-container {
+    width: 100%;
+    max-width: 1280px;
+
+    margin: 0 auto;
+}
+
+
+/* ---------------------------------------------------------
+   ENCABEZADO
+--------------------------------------------------------- */
+
+.contact-header {
+    margin-bottom: 30px;
+}
+
+.contact-header h2 {
+    margin: 0 0 18px;
+
+    font-family: "Outfit", Arial, sans-serif;
+
+    font-size: clamp(2.5rem, 4vw, 5rem);
+    font-weight: 800;
+
+    line-height: 0.96;
+
+    letter-spacing: -0.06em;
+
+    color: var(--contact-text);
+}
+
+.contact-header p {
+    max-width: 980px;
+
+    margin: 0;
+
+    font-family: "Plus Jakarta Sans", Arial, sans-serif;
+
+    font-size: clamp(1.05rem, 1.45vw, 1.4rem);
+    font-weight: 400;
+
+    line-height: 1.5;
+
+    color: var(--contact-text);
+}
+
+
+/* ---------------------------------------------------------
+   GRID DE TARJETAS
+--------------------------------------------------------- */
+
+.contact-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 22px;
+
+    margin-top: 26px;
+}
+
+
+/* ---------------------------------------------------------
+   TARJETA BASE
+--------------------------------------------------------- */
+
+.contact-card {
+    position: relative;
+
+    min-height: 310px;
+
+    box-sizing: border-box;
+
+    padding: 24px 22px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    border: 1px solid var(--contact-border);
+
+    border-radius: 18px;
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 7px 18px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* ---------------------------------------------------------
+   BARRA SUPERIOR DE CADA TARJETA
+--------------------------------------------------------- */
+
+.contact-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    transition: height 0.25s ease;
+}
+
+.contact-card:hover::before {
+    height: 6px;
+}
+
+
+/* ---------------------------------------------------------
+   HOVER GENERAL
+--------------------------------------------------------- */
+
+.contact-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 14px 28px rgba(10, 10, 10, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   ICONO
+--------------------------------------------------------- */
+
+.contact-icon {
+    width: 88px;
+    height: 88px;
+
+    flex-shrink: 0;
+
+    margin: 0 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 38px;
+
+    background: #F2F2F7;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* Animación del icono */
+
+.contact-card:hover .contact-icon {
+    transform: scale(1.07);
+}
+
+
+/* ---------------------------------------------------------
+   WHATSAPP
+--------------------------------------------------------- */
+
+.whatsapp-card::before {
+    background: var(--contact-quaternary);
+}
+
+.whatsapp-card {
+    border-top: 1px solid var(--contact-quaternary);
+}
+
+.whatsapp-card .contact-icon {
+    color: var(--contact-quaternary);
+    background: #EEEEFF;
+}
+
+.whatsapp-card h3 {
+    color: var(--contact-quaternary);
+}
+
+.whatsapp-card .contact-link {
+    color: var(--contact-quaternary);
+    border-bottom-color: var(--contact-quaternary);
+}
+
+.whatsapp-card:hover {
+    border-color: var(--contact-quaternary);
+}
+
+.whatsapp-card:hover .contact-icon {
+    color: #FFFFFF;
+    background: var(--contact-quaternary);
+
+    box-shadow:
+        0 7px 18px rgba(8, 0, 255, 0.30);
+}
+
+
+/* ---------------------------------------------------------
+   INSTAGRAM
+--------------------------------------------------------- */
+
+.instagram-card::before {
+    background: var(--contact-secondary);
+}
+
+.instagram-card {
+    border-top: 1px solid var(--contact-secondary);
+}
+
+.instagram-card .contact-icon {
+    color: var(--contact-secondary);
+    background: #FFECF8;
+}
+
+.instagram-card h3 {
+    color: var(--contact-secondary);
+}
+
+.instagram-card .contact-link {
+    color: var(--contact-secondary);
+    border-bottom-color: var(--contact-secondary);
+}
+
+.instagram-card:hover {
+    border-color: var(--contact-secondary);
+}
+
+.instagram-card:hover .contact-icon {
+    color: #FFFFFF;
+    background: var(--contact-secondary);
+
+    box-shadow:
+        0 7px 18px rgba(255, 0, 168, 0.30);
+}
+
+
+/* ---------------------------------------------------------
+   TIKTOK
+--------------------------------------------------------- */
+
+.tiktok-card::before {
+    background: var(--contact-neutral);
+}
+
+.tiktok-card {
+    border-top: 1px solid var(--contact-neutral);
+}
+
+.tiktok-card .contact-icon {
+    color: #FFFFFF;
+    background: var(--contact-neutral);
+
+    box-shadow:
+        0 7px 18px rgba(10, 10, 10, 0.20);
+}
+
+.tiktok-card h3 {
+    color: var(--contact-neutral);
+}
+
+.tiktok-card .contact-link {
+    color: var(--contact-secondary);
+    border-bottom-color: var(--contact-secondary);
+}
+
+.tiktok-card:hover {
+    border-color: var(--contact-neutral);
+}
+
+.tiktok-card:hover .contact-icon {
+    color: var(--contact-secondary);
+    background: var(--contact-neutral);
+
+    box-shadow:
+        0 7px 20px rgba(255, 0, 168, 0.35);
+}
+
+
+/* ---------------------------------------------------------
+   CORREO
+--------------------------------------------------------- */
+
+.email-card::before {
+    background: var(--contact-tertiary);
+}
+
+.email-card {
+    border-top: 1px solid var(--contact-tertiary);
+}
+
+.email-card .contact-icon {
+    color: var(--contact-tertiary);
+    background: #FFF0EF;
+}
+
+.email-card h3 {
+    color: var(--contact-tertiary);
+}
+
+.email-card .contact-link {
+    color: var(--contact-tertiary);
+    border-bottom-color: var(--contact-tertiary);
+}
+
+.email-card:hover {
+    border-color: var(--contact-tertiary);
+}
+
+.email-card:hover .contact-icon {
+    color: #FFFFFF;
+    background: var(--contact-tertiary);
+
+    box-shadow:
+        0 7px 18px rgba(157, 7, 0, 0.30);
+}
+
+
+/* ---------------------------------------------------------
+   TÍTULO DE TARJETA
+--------------------------------------------------------- */
+
+.contact-card h3 {
+    margin: 0 0 10px;
+
+    font-family: "Outfit", Arial, sans-serif;
+
+    font-size: clamp(1.4rem, 1.5vw, 2.1rem);
+    font-weight: 800;
+
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+}
+
+
+/* ---------------------------------------------------------
+   DESCRIPCIÓN
+--------------------------------------------------------- */
+
+.contact-card p {
+    max-width: 300px;
+
+    margin: 0;
+
+    font-family: "Plus Jakarta Sans", Arial, sans-serif;
+
+    font-size: 1rem;
+    font-weight: 400;
+
+    line-height: 1.5;
+
+    color: var(--contact-text-light);
+}
+
+
+/* ---------------------------------------------------------
+   LINK / BOTÓN INFERIOR
+--------------------------------------------------------- */
+
+.contact-link {
+    display: inline-block;
+
+    margin-top: auto;
+    padding-top: 18px;
+
+    font-family: "Outfit", Arial, sans-serif;
+
+    font-size: 1.2rem;
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    text-decoration: none;
+
+    border-bottom: 2px solid;
+
+    transition:
+        letter-spacing 0.2s ease,
+        transform 0.2s ease;
+}
+
+.contact-card:hover .contact-link {
+    letter-spacing: 0.4px;
+}
+
+
+/* ---------------------------------------------------------
+   ICONOS FONT AWESOME
+--------------------------------------------------------- */
+
+.contact-icon i {
+    display: block;
+
+    line-height: 1;
+
+    font-style: normal;
+}
+
+
+/* ---------------------------------------------------------
+   TABLET
+--------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+
+    .contact-section {
+        padding: 50px 25px 60px;
+    }
+
+    .contact-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 18px;
+    }
+
+    .contact-header h2 {
+        font-size: 38px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MÓVIL
+--------------------------------------------------------- */
+
+@media (max-width: 650px) {
+
+    .contact-section {
+        padding: 45px 18px 55px;
+    }
+
+    .contact-container {
+        max-width: 100%;
+    }
+
+    .contact-header {
+        margin-bottom: 25px;
+    }
+
+    .contact-header h2 {
+        font-size: 32px;
+    }
+
+    .contact-header p {
+        font-size: 16px;
+        line-height: 1.45;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+    }
+
+    .contact-card {
+        min-height: 250px;
+
+        padding: 20px;
+    }
+
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+
+        margin-bottom: 13px;
+
+        font-size: 28px;
+    }
+
+    .contact-card h3 {
+        font-size: 20px;
+    }
+
+    .contact-card p {
+        font-size: 15px;
+    }
+
+    .contact-link {
+        font-size: 14px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MÓVIL PEQUEÑO
+--------------------------------------------------------- */
+
+@media (max-width: 400px) {
+
+    .contact-header h2 {
+        font-size: 28px;
+    }
+
+    .contact-card {
+        min-height: 240px;
+    }
+
+    .contact-icon {
+        width: 56px;
+        height: 56px;
+
+        font-size: 26px;
+    }
+}

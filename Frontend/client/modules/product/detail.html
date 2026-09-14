@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Técnica — Comercializadora EL VECINO</title>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-obsidian': '#0A0A0A',
+            'electric-blue': '#0800FF',
+            'neon-magenta': '#FF00A8',
+            'whatsapp-green': '#25D366',
+            'slate-surface': '#F4F6FB',
+            'slate-border': '#E2E6EE'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../../index.css">
+  <link rel="stylesheet" href="../../../components/navbar/navbar.css">
+  <link rel="stylesheet" href="../../../components/footer/footer.css">
+  <link rel="stylesheet" href="../../../components/cart-modal/cart-modal.css">
+  <link rel="stylesheet" href="../../../components/toast/toast.css">
+  <link rel="stylesheet" href="../../../components/product/product-card.css">
+  <link rel="stylesheet" href="../../../components/product/product-modal.css">
+  <link rel="stylesheet" href="./detail.css">
+</head>
+<body class="bg-[#FCF8F8] font-['Plus_Jakarta_Sans'] text-[#1C1B1B] antialiased">
+  <div id="navbar-mount"></div>
+
+  <main class="detail-page pb-24">
+    <!-- Breadcrumb & Indicator -->
+    <section class="bg-white border-b border-slate-border py-3">
+      <div class="max-w-[80rem] mx-auto px-6 flex items-center justify-between gap-4 flex-wrap text-sm">
+        <nav class="flex items-center gap-2 text-gray-500">
+          <a href="../../../index.html" class="hover:text-electric-blue">Inicio</a>
+          <span>/</span>
+          <a href="./product.html" class="hover:text-electric-blue">Catálogo</a>
+          <span>/</span>
+          <span class="font-bold text-deep-obsidian truncate max-w-xs md:max-w-md" id="breadcrumbCurrent">Cargando...</span>
+        </nav>
+        <div class="inline-flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>Comercializadora El Vecino • DESPACHO INMEDIATO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Product Stage -->
+    <section class="max-w-[80rem] mx-auto px-6 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Left: Image Gallery & Badges (7 cols) -->
+        <div class="lg:col-span-7 detail-stage-box">
+          <div class="detail-gallery-main">
+            <span class="product-card-badge" id="detailBadge">LÍNEA PREMIUM</span>
+            <img id="detailMainImg" class="detail-gallery-img" src="https://placehold.co/500" alt="Producto">
+          </div>
+          <div class="p-4 bg-slate-surface border-t border-slate-border flex items-center justify-between text-xs text-gray-600">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-electric-blue text-[18px]">verified</span>
+              <span>Verificado y revision en el local</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-electric-blue text-[18px]">engineering</span>
+              <span>Asistencia durante toda el proceso de compra</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Specs & WhatsApp Station (5 cols) -->
+        <div class="lg:col-span-5 bg-white border border-slate-border rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-sm">
+          <div>
+            <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+              <span class="font-bold text-electric-blue uppercase">Garantía Directa</span>
+            </div>
+            <h1 id="detailTitle" class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-deep-obsidian leading-tight">
+              Cargando especificaciones...
+            </h1>
+            <p id="detailDesc" class="text-sm text-gray-600 mt-2 leading-relaxed"></p>
+
+            <ul id="detailSpecsList" class="mt-4 space-y-2 border-t border-slate-border pt-4">
+              <!-- Rendered dynamically -->
+            </ul>
+          </div>
+
+          <!-- Conversion Actions -->
+          <div class="border-t border-slate-border pt-3">
+            <div class="flex flex-col gap-2">
+              <a
+                id="btnDetailQuoteWhatsapp"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-card-quote h-12 text-base justify-center shadow-lg hover:shadow-xl"
+              >
+                <span class="material-symbols-outlined text-[24px]">chat</span>
+                <span>Cotizar Inmediatamente vía WhatsApp</span>
+              </a>
+
+              <button
+                id="btnDetailAddToCart"
+                type="button"
+                class="h-12 rounded-xl bg-electric-blue hover:bg-blue-700 text-white font-['Outfit'] font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md"
+              >
+                <span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+                <span>Añadir a Lista de Cotización</span>
+              </button>
+            </div>
+
+            <!-- Trust pill -->
+            <div class="mt-3 p-3 rounded-2xl bg-[#F3F6FB] border border-slate-200 text-sm text-gray-800 flex items-center gap-3 shadow-sm">
+              <span class="material-symbols-outlined text-electric-blue text-[22px]">verified_user</span>
+              <span id="detailWarranty">Respaldo Certificado:factura oficial del seniat con garantia oficial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Specs Table Section -->
+    <section class="max-w-[80rem] mx-auto px-6 py-8">
+      <div class="bg-white border border-slate-border rounded-3xl p-6 md:p-8 shadow-sm">
+        <h2 class="font-['Outfit'] font-extrabold text-xl text-deep-obsidian mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-electric-blue">table_chart</span>
+          <span>Ficha Técnica &amp; Parámetros de Ingeniería</span>
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="detail-specs-table" id="detailSpecsTable">
+            <!-- Rendered dynamically -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="max-w-[80rem] mx-auto px-6 py-8">
+      <div class="bg-white border border-slate-border rounded-3xl p-6 md:p-8 shadow-sm">
+        <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+          <h2 class="font-['Outfit'] font-extrabold text-xl md:text-2xl text-deep-obsidian flex items-center gap-2">
+            <span class="material-symbols-outlined text-electric-blue">reviews</span>
+            <span>Comentarios de clientes</span>
+          </h2>
+          <span class="text-sm text-gray-500">Comparte tu experiencia con este producto</span>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-[380px_1fr] gap-6">
+          <form id="productCommentForm" class="comment-form">
+            <div class="comment-form-grid">
+              <label>
+                <span>Tu nombre</span>
+                <input id="commentName" type="text" placeholder="Ej: María G." maxlength="40">
+              </label>
+              <label>
+                <span>Calificación</span>
+                <select id="commentRating">
+                  <option value="5">5/5 Excelente</option>
+                  <option value="4">4/5 Muy bueno</option>
+                  <option value="3">3/5 Bueno</option>
+                  <option value="2">2/5 Regular</option>
+                  <option value="1">1/5 Pésimo</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              <span>Tu comentario</span>
+              <textarea id="commentText" rows="5" maxlength="250" placeholder="Cuéntanos cómo te ha parecido este producto..." required></textarea>
+            </label>
+
+            <button type="submit" class="comment-submit-btn">
+              <span class="material-symbols-outlined text-[20px]">send</span>
+              <span>Publicar comentario</span>
+            </button>
+          </form>
+
+          <div>
+            <div id="commentsList" class="comments-list" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="max-w-[80rem] mx-auto px-6 py-8">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <span class="text-xs font-bold text-electric-blue uppercase tracking-widest">Sugerencias de Bodega</span>
+          <h2 class="font-['Outfit'] font-extrabold text-2xl text-deep-obsidian">Equipos Complementarios</h2>
+        </div>
+        <a href="./product.html" class="text-sm font-bold text-electric-blue hover:underline flex items-center gap-1">
+          <span>Ver todo el catálogo</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="relatedProductsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="../../../js/config.js"></script>
+  <script src="../../../js/storage.js"></script>
+  <script src="../../../js/api.js"></script>
+  <script src="../../../js/service/auth.service.js"></script>
+  <script src="../../../js/service/order.service.js"></script>
+  <script src="../../../js/service/product.service.js"></script>
+  <script src="./product.api.js"></script>
+  <script src="../../../components/toast/toast.js"></script>
+  <script src="../../../components/navbar/navbar.js"></script>
+  <script src="../../../components/footer/footer.js"></script>
+  <script src="../../../components/cart-modal/cart-modal.js"></script>
+  <script src="../../../components/product/product-card.js"></script>
+  <script src="../../../components/product/product-modal.js"></script>
+  <script src="../../../js/main.js"></script>
+  <script src="./detail.js"></script>
+</body>
+</html>

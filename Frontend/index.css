@@ -1,0 +1,278 @@
+/**
+ * index.css - Master Design System and Token Utilities
+ * Comercializadora El Vecino - Electric Neo-Tech Theme
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Core Colors */
+  --color-obsidian: #0A0A0A;
+  --color-electric-blue: #0800FF;
+  --color-neon-magenta: #FF00A8;
+  --color-whatsapp: #25D366;
+  --color-pure-white: #FFFFFF;
+  --color-slate-surface: #F4F6FB;
+  --color-slate-border: #E2E6EE;
+
+  /* Material & Neutral Tokens */
+  --color-surface: #FCF8F8;
+  --color-on-surface: #1C1B1B;
+  --color-on-surface-variant: #454558;
+  --color-primary: #0400BC;
+  --color-secondary: #B20074;
+  --color-error: #BA1A1A;
+
+  /* Fonts */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* Spacing */
+  --container-max: 80rem;
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F4F6FB;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5C4DB;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #757589;
+}
+
+/* Typography Helpers */
+.font-display-hero {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 768px) {
+  .font-display-hero {
+    font-size: 2.25rem;
+  }
+}
+
+.font-headline-lg {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .font-headline-lg {
+    font-size: 1.75rem;
+  }
+}
+
+.font-headline-md {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.font-headline-sm {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* Glow & Atmospheric Effects */
+.ambient-glow-blue {
+  background: radial-gradient(circle, rgba(8, 0, 255, 0.35) 0%, rgba(8, 0, 255, 0.05) 60%, transparent 80%);
+}
+
+.ambient-glow-magenta {
+  background: radial-gradient(circle, rgba(255, 0, 168, 0.25) 0%, rgba(255, 0, 168, 0.05) 60%, transparent 80%);
+}
+
+/* Glassmorphism Classes */
+.glass-panel-dark {
+  background: rgba(10, 10, 10, 0.85);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 230, 238, 0.8);
+}
+
+/* Button & Interaction Utilities */
+.btn-primary-glow {
+  background: var(--color-electric-blue);
+  color: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(8, 0, 255, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary-glow:hover {
+  background: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(8, 0, 255, 0.6);
+}
+
+.btn-whatsapp-glow {
+  background: var(--color-whatsapp);
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-whatsapp-glow:hover {
+  background: #1EBE5D;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.5);
+}
+
+.promo-carousel-shell {
+  position: relative;
+  min-height: 390px;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(10, 10, 10, 0.16);
+}
+
+.promo-carousel-track {
+  position: relative;
+  min-height: 390px;
+}
+
+.promo-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(24px);
+  pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.promo-slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.promo-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(10, 10, 10, 0.45);
+  color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.promo-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.promo-nav-btn.prev {
+  left: 18px;
+}
+
+.promo-nav-btn.next {
+  right: 18px;
+}
+
+.promo-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 12;
+}
+
+.promo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.promo-dot.active {
+  width: 28px;
+  border-radius: 999px;
+  background: #FF00A8;
+}
+
+.home-category-card {
+  min-height: 220px;
+  padding: 1.6rem 1.2rem 1.4rem;
+  border-radius: 1.5rem;
+  gap: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-category-icon {
+  width: 82px;
+  height: 82px;
+  border-radius: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-category-icon .material-symbols-outlined {
+  font-size: 2.5rem !important;
+}
+
+.home-category-name {
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.home-category-count {
+  font-size: 0.93rem;
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Acceso &amp; Autenticación — Comercializadora EL VECINO</title>
+  <meta name="description" content="Acceso seguro mediante tokens JWT para administradores, asesores comerciales y clientes de Comercializadora El Vecino.">
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="./components/toast/toast.css">
+  <link rel="stylesheet" href="./loguin.css">
+</head>
+<body>
+  <div class="login-container">
+    <!-- Atmospheric Ambient Glows -->
+    <div class="login-glow-1"></div>
+    <div class="login-glow-2"></div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+      <!-- Brand Header -->
+      <div class="text-center mb-6">
+        <a href="./index.html" class="inline-flex items-center gap-3 justify-center mb-3">
+          <div class="w-11 h-11 rounded-xl bg-black border border-white/20 flex items-center justify-center text-[#0800FF] shadow-lg">
+            <span class="material-symbols-outlined text-[24px]">bolt</span>
+          </div>
+          <div class="text-left">
+            <span class="font-['Outfit'] font-extrabold text-xl text-white block leading-none">EL VECINO</span>
+            <span class="font-['Outfit'] font-bold text-[10px] text-[#FF00A8] uppercase tracking-widest block mt-0.5">Electro &amp; Hogar</span>
+          </div>
+        </a>
+        <h1 class="font-['Outfit'] font-extrabold text-2xl text-white tracking-tight">Portal de Acceso</h1>
+        <p class="text-xs text-gray-400 mt-1">Autenticación segura con firma criptográfica JWT</p>
+      </div>
+
+      <!-- Active Session Alert Box -->
+      <div id="sessionStatusBox" style="display:none;"></div>
+
+      <!-- Role Selector Tabs -->
+      <div class="login-role-tabs">
+        <button type="button" class="login-role-btn active" data-role="admin">
+          <span class="material-symbols-outlined text-[16px] align-middle mr-1">shield_person</span>
+          <span>Administrador B2B</span>
+        </button>
+        <button type="button" class="login-role-btn" data-role="cliente">
+          <span class="material-symbols-outlined text-[16px] align-middle mr-1">person</span>
+          <span>Cliente Mayorista</span>
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm">
+        <div class="login-input-group">
+          <label class="login-input-label" for="loginEmail">Correo Electrónico</label>
+          <div class="login-input-wrapper">
+            <span class="material-symbols-outlined login-input-icon">mail</span>
+            <input
+              type="email"
+              id="loginEmail"
+              required
+              class="login-input"
+              placeholder="admin@elvecino.com"
+              value="admin@elvecino.com"
+            >
+          </div>
+        </div>
+
+        <div class="login-input-group">
+          <div class="flex items-center justify-between mb-1">
+            <label class="login-input-label mb-0" for="loginPassword">Contraseña de Seguridad</label>
+            <a href="https://wa.me/573001234567?text=Hola,%20deseo%20recuperar%20mi%20clave%20de%20acceso" target="_blank" class="text-[11px] text-cyan-400 hover:underline">
+              ¿Olvidaste tu clave?
+            </a>
+          </div>
+          <div class="login-input-wrapper">
+            <span class="material-symbols-outlined login-input-icon">lock</span>
+            <input
+              type="password"
+              id="loginPassword"
+              required
+              class="login-input pr-11"
+              placeholder="••••••••••••"
+              value="admin123456"
+            >
+            <button
+              type="button"
+              id="btnTogglePassword"
+              class="absolute right-3 text-gray-400 hover:text-white"
+              aria-label="Ver contraseña"
+            >
+              <span class="material-symbols-outlined text-[20px]" id="passwordToggleIcon">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="btnLoginSubmit" class="btn-login-submit mt-5">
+          <span class="material-symbols-outlined text-[20px]">login</span>
+          <span>Ingresar a la Plataforma</span>
+        </button>
+      </form>
+
+      <!-- Fast Demo Access -->
+      <div class="demo-access-box">
+        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center block">
+          Accesos Rápidos de Prueba (JWT Demo)
+        </span>
+        <button type="button" id="btnDemoAdmin" class="btn-demo-pill">
+          <span>Ingresar como <strong>Admin Master</strong></span>
+          <span class="text-cyan-400 text-xs font-bold">Auto Login &rarr;</span>
+        </button>
+        <button type="button" id="btnDemoCliente" class="btn-demo-pill">
+          <span>Ingresar como <strong>Cliente Registrado</strong></span>
+          <span class="text-neon-magenta text-xs font-bold">Auto Login &rarr;</span>
+        </button>
+      </div>
+
+      <!-- Return link -->
+      <div class="mt-6 text-center">
+        <a href="./index.html" class="text-xs text-gray-400 hover:text-white flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+          <span>Regresar a la Tienda Principal</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/service/auth.service.js"></script>
+  <script src="./components/toast/toast.js"></script>
+  <script src="./loguin.js"></script>
+</body>
+</html>
