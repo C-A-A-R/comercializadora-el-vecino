@@ -2,6 +2,9 @@ import { ComboService } from '../../services/combo.service.js';
 import { ComboBuilder } from './combo.builder.js';
 import { Toast } from '../../components/ui/Toast.js';
 
+// Fallback local en Base64 para evitar errores de red externos (via.placeholder.com)
+const placeholderComboImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjguNSIgcj0iMS41Ii8+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSIvPjwvc3ZnPg==';
+
 export const ComboListView = {
   async render() {
     return `
@@ -47,11 +50,17 @@ export const ComboListView = {
       grid.innerHTML = data.results.map(combo => {
         const calc = ComboBuilder.calculateTotals(combo.items, combo.price_combo_usd);
         const productsSummary = combo.items.map(i => `${i.quantity}x ${i.product.name}`).join(', ');
+        const imgSrc = combo.image_url ? combo.image_url : placeholderComboImage;
 
         return `
           <div class="bg-white border border-slate-border rounded-xl p-5 shadow-sm space-y-4 flex flex-col justify-between">
             <div class="space-y-3">
-              ${combo.image_url ? `<img src="${combo.image_url}" alt="${combo.name}" class="w-full h-36 object-cover rounded-lg border border-slate-border" />` : ''}
+              <img 
+                src="${imgSrc}" 
+                alt="${combo.name}" 
+                onerror="this.onerror=null; this.src='${placeholderComboImage}';" 
+                class="w-full h-36 object-cover rounded-lg border border-slate-border bg-slate-100" 
+              />
               <div class="flex items-start justify-between gap-2">
                 <h3 class="font-bold text-lg text-deep-obsidian font-display">${combo.name}</h3>
                 <span class="px-2 py-0.5 text-xs font-bold rounded ${combo.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}">

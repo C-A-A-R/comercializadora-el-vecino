@@ -1,7 +1,10 @@
 import { ProductService } from '../../services/product.service.js';
 import { DataTable } from '../../components/ui/DataTable.js';
-import { PriceDisplay } from '../../components/ui/PriceDisplay.js';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog.js';
+import { formatUSD, formatCOP } from '../../../js/config.js'; // Formateadores directos
+
+// SVG codificado en Base64 para evitar conflictos de comillas o caracteres especiales en HTML inline
+const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjguNSIgcj0iMS41Ii8+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSIvPjwvc3ZnPg==';
 
 export const ProductListView = {
   async render() {
@@ -11,21 +14,34 @@ export const ProductListView = {
       { 
         key: 'name', 
         label: 'Producto',
-        render: (val, row) => `
-          <div class="flex items-center gap-3">
-            <img src="${row.images[0]?.image || 'https://via.placeholder.com/40'}" class="w-10 h-10 object-cover rounded-lg border border-slate-border" alt="${val}" />
-            <div>
-              <p class="font-semibold text-deep-obsidian text-sm">${val}</p>
-              <p class="text-xs text-gray-500">${row.brand} | Mod: ${row.model}</p>
+        render: (val, row) => {
+          const imgSrc = (row.images && row.images[0]?.image) ? row.images[0].image : placeholderImage;
+          return `
+            <div class="flex items-center gap-3">
+              <img 
+                src="${imgSrc}" 
+                onerror="this.onerror=null; this.src='${placeholderImage}';" 
+                class="w-10 h-10 object-cover rounded-lg border border-slate-border bg-slate-100" 
+                alt="${val}" 
+              />
+              <div>
+                <p class="font-semibold text-deep-obsidian text-sm">${val}</p>
+                <p class="text-xs text-gray-500">${row.brand} | Mod: ${row.model}</p>
+              </div>
             </div>
-          </div>
-        `
+          `;
+        }
       },
       { key: 'category', label: 'Categoría', render: (val) => `<span class="px-2.5 py-1 bg-slate-surface border border-slate-border rounded-md text-xs font-medium">${val.name}</span>` },
       { 
         key: 'price_usd', 
         label: 'Precio (USD / COP)',
-        render: (val, row) => PriceDisplay({ priceUSD: row.price_usd, priceCOP: row.price_cop })
+        render: (val, row) => `
+          <div>
+            <span class="text-sm font-bold text-deep-obsidian block">${formatUSD(row.price_usd)}</span>
+            <span class="text-xs text-gray-500 block">${formatCOP(row.price_cop)} COP</span>
+          </div>
+        `
       },
       { 
         key: 'stock', 
