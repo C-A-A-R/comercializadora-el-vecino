@@ -12,8 +12,10 @@ const ProductCard = {
       ? `detail.html?id=${product.id}`
       : `./client/modules/product/detail.html?id=${product.id}`;
 
-    const formattedPrice = window.CONFIG?.formatCurrency(product.price) || `$ ${product.price}`;
-    const formattedOldPrice = product.originalPrice ? window.CONFIG?.formatCurrency(product.originalPrice) : null;
+    const hasPrice = Number(product?.price) > 0;
+    const hasOldPrice = Number(product?.originalPrice) > 0;
+    const formattedPrice = hasPrice ? window.CONFIG?.formatCurrency(product.price) : null;
+    const formattedOldPrice = hasOldPrice ? window.CONFIG?.formatCurrency(product.originalPrice) : null;
     const waUrl = window.OrderService?.buildDirectProductQuoteUrl(product) || '#';
 
     const specsPreview = (product.specs || []).slice(0, 2).map(spec => `
@@ -47,7 +49,7 @@ const ProductCard = {
 
           <div>
             <div class="product-card-pricing">
-              <span class="product-card-price">${formattedPrice}</span>
+              ${formattedPrice ? `<span class="product-card-price">${formattedPrice}</span>` : ''}
               ${formattedOldPrice ? `<span class="product-card-old-price">${formattedOldPrice}</span>` : ''}
             </div>
 

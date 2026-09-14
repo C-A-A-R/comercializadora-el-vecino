@@ -35,7 +35,7 @@ const Footer = {
               </p>
               <div class="inline-flex items-center gap-2 text-xs text-white/70">
                 <span class="w-2 h-2 rounded-full bg-electric-blue animate-pulse"></span>
-                <span>Bodega Central Operativa • 14 Ingenieros en Planta</span>
+                <span>Bodega Central Operativa</span>
               </div>
             </div>
 
@@ -71,11 +71,11 @@ const Footer = {
               <div class="footer-badge-box">
                 <div class="footer-badge-item">
                   <span class="material-symbols-outlined">verified</span>
-                  <span>Garantía Oficial 100% Directa de Fábrica</span>
+                  <span>Garantía Oficial 100% </span>
                 </div>
                 <div class="footer-badge-item">
                   <span class="material-symbols-outlined">receipt_long</span>
-                  <span>Factura Legal con IVA Desglosado DIAN</span>
+                  <span>Factura Legal con IVA Desglosado</span>
                 </div>
                 <div class="footer-badge-item">
                   <span class="material-symbols-outlined">local_shipping</span>

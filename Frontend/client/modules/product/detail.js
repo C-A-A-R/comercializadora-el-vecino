@@ -8,9 +8,111 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id') || 'prod-001';
+  const commentStorageKey = `el_vecino_comments_${productId}`;
 
   let currentProduct = null;
   let quantity = 1;
+
+  function getDefaultComments() {
+    return [
+      {
+        name: 'María G.',
+        rating: 5,
+        text: 'Muy buena compra, la calidad es excelente y llegó en tiempo récord.',
+        date: 'Hace 2 días'
+      },
+      {
+        name: 'Andrés M.',
+        rating: 4,
+        text: 'Funciona muy bien y tiene un diseño moderno. Lo recomiendo.',
+        date: 'Hace 1 semana'
+      },
+      {
+        name: 'Sofía C.',
+        rating: 5,
+        text: 'La atención fue rápida y el producto se ve igual que en la foto.',
+        date: 'Hace 2 semanas'
+      }
+    ];
+  }
+
+  function getProductComments() {
+    try {
+      const saved = localStorage.getItem(commentStorageKey);
+      if (!saved) return getDefaultComments();
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) && parsed.length ? parsed : getDefaultComments();
+    } catch (error) {
+      console.warn('[detail.js] No se pudieron cargar comentarios:', error);
+      return getDefaultComments();
+    }
+  }
+
+  function saveProductComments(comments) {
+    localStorage.setItem(commentStorageKey, JSON.stringify(comments.slice(0, 12)));
+  }
+
+  function renderComments() {
+    const listEl = document.getElementById('commentsList');
+    if (!listEl) return;
+
+    const comments = getProductComments();
+    if (!comments.length) {
+      listEl.innerHTML = '<p class="comment-empty">Sé el primero en dejar un comentario sobre este producto.</p>';
+      return;
+    }
+
+    listEl.innerHTML = comments.map(comment => {
+      const stars = Array.from({ length: 5 }, (_, index) => {
+        const filled = index < Number(comment.rating || 0);
+        return `<span class="material-symbols-outlined ${filled ? 'text-amber-400' : 'text-gray-300'}">star</span>`;
+      }).join('');
+
+      return `
+        <article class="comment-card">
+          <div class="comment-header">
+            <div>
+              <h3>${(comment.name || 'Cliente').trim()}</h3>
+              <span>${comment.date || 'Hace poco'}</span>
+            </div>
+            <div class="comment-stars">${stars}</div>
+          </div>
+          <p>${(comment.text || '').trim()}</p>
+        </article>
+      `;
+    }).join('');
+  }
+
+  const commentForm = document.getElementById('productCommentForm');
+  if (commentForm) {
+    commentForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const nameInput = document.getElementById('commentName');
+      const ratingInput = document.getElementById('commentRating');
+      const textInput = document.getElementById('commentText');
+
+      const name = (nameInput?.value || '').trim() || 'Cliente';
+      const rating = Number(ratingInput?.value || 5);
+      const text = (textInput?.value || '').trim();
+
+      if (!text) return;
+
+      const comments = getProductComments();
+      comments.unshift({
+        name,
+        rating,
+        text,
+        date: 'Hoy'
+      });
+
+      saveProductComments(comments);
+      renderComments();
+
+      commentForm.reset();
+      if (ratingInput) ratingInput.value = '5';
+    });
+  }
 
   async function init() {
     try {
@@ -20,6 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentProduct = all[0];
       }
       renderProductDetail(currentProduct);
+      renderComments();
       loadRelatedProducts(currentProduct);
     } catch (error) {
       console.error('[detail.js] Error al cargar producto:', error);
@@ -53,20 +156,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const descEl = document.getElementById('detailDesc');
     if (descEl) descEl.textContent = p.description || '';
-
-    // Price
-    const priceEl = document.getElementById('detailPrice');
-    if (priceEl) priceEl.textContent = window.CONFIG.formatCurrency(p.price);
-
-    const oldPriceEl = document.getElementById('detailOldPrice');
-    if (oldPriceEl) {
-      if (p.originalPrice) {
-        oldPriceEl.textContent = window.CONFIG.formatCurrency(p.originalPrice);
-        oldPriceEl.style.display = 'inline';
-      } else {
-        oldPriceEl.style.display = 'none';
-      }
-    }
 
     // Warranty
     const warrantyEl = document.getElementById('detailWarranty');
@@ -107,29 +196,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const url = window.OrderService.buildDirectProductQuoteUrl(currentProduct, quantity);
       btnQuote.href = url;
     }
-  }
-
-  // Stepper events
-  const qtyInput = document.getElementById('detailQtyInput');
-  const btnMinus = document.getElementById('btnDetailQtyMinus');
-  const btnPlus = document.getElementById('btnDetailQtyPlus');
-
-  if (btnMinus) {
-    btnMinus.addEventListener('click', () => {
-      if (quantity > 1) {
-        quantity--;
-        if (qtyInput) qtyInput.value = quantity;
-        updateWhatsappQuoteButton();
-      }
-    });
-  }
-
-  if (btnPlus) {
-    btnPlus.addEventListener('click', () => {
-      quantity++;
-      if (qtyInput) qtyInput.value = quantity;
-      updateWhatsappQuoteButton();
-    });
   }
 
   // Add to Quote Cart
