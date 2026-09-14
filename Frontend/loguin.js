@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         if (redirect === 'admin' || result.user.role === 'admin') {
-          window.location.href = './index.html';
+          // Redirige correctamente al index dentro del módulo admin
+          window.location.href = './admin/index.html'; 
         } else {
           window.location.href = './index.html';
         }

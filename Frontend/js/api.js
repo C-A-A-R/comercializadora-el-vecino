@@ -167,6 +167,26 @@ const Api = {
       };
     }
 
+    if (cleanPath.includes('/dashboard') || cleanPath.includes('/stats')) {
+      const products = window.Storage?.getProducts() || window.CONFIG?.INITIAL_PRODUCTS || [];
+      
+      return {
+        success: true,
+        data: {
+          total_productos: products.length || 18,
+          stock_critico: 3,
+          clics_whatsapp: 142,
+          valor_catalogo_usd: 1250.00,
+          tasa_cambio: 4100,
+          top_viewed: [
+            { name: 'Nevera Mabe 19 Pies', price_usd: 450.00, views: 89 },
+            { name: 'Lavadora Samsung 15kg', price_usd: 380.00, views: 64 },
+            { name: 'Televisor LG 55" 4K', price_usd: 420.00, views: 51 }
+          ]
+        }
+      };
+    }
+
     // 2. Endpoint /products
     if (cleanPath.includes('/products')) {
       const products = window.Storage?.getProducts() || window.CONFIG?.INITIAL_PRODUCTS || [];
@@ -224,3 +244,7 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = Api;
 }
+
+// ES Module exports para compatibilidad con import { api } o import Api
+export { Api as api, Api };
+export default Api;
