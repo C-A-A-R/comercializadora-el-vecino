@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Comercializadora El Vecino</title>
+  
+  <!-- Fuentes e Íconos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <!-- Tailwind CSS & Estilos Base -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'deep-obsidian': '#0A0A0A',
+              'electric-blue': '#0800FF',
+              'neon-magenta': '#FF00A8',
+              'whatsapp-green': '#25D366',
+              'slate-surface': '#F4F6FB',
+              'slate-border': '#E2E6EE'
+            },
+            fontFamily: {
+              display: ['Outfit', 'sans-serif'],
+              body: ['Plus Jakarta Sans', 'sans-serif']
+            }
+          }
+        }
+      };
+    } else {
+      console.warn('Tailwind CDN no disponible (modo offline o fallo de red).');
+    }
+  </script>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="bg-slate-surface text-deep-obsidian font-body antialiased min-h-screen flex flex-col">
+
+  <div id="app" class="flex flex-1 min-h-screen relative">
+    <!-- Layout de Sidebar y vistas SPA se inyectan dinámicamente -->
+  </div>
+
+  <!-- Contenedor global de Toasts para notificaciones -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
