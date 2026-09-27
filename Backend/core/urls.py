@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('api/', include('apps.product.api.routers')),
     path('api/promotions/', include('apps.promotions.api.routers')),
+    path('api/notifications/', include('apps.notifications.api.routers')),
 
     # Swagger / Redoc API Documentation
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
