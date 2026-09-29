@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EL VECINO — Catálogo Digital & Combos Mayoristas</title>
+  
+  <!-- Tipografías de Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Iconos de Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  
+  <!-- Hojas de Estilos con Variables CSS -->
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER & BARRA DE NAVEGACIÓN
+       ========================================================================== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#inicio" class="brand-logo">
+        <div class="brand-icon-box">
+          <span class="material-symbols-outlined text-neon-cyan" style="color: var(--neon-cyan); font-size: 26px;">bolt</span>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <span class="brand-name">EL VECINO</span>
+          <span class="brand-tag">Electro &amp; Hogar</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Inicio</a></li>
+          <li><a href="promociones.html" class="nav-link" style="color: var(--neon-magenta); font-weight: 700;">Promociones &amp; Combos ⚡</a></li>
+          <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
+          <li><a href="categorias.html" class="nav-link">Categorías</a></li>
+          <li><a href="destacados.html" class="nav-link">Destacados</a></li>
+          <li><a href="tiktok.html" class="nav-link">Vídeo Catálogo</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <a href="contacto.html" class="btn btn-neon-cyan" style="padding: 0.6rem 1.1rem; font-size: 0.9rem;">
+          <span class="material-symbols-outlined text-[20px]">chat</span>
+          <span>Cotizar WA</span>
+        </a>
+        <button id="mobileMenuBtn" class="mobile-menu-toggle" aria-label="Abrir Menú">
+          <span class="material-symbols-outlined" style="font-size: 24px;">menu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cajón de navegación móvil -->
+    <div id="mobileNavDrawer" class="mobile-nav-drawer">
+      <ul class="mobile-nav-links">
+        <li><a href="index.html" class="mobile-nav-link active" onclick="closeMobileNav()"><span class="material-symbols-outlined text-neon-cyan">home</span> Inicio</a></li>
+        <li><a href="promociones.html" class="mobile-nav-link" onclick="closeMobileNav()" style="color: var(--neon-magenta);"><span class="material-symbols-outlined">local_fire_department</span> Promociones &amp; Combos ⚡</a></li>
+        <li><a href="catalogo.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">format_list_bulleted</span> Catálogo Técnico</a></li>
+        <li><a href="categorias.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">grid_view</span> Categorías</a></li>
+        <li><a href="destacados.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">star</span> Destacados</a></li>
+        <li><a href="tiktok.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">smart_display</span> Vídeo Catálogo</a></li>
+        <li><a href="contacto.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">contact_support</span> Contacto &amp; Asesoría</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO PRINCIPAL (DARK NEO-TECH AMBIENT)
+       ========================================================================== -->
+  <section id="inicio" class="hero-stage">
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-glow-3"></div>
+
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-full); background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.3); margin-bottom: 0.5rem;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan);"></span>
+            <span style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; color: var(--neon-cyan); letter-spacing: 0.08em; text-transform: uppercase;">
+              Lote Importado Directo • Bodega Mayorista
+            </span>
+          </div>
+
+          <h1 class="hero-title">
+            Electrodomésticos de Alta Gama <span class="text-gradient">Directo de Bodega</span>
+          </h1>
+
+          <p class="hero-description">
+            Distribución técnica sin intermediarios. Calibra especificaciones, confirma disponibilidad de inventario sellado y recibe cotización personalizada al instante vía WhatsApp.
+          </p>
+
+          <div class="hero-actions">
+            <a href="promociones.html" class="btn btn-neon-magenta" style="font-size: 1.05rem; padding: 0.9rem 1.6rem;">
+              <span class="material-symbols-outlined">auto_awesome</span>
+              <span>Ver Combos del Mes</span>
+            </a>
+            <a href="catalogo.html" class="btn btn-neon-cyan" style="font-size: 1.05rem; padding: 0.9rem 1.6rem;">
+              <span class="material-symbols-outlined">format_list_bulleted</span>
+              <span>Explorar Catálogo Técnico</span>
+            </a>
+          </div>
+
+          <!-- Métricas en vivo -->
+          <div class="hero-metrics">
+            <div>
+              <span class="metric-number">&lt; 5 min</span>
+              <span class="metric-label">Respuesta WhatsApp</span>
+            </div>
+            <div>
+              <span class="metric-number" style="color: var(--neon-magenta);">100%</span>
+              <span class="metric-label">Garantía Directa</span>
+            </div>
+            <div>
+              <span class="metric-number" style="color: var(--electric-blue-subtle);">0 Intermediarios</span>
+              <span class="metric-label">Lotes Sellados</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Visual Hardware Matrix -->
+        <div>
+          <div class="hero-card-preview">
+            <img class="hero-card-img" src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80" alt="Equipamiento Premium El Vecino">
+            <div style="position: absolute; bottom: 24px; left: 24px; right: 24px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius-lg); padding: 1rem; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <span class="badge badge-neon-cyan" style="font-size: 0.7rem;">Stock en Bodega</span>
+                <h4 style="font-family: var(--font-display); font-size: 1.05rem; color: #FFF; margin-top: 2px;">Línea Blanca &amp; Confort 2026</h4>
+              </div>
+              <a href="#catalogo" class="btn btn-neon-cyan" style="padding: 0.5rem 0.85rem; font-size: 0.82rem;">
+                <span>Ver Fichas</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       BARRA DE BENEFICIOS DE BODEGA
+       ========================================================================== -->
+  <div style="background: var(--pure-white); border-bottom: 1px solid var(--slate-border); padding: 1.25rem 0;">
+    <div class="container">
+      <div id="benefitsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        <!-- Inyectado dinámicamente desde js/app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SECCIÓN DE PROMOCIONES Y PUBLICACIONES DE COMBOS
+       ========================================================================== -->
+  <section id="promociones-combos" class="section-padding" style="background: #0D0D11; color: var(--pure-white);">
+    <div class="container">
+      <div style="display: flex; flex-direction: column; md:flex-row; md:items-end; justify-content: space-between; gap: 1.5rem; margin-bottom: 3rem;">
+        <div>
+          <div class="badge badge-neon-magenta" style="margin-bottom: 0.5rem;">
+            <span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+            Temporada de Paquetes
+          </div>
+          <h2 style="font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em;">
+            Publicaciones de <span style="color: var(--neon-cyan);">Combos</span> &amp; <span style="color: var(--neon-magenta);">Paquetes Especiales</span>
+          </h2>
+          <p style="color: #94A3B8; font-size: 1.05rem; max-width: 650px; margin-top: 0.5rem;">
+            Equipa tu hogar o proyecto en un solo despacho. Combos con accesorios bonificados, flete técnico y garantía directa de fábrica (sin precios fijos online, cotización personalizada 1 a 1).
+          </p>
+        </div>
+      </div>
+
+      <!-- Contenedor Dinámico de Combos -->
+      <div id="combosContainer">
+        <!-- Renderizado desde js/app.js con datos de js/data.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CATÁLOGO TÉCNICO DE PRODUCTOS (SIN PRECIOS)
+       ========================================================================== -->
+  <section id="catalogo" class="section-padding">
+    <div class="container">
+      <div style="display: flex; flex-direction: column; md:flex-row; md:items-end; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem;">
+        <div>
+          <span class="badge badge-electric-blue" style="margin-bottom: 0.5rem;">Inventario Mayorista</span>
+          <h2 style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--deep-obsidian); letter-spacing: -0.02em;">
+            Catálogo de Fichas Técnicas
+          </h2>
+          <p style="color: var(--text-muted); font-size: 1rem; max-width: 550px;">
+            Filtra por categoría técnica, revisa especificaciones y solicita la disponibilidad y cotización inmediata con un solo toque.
+          </p>
+        </div>
+
+        <!-- Buscador en Vivo -->
+        <div style="position: relative; max-width: 320px; width: 100%;">
+          <span class="material-symbols-outlined" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 20px;">search</span>
+          <input 
+            type="text" 
+            id="catalogSearchInput" 
+            placeholder="Buscar por SKU, marca o modelo..."
+            style="width: 100%; height: 46px; padding-left: 40px; padding-right: 14px; border-radius: var(--radius-lg); border: 1.5px solid var(--slate-border); background: var(--pure-white); outline: none;"
+          >
+        </div>
+      </div>
+
+      <!-- Barra de Filtros por Categoría -->
+      <div class="categories-filter-bar" id="categoriesFilterContainer">
+        <!-- Renderizado desde js/app.js -->
+      </div>
+
+      <!-- Grid de Productos -->
+      <div class="product-grid" id="allProductsGrid">
+        <!-- Renderizado desde js/app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VÍDEO CATÁLOGO (TIKTOK / REELS SHOWCASE)
+       ========================================================================== -->
+  <section id="tiktok" class="section-padding" style="background: var(--deep-obsidian); color: var(--pure-white);">
+    <div class="container">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto 3rem auto;">
+        <span class="badge badge-neon-cyan" style="margin-bottom: 0.5rem;">Formato Inmersivo</span>
+        <h2 style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">
+          Vídeo Catálogo &amp; Pruebas en Vivo
+        </h2>
+        <p style="color: #94A3B8; font-size: 1rem; margin-top: 0.5rem;">
+          Conoce el funcionamiento real de cada equipo antes de cotizar. Demostraciones directas desde nuestra bodega técnica.
+        </p>
+      </div>
+
+      <!-- Grid de Vídeos Estilo TikTok -->
+      <div class="tiktok-grid" id="tiktokGrid">
+        <!-- Renderizado desde js/app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN DE ASESORÍA Y CONTACTO
+       ========================================================================== -->
+  <section id="contacto" class="section-padding" style="background: var(--pure-white);">
+    <div class="container">
+      <div style="background: var(--slate-surface); border: 1px solid var(--slate-border); border-radius: var(--radius-2xl); padding: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; align-items: center;">
+        <div>
+          <span class="badge badge-electric-blue" style="margin-bottom: 0.75rem;">Mesa de Asesoría Directa</span>
+          <h2 style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--deep-obsidian);">
+            ¿Requieres cotización para proyectos o lotes mayoristas?
+          </h2>
+          <p style="color: var(--text-muted); margin-top: 0.75rem; margin-bottom: 1.5rem; font-size: 1rem;">
+            Nuestro equipo técnico revisa especificaciones de compatibilidad, disponibilidad de inventario sellado y opciones de flete con respuesta en menos de 5 minutos.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span class="material-symbols-outlined text-neon-cyan" style="color: #0098a6;">schedule</span>
+              <span style="font-size: 0.95rem; font-weight: 600;">Lunes a Sábado: 8:00 AM – 6:00 PM</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span class="material-symbols-outlined text-electric-blue">local_shipping</span>
+              <span style="font-size: 0.95rem; font-weight: 600;">Despacho directo y asegurado a todo el país</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: var(--pure-white); padding: 2rem; border-radius: var(--radius-xl); border: 1px solid var(--slate-border); box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+          <h3 style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem; color: var(--deep-obsidian);">
+            Iniciar Cotización Express
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Haz clic para abrir el chat directo con un asesor asignado en tiempo real.
+          </p>
+          <a href="https://wa.me/584120000000?text=Hola%20El%20Vecino,%20quisiera%20solicitar%20una%20cotizaci%C3%B3n%20y%20consultar%20disponibilidad%20de%20inventario." target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan" style="width: 100%; padding: 0.9rem; font-size: 1.05rem;">
+            <span class="material-symbols-outlined text-[24px]">chat</span>
+            <span>Abrir WhatsApp Oficial</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer style="background: var(--deep-obsidian); color: var(--pure-white); padding: 3rem 0 2rem 0; border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="container">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div class="brand-icon-box" style="width: 36px; height: 36px;">
+            <span class="material-symbols-outlined text-neon-cyan" style="font-size: 20px;">bolt</span>
+          </div>
+          <span style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: #FFF;">EL VECINO</span>
+        </div>
+
+        <div style="display: flex; gap: 1.5rem; font-size: 0.9rem; color: #94A3B8;">
+          <a href="index.html" style="color: var(--neon-cyan); font-weight: 600;">Inicio</a>
+          <a href="promociones.html" style="color: #94A3B8;">Promociones</a>
+          <a href="catalogo.html" style="color: #94A3B8;">Catálogo</a>
+          <a href="categorias.html" style="color: #94A3B8;">Categorías</a>
+          <a href="destacados.html" style="color: #94A3B8;">Destacados</a>
+          <a href="tiktok.html" style="color: #94A3B8;">Vídeo Catálogo</a>
+          <a href="contacto.html" style="color: #94A3B8;">Contacto</a>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 1.5rem; font-size: 0.8rem; color: #64748B;">
+        <p>© 2026 EL VECINO. Catálogo Técnico y Comercial sin precios fijos online.</p>
+        <p>Sistema Electric Neo-Tech con Cotización Directa.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODAL DE PRODUCTO / FICHA TÉCNICA
+       ========================================================================== -->
+  <div id="productModal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeProductModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <div id="modalContent">
+        <!-- Inyectado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       DOCK FLOTANTE WHATSAPP (NEON CYAN)
+       ========================================================================== -->
+  <div id="floatingDock" class="floating-dock">
+    <!-- Inyectado dinámicamente con estilo Neon Cyan -->
+  </div>
+
+  <!-- ==========================================================================
+       SCRIPTS JAVASCRIPT MODULARES BASADOS EN VARIABLES
+       ========================================================================== -->
+  <script src="./js/config.js"></script>
+  <script src="./js/data.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

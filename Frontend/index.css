@@ -1,4 +1,4 @@
-/**
+﻿/**
  * index.css - Master Design System and Token Utilities
  * Comercializadora El Vecino - Electric Neo-Tech Theme
  */
@@ -10,7 +10,7 @@
   --color-obsidian: #0A0A0A;
   --color-electric-blue: #0800FF;
   --color-neon-magenta: #FF00A8;
-  --color-whatsapp: #25D366;
+  --color-whatsapp: #00F0FF;
   --color-pure-white: #FFFFFF;
   --color-slate-surface: #F4F6FB;
   --color-slate-border: #E2E6EE;
@@ -276,3 +276,4 @@ html, body {
 .home-category-count {
   font-size: 0.93rem;
 }
+
