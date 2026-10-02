@@ -1,7 +1,6 @@
 import { Router } from './core/router.js';
 import { AuthGuard } from './core/guards.js';
-import { renderSidebar } from './components/layout/Sidebar.js';
-import { renderHeader, bindHeaderEvents } from './components/layout/Header.js';
+import { bindHeaderEvents } from './components/layout/Header.js';
 import { DashboardView } from './modules/dashboard/dashboard.view.js';
 import { ProductListView } from './modules/products/product-list.view.js';
 import { ProductFormView } from './modules/products/product-form.view.js';
@@ -10,10 +9,9 @@ import { PromotionListView } from './modules/promotions/promotion-list.view.js';
 import { PromotionFormView } from './modules/promotions/promotion-form.view.js';
 import { ComboListView } from './modules/combos/combo-list.view.js';
 import { ComboFormView } from './modules/combos/combo-form.view.js';
+import { SocialShowcaseView } from './modules/social-showcase/social-showcase.view.js';
+import { WhatsAppCrmView } from './modules/whatsapp/whatsapp-crm.view.js';
 
-/**
- * Objeto de operaciones globales adaptado a la arquitectura modular
- */
 export const AdminOps = {
   init() {
     console.log('[AdminOps] Inicializando operaciones del panel...');
@@ -25,156 +23,165 @@ if (typeof window !== 'undefined') {
   window.AdminOps = AdminOps;
 }
 
-const appTarget = document.getElementById('app');
-
-/**
- * Construye la estructura base (Layout + Shell) alrededor del contenido dinámico
- */
-function buildShell(contentHtml) {
-  return `
-    ${renderSidebar()}
-    <div class="flex-1 flex flex-col min-w-0">
-      ${renderHeader()}
-      <main id="main-content" class="p-6 flex-1 overflow-y-auto">
-        ${contentHtml}
-      </main>
-    </div>
-  `;
-}
-
-/**
- * Extensión del enrutador para soportar renderizado asíncrono y parámetros dinámicos
- */
-export class AsyncRouter extends Router {
-  async resolve() {
-    const hash = window.location.hash.replace('#', '') || '/dashboard';
-    
-    let routeKey = hash;
-    let paramId = null;
-
-    if (hash.startsWith('/products/edit/')) {
-      routeKey = '/products/edit';
-      paramId = hash.split('/products/edit/')[1];
-    }
-
-    const route = this.routes[routeKey] || this.routes['404'];
-
-    if (route) {
-      if (route.guard && !route.guard()) {
-        if (this.routes['403']) {
-          this.target.innerHTML = typeof this.routes['403'].render === 'function' 
-            ? this.routes['403'].render() 
-            : await this.routes['403'].renderAsync();
-        }
-        return;
-      }
-
-      this.target.innerHTML = route.renderAsync 
-        ? await route.renderAsync(paramId) 
-        : route.render(paramId);
-
-      if (route.afterRender) route.afterRender(paramId);
-    }
+// Control de visibilidad del mini menú de filtro global
+function toggleDateFilter(show = true) {
+  const filterContainer = document.getElementById('global-date-filter');
+  if (filterContainer) {
+    filterContainer.style.display = show ? 'flex' : 'none';
   }
 }
 
-// Configuración de rutas SPA bajo la arquitectura definida en el SPEC
+// 1. Selector del contenedor principal de la aplicación
+const appTarget = document.getElementById('app-content');
+
+// 2. Mapeo directo de rutas en español con visibilidad de filtro según el contexto
 const routes = {
   '/dashboard': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await DashboardView.render()),
-    afterRender: () => bindHeaderEvents()
-  },
-  '/products': {
-    guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ProductListView.render()),
+    renderAsync: async () => await DashboardView.render(),
     afterRender: () => {
+      toggleDateFilter(true); // Se muestra (Métricas generales)
       bindHeaderEvents();
-      ProductListView.bindEvents();
     }
   },
-  '/products/new': {
+  '/productos': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ProductFormView.render()),
+    renderAsync: async () => await ProductListView.render(),
     afterRender: () => {
+      toggleDateFilter(false); // Oculto en listados CRUD
       bindHeaderEvents();
-      ProductFormView.bindEvents();
+      if (typeof ProductListView.bindEvents === 'function') {
+        ProductListView.bindEvents();
+      }
     }
   },
-  '/products/edit': {
+  '/productos/nuevo': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async (id) => buildShell(await ProductFormView.render(id)),
+    renderAsync: async () => await ProductFormView.render(),
     afterRender: () => {
+      toggleDateFilter(false); // Oculto en formularios
       bindHeaderEvents();
-      ProductFormView.bindEvents();
+      if (typeof ProductFormView.bindEvents === 'function') {
+        ProductFormView.bindEvents();
+      }
     }
   },
-  '/categories': {
+  '/productos/editar': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await CategoryListView.render()),
-    afterRender: () => {
+    renderAsync: async (id) => await ProductFormView.render(id),
+    afterRender: (id) => {
+      toggleDateFilter(false);
       bindHeaderEvents();
-      CategoryListView.bindEvents();
+      if (typeof ProductFormView.bindEvents === 'function') {
+        ProductFormView.bindEvents(id);
+      }
     }
   },
-  '/promotions': {
+  '/categorias': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await PromotionListView.render()),
+    renderAsync: async () => await CategoryListView.render(),
     afterRender: () => {
+      toggleDateFilter(false);
       bindHeaderEvents();
-      PromotionListView.bindEvents();
+      if (typeof CategoryListView.bindEvents === 'function') {
+        CategoryListView.bindEvents();
+      }
     }
   },
-  '/promotions/new': {
+  '/whatsapp': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await PromotionFormView.render()),
+    renderAsync: async () => await WhatsAppCrmView.render(),
     afterRender: () => {
+      toggleDateFilter(true); // Se muestra (Métricas de atención/conversión)
       bindHeaderEvents();
-      PromotionFormView.bindEvents();
+      if (typeof WhatsAppCrmView.bindEvents === 'function') {
+        WhatsAppCrmView.bindEvents();
+      }
     }
   },
-  '/combos': {
+  '/demos': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ComboListView.render()),
+    renderAsync: async () => await SocialShowcaseView.render(),
     afterRender: () => {
+      toggleDateFilter(true); // Se muestra (Métricas de interacción/redes)
       bindHeaderEvents();
-      ComboListView.bindEvents();
+      if (typeof SocialShowcaseView.bindEvents === 'function') {
+        SocialShowcaseView.bindEvents();
+      }
     }
   },
-  '/combos/new': {
+  '/promos': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ComboFormView.render()),
+    renderAsync: async () => await PromotionListView.render(),
     afterRender: () => {
+      toggleDateFilter(false);
       bindHeaderEvents();
-      ComboFormView.bindEvents();
+      if (typeof PromotionListView.bindEvents === 'function') {
+        PromotionListView.bindEvents();
+      }
+    }
+  },
+  '/promociones/nueva': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => await PromotionFormView.render(),
+    afterRender: () => {
+      toggleDateFilter(false);
+      bindHeaderEvents();
+      if (typeof PromotionFormView.bindEvents === 'function') {
+        PromotionFormView.bindEvents();
+      }
+    }
+  },
+  '/b2b': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => await ComboListView.render(),
+    afterRender: () => {
+      toggleDateFilter(false);
+      bindHeaderEvents();
+      if (typeof ComboListView.bindEvents === 'function') {
+        ComboListView.bindEvents();
+      }
+    }
+  },
+  '/combos/nuevo': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => await ComboFormView.render(),
+    afterRender: () => {
+      toggleDateFilter(false);
+      bindHeaderEvents();
+      if (typeof ComboFormView.bindEvents === 'function') {
+        ComboFormView.bindEvents();
+      }
     }
   },
   '403': {
-    render: () => buildShell(`
+    render: () => `
       <div class="p-8 text-center space-y-4">
         <span class="material-symbols-outlined text-6xl text-red-500">gpp_maybe</span>
-        <h1 class="font-display text-3xl font-bold text-deep-obsidian">403 - Acceso Denegado</h1>
-        <p class="text-gray-600 max-w-md mx-auto">No posees los permisos necesarios con tu rol actual para acceder a este módulo.</p>
+        <h1 class="font-outfit text-3xl font-bold text-white">403 - Acceso Denegado</h1>
+        <p class="text-gray-400">No posees los privilegios administrativos requeridos.</p>
+        <a href="#/dashboard" class="inline-block px-6 py-2.5 bg-electric-blue text-white font-bold rounded-xl text-sm">Volver al Inicio</a>
       </div>
-    `),
-    afterRender: () => bindHeaderEvents()
+    `
   },
   '404': {
-    render: () => buildShell(`
+    render: () => `
       <div class="p-8 text-center space-y-4">
-        <span class="material-symbols-outlined text-6xl text-gray-400">find_in_page</span>
-        <h1 class="font-display text-3xl font-bold text-deep-obsidian">404 - Ruta no encontrada</h1>
-        <a href="#/dashboard" class="inline-block px-4 py-2 bg-electric-blue text-white rounded-lg text-sm font-medium">Volver al Dashboard</a>
+        <span class="material-symbols-outlined text-6xl text-amber-500">search_off</span>
+        <h1 class="font-outfit text-3xl font-bold text-white">404 - Módulo no encontrado</h1>
+        <p class="text-gray-400">La ruta especificada no existe en la consola de administración.</p>
+        <a href="#/dashboard" class="inline-block px-6 py-2.5 bg-electric-blue text-white font-bold rounded-xl text-sm">Volver al Inicio</a>
       </div>
-    `),
-    afterRender: () => bindHeaderEvents()
+    `
   }
 };
 
-// Inicialización del enrutador asíncrono
+// 3. Inicialización instanciando la clase Router
 document.addEventListener('DOMContentLoaded', () => {
-  if (AdminOps.init()) {
-    const router = new AsyncRouter(routes, appTarget);
+  if (appTarget) {
+    const router = new Router(routes, appTarget);
     router.init();
+  } else {
+    console.error('[AdminOps] No se encontró el elemento contenedor #app-content');
   }
 });

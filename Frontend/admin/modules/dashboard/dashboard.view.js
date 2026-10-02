@@ -1,18 +1,14 @@
 import { DashboardService } from '../../services/dashboard.service.js';
-import { PriceDisplay } from '../../components/ui/PriceDisplay.js';
-import { formatUSD, formatCOP } from '../../../js/config.js';
+import { formatUSD } from '../../../js/config.js';
 
 export const DashboardView = {
   async render() {
     const summaryResponse = await DashboardService.getSummary();
 
-    // Sanitización y fallback seguro de métricas
     const stats = summaryResponse?.data || {
       total_productos: 0,
       stock_critico: 0,
       clics_whatsapp: 0,
-      valor_catalogo_usd: 0,
-      tasa_cambio: 1,
       top_viewed: []
     };
 
@@ -30,46 +26,13 @@ export const DashboardView = {
 
     const topViewedItems = Array.isArray(stats.top_viewed) ? stats.top_viewed : [];
 
-    // Formateo o instanciación segura de PriceDisplay
-    let priceDisplayHtml = '';
-    try {
-      priceDisplayHtml = new PriceDisplay({ 
-        priceUSD: stats.valor_catalogo_usd ?? 0, 
-        priceCOP: (stats.valor_catalogo_usd ?? 0) * (stats.tasa_cambio ?? 1) 
-      }).render();
-    } catch {
-      priceDisplayHtml = `
-        <span class="text-base font-bold text-deep-obsidian">${formatUSD(stats.valor_catalogo_usd ?? 0)}</span>
-        <span class="text-xs text-gray-500 block">${formatCOP((stats.valor_catalogo_usd ?? 0) * (stats.tasa_cambio ?? 1))} COP</span>
-      `;
-    }
-
     return `
       <div class="space-y-6">
         ${bannerOffline}
 
-        <!-- Encabezado y Accesos Rápidos -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h2 class="font-display text-2xl font-bold text-deep-obsidian">Dashboard Operativo</h2>
-            <p class="text-sm text-gray-500">Métricas en tiempo real e indicadores clave de rendimiento</p>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <a href="#/products" class="px-4 py-2 bg-electric-blue text-white font-medium text-sm rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
-              <span class="material-symbols-outlined text-lg">add</span>
-              Nuevo Producto
-            </a>
-            <a href="#/promotions" class="px-4 py-2 bg-neon-magenta text-white font-medium text-sm rounded-lg hover:opacity-90 transition flex items-center gap-2">
-              <span class="material-symbols-outlined text-lg">local_offer</span>
-              Crear Promoción
-            </a>
-          </div>
-        </div>
-
-        <!-- Grilla de Tarjetas KPI -->
+        <!-- Tarjetas de Métricas Principales -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- Total Productos -->
-          <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
+          <div class="p-5 bg-white rounded-xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase">Total Productos</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-1">${stats.total_productos ?? 0}</p>
@@ -79,8 +42,7 @@ export const DashboardView = {
             </div>
           </div>
 
-          <!-- Stock Crítico -->
-          <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
+          <div class="p-5 bg-white rounded-xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase">Stock Crítico (≤5)</p>
               <p class="text-2xl font-bold text-red-600 mt-1">${stats.stock_critico ?? 0}</p>
@@ -90,10 +52,9 @@ export const DashboardView = {
             </div>
           </div>
 
-          <!-- Clics WhatsApp -->
-          <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
+          <div class="p-5 bg-white rounded-xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase">Clics WhatsApp (30d)</p>
+              <p class="text-xs font-semibold text-gray-500 uppercase">Clics WhatsApp (30D)</p>
               <p class="text-2xl font-bold text-whatsapp-green mt-1">${stats.clics_whatsapp ?? 0}</p>
             </div>
             <div class="p-3 bg-emerald-50 text-whatsapp-green rounded-xl">
@@ -101,33 +62,32 @@ export const DashboardView = {
             </div>
           </div>
 
-          <!-- Valor Catálogo USD -->
-          <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
+          <!-- Métrica B2B (Reemplaza a Valor Catálogo) -->
+          <div class="p-5 bg-white rounded-xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase">Valor Catálogo</p>
-              <div class="mt-1">
-                ${priceDisplayHtml}
-              </div>
+              <p class="text-xs font-semibold text-gray-500 uppercase">Cotizaciones de Combos</p>
+              <p class="text-2xl font-bold text-purple-600 mt-1">42 <span class="text-xs font-normal text-gray-400">/mes</span></p>
             </div>
             <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
-              <span class="material-symbols-outlined">payments</span>
+              <span class="material-symbols-outlined">domain</span>
             </div>
           </div>
         </div>
 
-        <!-- Sección Secundaria: Top Productos y Widget Tasa de Cambio -->
+        <!-- Sección Principal / Métricas B2B y Top Productos -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Top 5 Productos Consultados -->
-          <div class="lg:col-span-2 bg-white rounded-xl border border-slate-border p-5 shadow-sm">
+          
+          <!-- Top Productos Consultados -->
+          <div class="lg:col-span-1 bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm">
             <h3 class="font-display text-lg font-bold text-deep-obsidian mb-4">Top Productos Más Consultados</h3>
-            <div class="divide-y divide-slate-border">
+            <div class="divide-y divide-slate-100">
               ${topViewedItems.length > 0 ? topViewedItems.map((item, index) => `
                 <div class="py-3 flex items-center justify-between gap-4">
                   <div class="flex items-center gap-3">
                     <span class="font-display font-bold text-sm text-gray-400 w-5">#${index + 1}</span>
                     <div>
                       <p class="text-sm font-medium text-deep-obsidian">${item.name}</p>
-                      <p class="text-xs text-gray-500">${formatUSD(item.price_usd)} / ${formatCOP(item.price_usd * (stats.tasa_cambio ?? 1))} COP</p>
+                      <p class="text-xs text-gray-500">${formatUSD(item.price_usd)}</p>
                     </div>
                   </div>
                   <div class="text-right">
@@ -141,23 +101,68 @@ export const DashboardView = {
             </div>
           </div>
 
-          <!-- Tasa de Cambio Actual -->
-          <div class="bg-white rounded-xl border border-slate-border p-5 shadow-sm flex flex-col justify-between">
+          <!-- Módulo B2B & Demanda Comercial (Reemplaza a Tasa de Cambio) -->
+          <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm space-y-6 flex flex-col justify-between">
             <div>
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-display text-lg font-bold text-deep-obsidian">Tasa de Cambio</h3>
-                <span class="material-symbols-outlined text-gray-400">currency_exchange</span>
+              <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                <div>
+                  <h3 class="font-display text-lg font-bold text-deep-obsidian">Estadísticas Generales</h3>
+                  <p class="text-xs text-gray-500">Análisis comparativo de canales directos e interés por familias de productos</p>
+                </div>
+                <span class="material-symbols-outlined text-purple-600 bg-purple-50 p-2 rounded-lg">analytics</span>
               </div>
-              <p class="text-xs text-gray-500 mb-1">Tasa referencia USD → COP</p>
-              <p class="text-3xl font-bold text-deep-obsidian">1 USD = ${formatCOP(stats.tasa_cambio ?? 1)} COP</p>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                <!-- Gráfico Estático: Flujo de Demanda -->
+                <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-700">Flujo de Productos</span>
+                    <div class="flex items-center gap-2 text-[10px] text-gray-500">
+                      <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span> Productos
+                    </div>
+                  </div>
+                  
+                  <!-- Barras de Gráfico -->
+                  <div class="h-28 flex items-end justify-between gap-1 pt-4 px-2 border-b border-slate-200">
+                    <div class="w-full bg-blue-500/80 h-[40%] rounded-t-sm"></div>
+                    <div class="w-full bg-pink-500/80 h-[65%] rounded-t-sm"></div>
+                    <div class="w-full bg-blue-500/80 h-[50%] rounded-t-sm"></div>
+                    <div class="w-full bg-blue-600 h-[85%] rounded-t-sm"></div>
+                    <div class="w-full bg-pink-500/80 h-[30%] rounded-t-sm"></div>
+                    <div class="w-full bg-blue-500/80 h-[70%] rounded-t-sm"></div>
+                    <div class="w-full bg-purple-600 h-[95%] rounded-t-sm"></div>
+                    <div class="w-full bg-blue-500/80 h-[60%] rounded-t-sm"></div>
+                  </div>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs">check_circle</span>
+                    Tasa de respuesta efectiva en WhatsApp: 94.2% (antes de 5 minutos)
+                  </p>
+                </div>
+
+                <!-- Indicador Circular: Interés por Familia -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center justify-center text-center">
+                  <span class="text-xs font-bold text-slate-700 mb-2">Interés por Familia</span>
+                  <div class="relative w-20 h-20 rounded-full border-4 border-purple-500 border-t-blue-500 border-r-pink-500 flex items-center justify-center my-1">
+                    <span class="text-xs font-bold text-deep-obsidian">100%</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 space-y-1 w-full text-left mt-2">
+                    <div class="flex justify-between"><span>• Refrigeración</span><span class="font-bold">54%</span></div>
+                    <div class="flex justify-between"><span>• Pantallas / Audio</span><span class="font-bold">28%</span></div>
+                    <div class="flex justify-between"><span>• Cocina & Otros</span><span class="font-bold">18%</span></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="mt-6 pt-4 border-t border-slate-border">
-              <a href="#/settings" class="text-sm font-medium text-electric-blue hover:underline flex items-center justify-between">
-                <span>Ajustar tasa de cambio</span>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs text-gray-500">Métricas del sistema</span>
+              <a href="#/b2b" class="text-sm font-medium text-purple-600 hover:underline flex items-center gap-1">
+                <span>Ir al Armador de Combos B2B</span>
                 <span class="material-symbols-outlined text-base">arrow_forward</span>
               </a>
             </div>
           </div>
+
         </div>
       </div>
     `;

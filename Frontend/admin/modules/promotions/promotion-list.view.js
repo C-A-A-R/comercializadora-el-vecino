@@ -11,7 +11,7 @@ export const PromotionListView = {
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Gestión de Promociones</h1>
             <p class="text-sm text-gray-500">Administración de descuentos y vigencias promocionales</p>
           </div>
-          <a href="#/promotions/new" class="inline-flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <a href="#/promociones/nueva" class="inline-flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
             <span class="material-symbols-outlined text-sm">add</span> Nueva Promoción
           </a>
         </div>

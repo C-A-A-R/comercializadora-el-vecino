@@ -11,26 +11,29 @@ export const PromotionFormView = {
     return `
       <div class="max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-deep-obsidian font-display">Crear Nueva Promoción</h1>
+          <div>
+            <h1 class="text-2xl font-bold text-deep-obsidian font-display">Simulador y Registro de Promociones (Interno)</h1>
+            <p class="text-sm text-gray-500">Calcula descuentos en USD para cierres comerciales en WhatsApp y guarda la referencia interna.</p>
+          </div>
           <a href="#/promotions" class="text-sm text-gray-500 hover:text-gray-700">← Volver al listado</a>
         </div>
 
         <form id="promo-form" class="bg-white p-6 rounded-xl shadow-sm border border-slate-border grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4 md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700">Nombre de la Promoción</label>
-            <input type="text" id="promo-name" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej: Super Descuento Septiembre" />
+          <div class="space-y-2 md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Nombre de la Promoción / Campaña Interna</label>
+            <input type="text" id="promo-name" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej: Especial Cierre WhatsApp - Refrigeración" />
           </div>
 
-          <div class="space-y-4 md:col-span-2">
+          <div class="space-y-2 md:col-span-2">
             <label class="block text-sm font-medium text-gray-700">Seleccionar Producto</label>
             <select id="promo-product-id" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm bg-white focus:ring-2 focus:ring-electric-blue outline-none">
-              <option value="">Cargando productos...</option>
+              <option value="">Cargando catálogo de productos...</option>
             </select>
           </div>
 
           <div class="space-y-2">
             <label class="block text-sm font-medium text-gray-700">Tipo de Descuento</label>
-            <div class="flex gap-4 pt-1">
+            <div class="flex gap-4 pt-2">
               <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
                 <input type="radio" name="discount_type" value="percentage" checked class="text-electric-blue focus:ring-electric-blue" />
                 Porcentaje (%)
@@ -48,40 +51,56 @@ export const PromotionFormView = {
           </div>
 
           <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
-            <input type="datetime-local" id="promo-start" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm" />
+            <label class="block text-sm font-medium text-gray-700">Vigencia Inicio (Opcional)</label>
+            <input type="datetime-local" id="promo-start" class="w-full border border-slate-border rounded-lg p-2.5 text-sm" />
           </div>
 
           <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">Fecha de Fin</label>
-            <input type="datetime-local" id="promo-end" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm" />
+            <label class="block text-sm font-medium text-gray-700">Vigencia Fin (Opcional)</label>
+            <input type="datetime-local" id="promo-end" class="w-full border border-slate-border rounded-lg p-2.5 text-sm" />
           </div>
 
-          <!-- Preview de Precios -->
-          <div class="md:col-span-2 bg-slate-surface p-4 rounded-xl border border-slate-border space-y-3">
-            <h3 class="text-sm font-bold text-gray-700">Vista Previa de Precios (Calculado en tiempo real)</h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <span class="block text-xs text-gray-500">Precio Regular</span>
-                <span id="preview-base-usd" class="font-semibold text-gray-800">$0.00 USD</span>
-                <span id="preview-base-cop" class="block text-xs text-gray-400">$ 0 COP</span>
+          <!-- Preview de Precios Internos (Calculado en tiempo real) -->
+          <div class="md:col-span-2 bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <span class="material-symbols-outlined text-electric-blue text-lg">calculate</span>
+                Cálculo de Promoción para Vendedor (USD)
+              </h3>
+              <span class="text-[11px] font-semibold bg-blue-100 text-electric-blue px-2 py-0.5 rounded-full">Uso Interno Comercial</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+              <div class="bg-white p-3 rounded-lg border border-slate-200">
+                <span class="block text-xs font-medium text-gray-500 uppercase">Precio Base</span>
+                <span id="preview-base-usd" class="font-bold text-lg text-gray-800">$0.00 USD</span>
               </div>
-              <div>
-                <span class="block text-xs text-gray-500">Descuento Estimado</span>
-                <span id="preview-saved-usd" class="font-semibold text-neon-magenta">$0.00 USD</span>
-                <span id="preview-saved-pct" class="block text-xs text-neon-magenta">0% ahorro</span>
+              <div class="bg-white p-3 rounded-lg border border-slate-200">
+                <span class="block text-xs font-medium text-gray-500 uppercase">Monto Descontado</span>
+                <span id="preview-saved-usd" class="font-bold text-lg text-neon-magenta">$0.00 USD</span>
+                <span id="preview-saved-pct" class="block text-xs text-neon-magenta font-medium">0% de ahorro</span>
               </div>
-              <div>
-                <span class="block text-xs text-gray-500">Precio Promocional Final</span>
-                <span id="preview-final-usd" class="font-bold text-base text-electric-blue">$0.00 USD</span>
-                <span id="preview-final-cop" class="block text-xs text-electric-blue">$ 0 COP</span>
+              <div class="bg-white p-3 rounded-lg border border-slate-200">
+                <span class="block text-xs font-medium text-gray-500 uppercase">Precio Final Cierre</span>
+                <span id="preview-final-usd" class="font-bold text-xl text-electric-blue">$0.00 USD</span>
               </div>
+            </div>
+
+            <!-- Plantilla lista para copiar y enviar al chat de WhatsApp -->
+            <div class="pt-2">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-gray-700">Texto para Copiar al Chat de WhatsApp:</span>
+                <button type="button" id="copy-whatsapp-btn" class="text-xs text-whatsapp-green font-bold hover:underline flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">content_copy</span> Copiar Oferta
+                </button>
+              </div>
+              <textarea id="whatsapp-template" readonly class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-gray-700 font-mono h-20 outline-none resize-none" placeholder="Selecciona un producto y descuento para generar el mensaje de venta..."></textarea>
             </div>
           </div>
 
           <div class="md:col-span-2 flex justify-end gap-3 pt-4 border-t border-slate-border">
             <a href="#/promotions" class="px-4 py-2 text-sm rounded-lg border border-slate-border text-gray-600 hover:bg-slate-100">Cancelar</a>
-            <button type="submit" class="px-4 py-2 text-sm bg-electric-blue text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">Guardar Promoción</button>
+            <button type="submit" class="px-4 py-2 text-sm bg-electric-blue text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">Guardar Referencia de Promoción</button>
           </div>
         </form>
       </div>
@@ -114,6 +133,13 @@ export const PromotionFormView = {
       r.addEventListener('change', () => this.updatePreview());
     });
 
+    document.getElementById('copy-whatsapp-btn')?.addEventListener('click', () => {
+      const text = document.getElementById('whatsapp-template').value;
+      if (!text) return;
+      navigator.clipboard.writeText(text);
+      Toast.show({ message: '¡Texto copiado al portapapeles para WhatsApp!', type: 'success' });
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       await this.handleSubmit();
@@ -132,28 +158,38 @@ export const PromotionFormView = {
     const calc = PromotionCalculator.calculateDiscount(this.selectedProduct.price_usd, discountType, discountValue);
 
     document.getElementById('preview-base-usd').textContent = `${calc.baseUsdFormatted} USD`;
-    document.getElementById('preview-base-cop').textContent = calc.baseCopFormatted;
     document.getElementById('preview-saved-usd').textContent = `${calc.savedUsdFormatted} USD`;
-    document.getElementById('preview-saved-pct').textContent = `${calc.savedPercentage} ahorro`;
+    document.getElementById('preview-saved-pct').textContent = `${calc.savedPercentage} de ahorro`;
     document.getElementById('preview-final-usd').textContent = `${calc.finalUsdFormatted} USD`;
-    document.getElementById('preview-final-cop').textContent = calc.finalCopFormatted;
+
+    // Generar mensaje listo para WhatsApp
+    const promoName = document.getElementById('promo-name').value || 'Promoción Especial';
+    const textMsg = `¡Hola! 👋 Te comparto el detalle de la promoción especial de El Vecino para ti:\n\n` +
+      `📌 *Producto:* ${this.selectedProduct.name}\n` +
+      `💵 *Precio Regular:* ${calc.baseUsdFormatted} USD\n` +
+      `🔥 *Precio Oferta Cierre:* ${calc.finalUsdFormatted} USD (Ahorras ${calc.savedUsdFormatted} USD)\n\n` +
+      `¿Avanzamos con la reserva del equipo? 🛒✨`;
+
+    document.getElementById('whatsapp-template').value = textMsg;
   },
 
   resetPreview() {
     document.getElementById('preview-base-usd').textContent = '$0.00 USD';
-    document.getElementById('preview-base-cop').textContent = '$ 0 COP';
     document.getElementById('preview-saved-usd').textContent = '$0.00 USD';
     document.getElementById('preview-saved-pct').textContent = '0% ahorro';
     document.getElementById('preview-final-usd').textContent = '$0.00 USD';
-    document.getElementById('preview-final-cop').textContent = '$ 0 COP';
+    document.getElementById('whatsapp-template').value = '';
   },
 
   async handleSubmit() {
-    const startDate = new Date(document.getElementById('promo-start').value);
-    const endDate = new Date(document.getElementById('promo-end').value);
+    const startVal = document.getElementById('promo-start').value;
+    const endVal = document.getElementById('promo-end').value;
 
-    if (startDate >= endDate) {
-      Toast.show({ message: 'La fecha de inicio debe ser estrictamente anterior a la fecha de fin', type: 'error' });
+    const startDate = startVal ? new Date(startVal) : new Date();
+    const endDate = endVal ? new Date(endVal) : new Date(Date.now() + 30*24*60*60*1000); // 30 días por defecto
+
+    if (startVal && endVal && startDate >= endDate) {
+      Toast.show({ message: 'La fecha de inicio debe ser anterior a la fecha de fin', type: 'error' });
       return;
     }
 
@@ -169,7 +205,7 @@ export const PromotionFormView = {
 
     try {
       await PromotionService.create(payload);
-      Toast.show({ message: 'Promoción creada exitosamente', type: 'success' });
+      Toast.show({ message: 'Promoción guardada en el catálogo interno', type: 'success' });
       window.location.hash = '#/promotions';
     } catch (err) {
       Toast.show({ message: 'No se pudo guardar la promoción', type: 'error' });

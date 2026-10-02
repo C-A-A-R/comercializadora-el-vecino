@@ -29,9 +29,11 @@ const Api = {
     localStorage.removeItem('el_vecino_jwt_token');
   },
 
-  /**
-   * Builds request headers with JWT authorization and Content-Type
-   */
+  logout() {
+    this.removeToken();
+    window.dispatchEvent(new CustomEvent('auth:unauthorized', { detail: { reason: 'user_logout' } }));
+  },
+
   getHeaders(customHeaders = {}) {
     const headers = {
       'Content-Type': 'application/json',
@@ -47,9 +49,6 @@ const Api = {
     return headers;
   },
 
-  /**
-   * Main request executor
-   */
   async request(endpoint, options = {}) {
     const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
     const headers = this.getHeaders(options.headers);
@@ -62,7 +61,6 @@ const Api = {
     try {
       const response = await fetch(url, config);
 
-      // Manejo de expiración o token inválido (401 Unauthorized)
       if (response.status === 401) {
         console.warn('[Api] Sesión expirada o no autorizada (401).');
         this.removeToken();
@@ -80,15 +78,12 @@ const Api = {
         throw new Error(errorData.message || `Error del servidor: ${response.status}`);
       }
 
-      // Si no hay contenido (ej: 204 No Content)
       if (response.status === 204) {
         return { success: true };
       }
 
       return await response.json();
     } catch (networkError) {
-      // Si la petición falla por red (servidor backend local no iniciado),
-      // activamos fallback transparente para garantizar que la UI funcione sin romperse.
       console.info(`[Api] Backend no disponible en "${url}". Ejecutando fallback simulado:`, networkError.message);
       return this.mockFallback(endpoint, config, networkError);
     }
@@ -131,14 +126,10 @@ const Api = {
     return this.request(endpoint, { ...options, method: 'DELETE' });
   },
 
-  /**
-   * Mock fallback inteligente para pruebas frontend offline
-   */
   async mockFallback(endpoint, config, originalError) {
     const cleanPath = endpoint.split('?')[0].replace('/api/v1', '');
     const method = (config.method || 'GET').toUpperCase();
 
-    // 1. Endpoint /auth/login
     if (cleanPath.includes('/auth/login') && method === 'POST') {
       const payload = JSON.parse(config.body || '{}');
       const email = payload.email || '';
@@ -150,12 +141,11 @@ const Api = {
         role: isAdmin ? 'admin' : 'cliente'
       };
 
-      // Generar JWT simulado válido
       const headerB64 = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
       const payloadB64 = btoa(JSON.stringify({
         ...mockUser,
         iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + 86400 // 24h
+        exp: Math.floor(Date.now() / 1000) + 86400
       }));
       const mockJwt = `${headerB64}.${payloadB64}.simulated_signature_el_vecino`;
 
@@ -187,23 +177,19 @@ const Api = {
       };
     }
 
-    // 2. Endpoint /products
     if (cleanPath.includes('/products')) {
       const products = window.Storage?.getProducts() || window.CONFIG?.INITIAL_PRODUCTS || [];
 
-      // Detalle de producto /products/:id
       const idMatch = cleanPath.match(/\/products\/([^/?]+)/);
       if (idMatch && method === 'GET') {
         const prod = products.find(p => p.id === idMatch[1]);
         if (prod) return { success: true, data: prod };
       }
 
-      // Listado general
       if (method === 'GET') {
         return { success: true, data: products, total: products.length };
       }
 
-      // Creación
       if (method === 'POST') {
         const newProd = { id: 'prod-' + Date.now(), ...JSON.parse(config.body || '{}') };
         products.unshift(newProd);
@@ -212,7 +198,6 @@ const Api = {
       }
     }
 
-    // 3. Endpoint /promociones
     if (cleanPath.includes('/promociones')) {
       return {
         success: true,
@@ -220,7 +205,6 @@ const Api = {
       };
     }
 
-    // 4. Endpoint /categories
     if (cleanPath.includes('/categories')) {
       return {
         success: true,
@@ -228,7 +212,6 @@ const Api = {
       };
     }
 
-    // Default fallback
     return {
       success: true,
       data: null,
@@ -245,6 +228,5 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = Api;
 }
 
-// ES Module exports para compatibilidad con import { api } o import Api
 export { Api as api, Api };
 export default Api;

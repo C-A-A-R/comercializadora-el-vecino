@@ -1,9 +1,8 @@
 import { ProductService } from '../../services/product.service.js';
 import { DataTable } from '../../components/ui/DataTable.js';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog.js';
-import { formatUSD, formatCOP } from '../../../js/config.js'; // Formateadores directos
+import { formatUSD, formatCOP } from '../../../js/config.js';
 
-// SVG codificado en Base64 para evitar conflictos de comillas o caracteres especiales en HTML inline
 const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjguNSIgcj0iMS41Ii8+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSIvPjwvc3ZnPg==';
 
 export const ProductListView = {
@@ -90,7 +89,8 @@ export const ProductListView = {
             <h2 class="font-display text-2xl font-bold text-deep-obsidian">Catálogo de Productos</h2>
             <p class="text-sm text-gray-500">Gestión de inventario, variantes y visibilidad</p>
           </div>
-          <a href="#/products/new" class="px-4 py-2 bg-electric-blue text-white rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-blue-700 transition">
+          <!-- Botón único de acción principal para crear producto -->
+          <a href="#/productos/nuevo" class="px-4 py-2 bg-electric-blue text-white rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-blue-700 transition">
             <span class="material-symbols-outlined text-lg">add</span>
             Nuevo Producto
           </a>

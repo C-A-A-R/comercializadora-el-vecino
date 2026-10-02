@@ -37,3 +37,39 @@ export function bindHeaderEvents() {
     window.location.href = '../loguin.html?redirect=admin';
   });
 }
+
+// admin/components/layout/Header.js
+
+// export const HeaderState = {
+//   currentRange: '7d'
+// };
+
+// export function bindHeaderEvents() {
+//   const filterContainer = document.getElementById('global-date-filter');
+//   if (!filterContainer) return;
+
+//   const buttons = filterContainer.querySelectorAll('.date-filter-btn');
+
+//   buttons.forEach(btn => {
+//     btn.onclick = (e) => {
+//       const selectedRange = e.currentTarget.getAttribute('data-range');
+//       if (HeaderState.currentRange === selectedRange) return;
+
+//       HeaderState.currentRange = selectedRange;
+
+//       // 1. Actualización visual de los botones
+//       buttons.forEach(b => {
+//         b.classList.remove('bg-black', 'text-white', 'shadow-sm');
+//         b.classList.add('text-slate-600');
+//       });
+
+//       e.currentTarget.classList.remove('text-slate-600');
+//       e.currentTarget.classList.add('bg-black', 'text-white', 'shadow-sm');
+
+//       // 2. Disparar Evento Global para la vista activa
+//       window.dispatchEvent(new CustomEvent('dateRangeChanged', { 
+//         detail: { range: selectedRange } 
+//       }));
+//     };
+//   });
+// }
