@@ -1,7 +1,7 @@
-import { formatUSD } from '../../../js/config.js';
+import { formatUSD, formatCOP } from '../../../js/config.js';
 
 export const PromotionCalculator = {
-  calculateDiscount(priceUsd, discountType, discountValue) {
+  calculateDiscount(priceUsd, discountType, discountValue, exchangeRate = 4200) {
     const basePrice = Number(priceUsd) || 0;
     const value = Number(discountValue) || 0;
     let finalUsd = basePrice;
@@ -16,10 +16,14 @@ export const PromotionCalculator = {
     }
 
     const savedPercentage = basePrice > 0 ? ((savedUsd / basePrice) * 100).toFixed(1) : 0;
+    const finalCop = finalUsd * exchangeRate;
+    const baseCop = basePrice * exchangeRate;
 
     return {
       baseUsdFormatted: formatUSD(basePrice),
+      baseCopFormatted: formatCOP(baseCop),
       finalUsdFormatted: formatUSD(finalUsd),
+      finalCopFormatted: formatCOP(finalCop),
       savedUsdFormatted: formatUSD(savedUsd),
       savedPercentage: `${savedPercentage}%`,
       finalUsd,
@@ -36,11 +40,11 @@ export const PromotionCalculator = {
     const end = new Date(endDate);
 
     if (now < start) {
-      return '<span class="px-2 py-1 text-xs font-semibold rounded bg-amber-100 text-amber-800">Programada</span>';
+      return '<span class="px-2 py-1 text-xs font-semibold rounded bg-amber-100 text-amber-800">Pendiente</span>';
     }
     if (now > end) {
       return '<span class="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-800">Vencida</span>';
     }
-    return '<span class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800">Activa (Uso Comercial)</span>';
+    return '<span class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800">Activa</span>';
   }
 };

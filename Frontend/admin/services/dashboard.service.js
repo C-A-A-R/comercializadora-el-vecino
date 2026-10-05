@@ -6,7 +6,7 @@ const CACHE_KEY = 'ev_dashboard_snapshot';
 export const DashboardService = {
   async getSummary() {
     if (CONFIG?.USE_MOCKS) {
-      return DASHBOARD_MOCK;
+      return { data: DASHBOARD_MOCK, isOffline: false };
     }
 
     try {

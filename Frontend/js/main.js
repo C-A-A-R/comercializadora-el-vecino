@@ -3,6 +3,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 Inicializando Comercializadora El Vecino App...');
+
   // 1. Inicializar sistema de Toasts
   if (window.Toast) {
     window.Toast.init();

@@ -1,3 +1,4 @@
+import { api } from '../../js/api.js';
 import { CONFIG } from '../../js/config.js';
 import { CATEGORIES_MOCK, PRODUCT_TYPES_MOCK } from './mocks/categories.mock.js';
 
@@ -7,10 +8,27 @@ export const CategoryService = {
     if (CONFIG?.USE_MOCKS) {
       return { count: CATEGORIES_MOCK.length, results: [...CATEGORIES_MOCK] };
     }
-    const response = await fetch(`${CONFIG.API_BASE_URL}/categories/`, {
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ev_auth_token')}` }
-    });
-    return await response.json();
+    try {
+      const response = await api.get('/categories/');
+      const rawResults = response?.results || (Array.isArray(response) ? response : []);
+      const results = rawResults.map(c => ({
+        id: c.id,
+        name: c.category_name || c.name || '',
+        category_name: c.category_name || c.name || '',
+        slug: (c.category_name || c.name || '').toLowerCase().replace(/\s+/g, '-'),
+        description: c.description || '',
+        category_image: c.category_image || null,
+        created_at: c.created_at || '',
+        is_active: !c.is_deleted
+      }));
+      return {
+        count: response?.total_items || results.length,
+        results
+      };
+    } catch (error) {
+      console.warn('[CategoryService] Error al listar categorías del backend, usando mock fallback:', error);
+      return { count: CATEGORIES_MOCK.length, results: [...CATEGORIES_MOCK] };
+    }
   },
 
   async saveCategory(data) {
@@ -21,42 +39,45 @@ export const CategoryService = {
       } else {
         const newCat = {
           id: Date.now(),
-          name: data.name,
-          slug: data.name.toLowerCase().replace(/\s+/g, '-'),
+          name: data.name || data.category_name,
+          category_name: data.name || data.category_name,
+          slug: (data.name || data.category_name).toLowerCase().replace(/\s+/g, '-'),
           description: data.description || '',
-          is_active: true,
-          product_types: []
+          is_active: true
         };
         CATEGORIES_MOCK.push(newCat);
       }
       return { success: true };
     }
 
-    const method = data.id ? 'PUT' : 'POST';
-    const url = data.id 
-      ? `${CONFIG.API_BASE_URL}/categories/${data.id}/` 
-      : `${CONFIG.API_BASE_URL}/categories/`;
+    const payload = {
+      category_name: data.category_name || data.name,
+      description: data.description || ''
+    };
 
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Authorization': `Bearer ${sessionStorage.getItem('ev_auth_token')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    return await response.json();
+    if (data.id) {
+      return await api.patch(`/categories/${data.id}/`, payload);
+    } else {
+      return await api.post('/categories/', payload);
+    }
   },
 
-  // --- TIPOS DE PRODUCTO ---
+  async deleteCategory(id) {
+    if (CONFIG?.USE_MOCKS) {
+      const idx = CATEGORIES_MOCK.findIndex(c => c.id === parseInt(id, 10));
+      if (idx !== -1) CATEGORIES_MOCK.splice(idx, 1);
+      return { success: true };
+    }
+    return await api.delete(`/categories/${id}/`);
+  },
+
+  // --- TIPOS DE PRODUCTO (Obsoleto en Backend - mantenido por retrocompatibilidad de interfaz) ---
   async listProductTypes() {
     if (CONFIG?.USE_MOCKS) {
       return { count: PRODUCT_TYPES_MOCK.length, results: [...PRODUCT_TYPES_MOCK] };
     }
-    const response = await fetch(`${CONFIG.API_BASE_URL}/product-types/`, {
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ev_auth_token')}` }
-    });
-    return await response.json();
+    // Entidad consolidada dentro de Categorías en Django
+    return { count: 0, results: [] };
   },
 
   async saveProductType(data) {
@@ -75,20 +96,6 @@ export const CategoryService = {
       }
       return { success: true };
     }
-
-    const method = data.id ? 'PUT' : 'POST';
-    const url = data.id 
-      ? `${CONFIG.API_BASE_URL}/product-types/${data.id}/` 
-      : `${CONFIG.API_BASE_URL}/product-types/`;
-
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Authorization': `Bearer ${sessionStorage.getItem('ev_auth_token')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    return await response.json();
+    return { success: true };
   }
 };

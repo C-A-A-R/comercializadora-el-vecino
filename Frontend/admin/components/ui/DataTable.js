@@ -32,7 +32,7 @@ export class DataTable {
                 ${this.actions.length ? `
                   <td class="px-6 py-4 whitespace-nowrap text-right space-x-2">
                     ${this.actions.map(act => `
-                      <button data-action="${act.name}" data-index="${idx}" class="p-1 text-gray-500 hover:text-electric-blue transition" title="${act.label}">
+                      <button data-action="${act.name}" data-index="${idx}" data-id="${row.id ?? ''}" class="p-1 text-gray-500 hover:text-electric-blue transition" title="${act.label}">
                         <span class="material-symbols-outlined text-xl">${act.icon}</span>
                       </button>
                     `).join('')}

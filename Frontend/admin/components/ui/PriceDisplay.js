@@ -4,33 +4,40 @@
  */
 import { formatUSD, formatCOP } from '../../../js/config.js';
 
-export class PriceDisplay {
-  /**
-   * Genera el HTML formateado para visualizar USD y COP según la norma RN-06.
-   * @param {number} priceUsd - Precio base en USD
-   * @param {number} priceCop - Precio calculado o proyectado en COP
-   * @param {Object} [options]
-   * @param {'sm' | 'md' | 'lg'} [options.size='md'] - Tamaño tipográfico
-   * @returns {string} String HTML renderizable
-   */
-  static render(priceUsd, priceCop, options = { size: 'md' }) {
-    const sizeClasses = {
-      sm: 'text-xs',
-      md: 'text-sm',
-      lg: 'text-base font-bold'
-    };
+export function PriceDisplay(props, cop, options = { size: 'md' }) {
+  let priceUsd = 0;
+  let priceCop = 0;
+  let opt = options;
 
-    const currentSize = sizeClasses[options.size] || sizeClasses.md;
-
-    return `
-      <div class="price-display inline-flex flex-col ${currentSize}">
-        <span class="font-bold text-deep-obsidian dark:text-white">
-          ${formatUSD(priceUsd)}
-        </span>
-        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
-          ${formatCOP(priceCop)}
-        </span>
-      </div>
-    `;
+  if (typeof props === 'object' && props !== null) {
+    priceUsd = Number(props.priceUSD ?? props.priceUsd ?? props.usd ?? 0);
+    priceCop = Number(props.priceCOP ?? props.priceCop ?? props.cop ?? (priceUsd * 4200));
+    if (props.size) opt = { size: props.size };
+  } else {
+    priceUsd = Number(props) || 0;
+    priceCop = Number(cop) || (priceUsd * 4200);
   }
+
+  const sizeClasses = {
+    sm: 'text-xs',
+    md: 'text-sm',
+    lg: 'text-base font-bold'
+  };
+
+  const currentSize = sizeClasses[opt?.size] || sizeClasses.md;
+
+  return `
+    <div class="price-display inline-flex flex-col ${currentSize}">
+      <span class="font-bold text-deep-obsidian">
+        ${formatUSD(priceUsd)}
+      </span>
+      <span class="text-xs text-gray-500 font-medium">
+        ${formatCOP(priceCop)}
+      </span>
+    </div>
+  `;
 }
+
+PriceDisplay.render = function(priceUsd, priceCop, options = { size: 'md' }) {
+  return PriceDisplay(priceUsd, priceCop, options);
+};
