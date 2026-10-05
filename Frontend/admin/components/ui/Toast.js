@@ -23,23 +23,13 @@ export class Toast {
   static show(message, type = 'info', duration = 4000) {
     this._ensureContainer();
 
-    let text = message;
-    let toastType = type;
-    let toastDuration = duration;
-
-    if (typeof message === 'object' && message !== null) {
-      text = message.message || '';
-      toastType = message.type || 'info';
-      toastDuration = message.duration || 4000;
-    }
-
     const toast = document.createElement('div');
-    toast.className = `pointer-events-auto flex items-center gap-3 p-4 rounded-lg shadow-lg text-white transition-all transform translate-y-2 opacity-0 text-sm font-medium ${this._getTypeStyles(toastType)}`;
+    toast.className = `pointer-events-auto flex items-center gap-3 p-4 rounded-lg shadow-lg text-white transition-all transform translate-y-2 opacity-0 text-sm font-medium ${this._getTypeStyles(type)}`;
     
-    const icon = this._getIcon(toastType);
+    const icon = this._getIcon(type);
     toast.innerHTML = `
       <span class="material-symbols-outlined text-xl">${icon}</span>
-      <span class="flex-1">${text}</span>
+      <span class="flex-1">${message}</span>
       <button class="toast-close opacity-70 hover:opacity-100 transition-opacity">
         <span class="material-symbols-outlined text-lg">close</span>
       </button>
@@ -59,8 +49,8 @@ export class Toast {
 
     toast.querySelector('.toast-close').addEventListener('click', closeToast);
 
-    if (toastDuration > 0) {
-      setTimeout(closeToast, toastDuration);
+    if (duration > 0) {
+      setTimeout(closeToast, duration);
     }
   }
 

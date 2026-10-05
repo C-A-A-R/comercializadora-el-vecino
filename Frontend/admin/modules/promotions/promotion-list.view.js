@@ -11,7 +11,7 @@ export const PromotionListView = {
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Gestión de Promociones</h1>
             <p class="text-sm text-gray-500">Administración de descuentos y vigencias promocionales</p>
           </div>
-          <a href="#/promotions/new" class="inline-flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <a href="#/promociones/nueva" class="inline-flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
             <span class="material-symbols-outlined text-sm">add</span> Nueva Promoción
           </a>
         </div>
@@ -82,12 +82,9 @@ export const PromotionListView = {
             <td class="p-4 font-medium text-neon-magenta">${discountText}</td>
             <td class="p-4 text-xs text-gray-500">${start} - ${end}</td>
             <td class="p-4">${badge}</td>
-            <td class="p-4 text-right space-x-2">
-              <button data-toggle-id="${promo.id}" data-active="${promo.is_active}" class="text-xs px-2.5 py-1 rounded border border-slate-border hover:bg-slate-100 font-medium">
+            <td class="p-4 text-right">
+              <button data-toggle-id="${promo.id}" data-active="${promo.is_active}" class="text-xs px-2 py-1 rounded border border-slate-border hover:bg-slate-100">
                 ${promo.is_active ? 'Desactivar' : 'Activar'}
-              </button>
-              <button data-delete-id="${promo.id}" class="text-xs px-2.5 py-1 rounded border border-red-200 text-red-600 hover:bg-red-50 font-medium">
-                Eliminar
               </button>
             </td>
           </tr>
@@ -96,8 +93,7 @@ export const PromotionListView = {
 
       this.bindTableActions();
     } catch (err) {
-      console.error(err);
-      Toast.show('Error al cargar promociones', 'error');
+      Toast.show({ message: 'Error al cargar promociones', type: 'error' });
     }
   },
 
@@ -108,26 +104,10 @@ export const PromotionListView = {
         const currentActive = e.target.getAttribute('data-active') === 'true';
         try {
           await PromotionService.toggleActive(id, !currentActive);
-          Toast.show(`Promoción ${!currentActive ? 'activada' : 'desactivada'} con éxito`, 'success');
+          Toast.show({ message: `Promoción ${!currentActive ? 'activada' : 'desactivada'} con éxito`, type: 'success' });
           await this.loadPromotions();
         } catch (err) {
-          console.error(err);
-          Toast.show('No se pudo cambiar el estado de la promoción', 'error');
-        }
-      });
-    });
-
-    document.querySelectorAll('[data-delete-id]').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        const id = e.target.getAttribute('data-delete-id');
-        if (!confirm('¿Desea eliminar permanentemente esta promoción?')) return;
-        try {
-          await PromotionService.delete(id);
-          Toast.show('Promoción eliminada con éxito', 'success');
-          await this.loadPromotions();
-        } catch (err) {
-          console.error(err);
-          Toast.show('No se pudo eliminar la promoción', 'error');
+          Toast.show({ message: 'No se pudo cambiar el estado de la promoción', type: 'error' });
         }
       });
     });

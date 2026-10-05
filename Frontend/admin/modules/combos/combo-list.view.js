@@ -2,6 +2,9 @@ import { ComboService } from '../../services/combo.service.js';
 import { ComboBuilder } from './combo.builder.js';
 import { Toast } from '../../components/ui/Toast.js';
 
+// Fallback local en Base64 para evitar errores de red externos (via.placeholder.com)
+const placeholderComboImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjguNSIgcj0iMS41Ii8+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSIvPjwvc3ZnPg==';
+
 export const ComboListView = {
   async render() {
     return `
@@ -11,7 +14,7 @@ export const ComboListView = {
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Armador de Combos</h1>
             <p class="text-sm text-gray-500">Agrupa productos y configura ofertas de paquete</p>
           </div>
-          <a href="#/combos/new" class="inline-flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <a href="#/combos/nuevo" class="inline-flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
             <span class="material-symbols-outlined text-sm">add</span> Crear Nuevo Combo
           </a>
         </div>
@@ -47,11 +50,17 @@ export const ComboListView = {
       grid.innerHTML = data.results.map(combo => {
         const calc = ComboBuilder.calculateTotals(combo.items, combo.price_combo_usd);
         const productsSummary = combo.items.map(i => `${i.quantity}x ${i.product.name}`).join(', ');
+        const imgSrc = combo.image_url ? combo.image_url : placeholderComboImage;
 
         return `
           <div class="bg-white border border-slate-border rounded-xl p-5 shadow-sm space-y-4 flex flex-col justify-between">
             <div class="space-y-3">
-              ${combo.image_url ? `<img src="${combo.image_url}" alt="${combo.name}" class="w-full h-36 object-cover rounded-lg border border-slate-border" />` : ''}
+              <img 
+                src="${imgSrc}" 
+                alt="${combo.name}" 
+                onerror="this.onerror=null; this.src='${placeholderComboImage}';" 
+                class="w-full h-36 object-cover rounded-lg border border-slate-border bg-slate-100" 
+              />
               <div class="flex items-start justify-between gap-2">
                 <h3 class="font-bold text-lg text-deep-obsidian font-display">${combo.name}</h3>
                 <span class="px-2 py-0.5 text-xs font-bold rounded ${combo.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}">
@@ -76,14 +85,9 @@ export const ComboListView = {
                   <span class="block text-xs text-gray-400">${calc.offerPriceCopFormatted}</span>
                 </div>
               </div>
-              <div class="flex gap-2 mt-2">
-                <button data-toggle-id="${combo.id}" data-active="${combo.is_active}" class="flex-1 py-1.5 text-xs border border-slate-border rounded-lg hover:bg-slate-50 font-medium">
-                  ${combo.is_active ? 'Desactivar' : 'Activar'}
-                </button>
-                <button data-delete-id="${combo.id}" class="px-3 py-1.5 text-xs border border-red-200 text-red-600 rounded-lg hover:bg-red-50 font-medium">
-                  Eliminar
-                </button>
-              </div>
+              <button data-toggle-id="${combo.id}" data-active="${combo.is_active}" class="w-full mt-2 py-1.5 text-xs border border-slate-border rounded-lg hover:bg-slate-50 font-medium">
+                ${combo.is_active ? 'Desactivar Combo' : 'Activar Combo'}
+              </button>
             </div>
           </div>
         `;
@@ -91,8 +95,7 @@ export const ComboListView = {
 
       this.bindCardActions();
     } catch (err) {
-      console.error(err);
-      Toast.show('Error al cargar la lista de combos', 'error');
+      Toast.show({ message: 'Error al cargar la lista de combos', type: 'error' });
     }
   },
 
@@ -103,26 +106,10 @@ export const ComboListView = {
         const currentActive = e.target.getAttribute('data-active') === 'true';
         try {
           await ComboService.toggleActive(id, !currentActive);
-          Toast.show(`Estado del combo actualizado`, 'success');
+          Toast.show({ message: `Estado del combo actualizado`, type: 'success' });
           await this.loadCombos();
         } catch (err) {
-          console.error(err);
-          Toast.show('No se pudo actualizar el estado', 'error');
-        }
-      });
-    });
-
-    document.querySelectorAll('[data-delete-id]').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        const id = e.target.getAttribute('data-delete-id');
-        if (!confirm('¿Desea eliminar este combo?')) return;
-        try {
-          await ComboService.delete(id);
-          Toast.show('Combo eliminado con éxito', 'success');
-          await this.loadCombos();
-        } catch (err) {
-          console.error(err);
-          Toast.show('No se pudo eliminar el combo', 'error');
+          Toast.show({ message: 'No se pudo actualizar el estado', type: 'error' });
         }
       });
     });

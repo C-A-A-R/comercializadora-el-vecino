@@ -1,4 +1,4 @@
-/**
+﻿/**
  * product-modal.js - Quick technical view modal for product inspection
  */
 
@@ -72,7 +72,7 @@ const ProductModal = {
           ${product.badge ? `<span class="product-card-badge">${product.badge}</span>` : ''}
           <img class="product-modal-img" src="${product.image || 'https://placehold.co/400'}" alt="${product.name}">
           <div class="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">
-            <span class="w-2 h-2 rounded-full bg-whatsapp-green animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
             <span>Verificado en Bodega Central</span>
           </div>
         </div>
@@ -161,3 +161,4 @@ const ProductModal = {
 if (typeof window !== 'undefined') {
   window.ProductModal = ProductModal;
 }
+
