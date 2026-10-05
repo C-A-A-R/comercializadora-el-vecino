@@ -58,8 +58,8 @@ function renderCategoriesFilter() {
       data-category="${cat.id}"
       onclick="filterProductsByCategory('${cat.id}', this)"
     >
-      <span class="material-symbols-outlined text-[18px]">${cat.icon}</span>
       <span>${cat.name}</span>
+      ${cat.count ? `<span style="font-size: 0.78rem; opacity: 0.75; margin-left: 4px;">(${cat.count})</span>` : ''}
     </button>
   `).join("");
 }

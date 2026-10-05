@@ -83,11 +83,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     listEl.innerHTML = comments.map(comment => {
-      const stars = Array.from({ length: 5 }, (_, index) => {
-        const filled = index < Number(comment.rating || 0);
-        return `<span class="material-symbols-outlined ${filled ? 'text-amber-400' : 'text-gray-300'}">star</span>`;
-      }).join('');
-
       return `
         <article class="comment-card">
           <div class="comment-header">
@@ -95,7 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
               <h3>${(comment.name || 'Cliente').trim()}</h3>
               <span>${comment.date || 'Hace poco'}</span>
             </div>
-            <div class="comment-stars">${stars}</div>
           </div>
           <p>${(comment.text || '').trim()}</p>
         </article>
@@ -109,11 +103,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       event.preventDefault();
 
       const nameInput = document.getElementById('commentName');
-      const ratingInput = document.getElementById('commentRating');
       const textInput = document.getElementById('commentText');
 
       const name = (nameInput?.value || '').trim() || 'Cliente';
-      const rating = Number(ratingInput?.value || 5);
       const text = (textInput?.value || '').trim();
 
       if (!text) return;
@@ -133,7 +125,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const comments = getProductComments();
       comments.unshift({
         name,
-        rating,
         text,
         date: 'Hoy'
       });
