@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300F0FF'><path d='M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.9 17.55 11 21 11 21z'/></svg>">
-  <title>EL VECINO — Catálogo Digital &amp; Combos Mayoristas</title>
+  <title>Promociones &amp; Combos — EL VECINO</title>
   
   <!-- Tipografías de Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,8 +37,8 @@
 
       <nav>
         <ul class="nav-links">
-          <li><a href="index.html" class="nav-link active">Inicio</a></li>
-          <li><a href="promociones.html" class="nav-link nav-link-promo">Promociones &amp; Combos ⚡</a></li>
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="promociones.html" class="nav-link nav-link-promo active">Promociones &amp; Combos ⚡</a></li>
           <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
           <li><a href="categorias.html" class="nav-link">Categorías</a></li>
           <li><a href="destacados.html" class="nav-link">Destacados</a></li>
@@ -61,8 +61,8 @@
     <!-- Cajón de navegación móvil -->
     <div id="mobileNavDrawer" class="mobile-nav-drawer">
       <ul class="mobile-nav-links">
-        <li><a href="index.html" class="mobile-nav-link active" onclick="closeMobileNav()"><span class="material-symbols-outlined text-neon-cyan">home</span> Inicio</a></li>
-        <li><a href="promociones.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined text-neon-magenta">local_fire_department</span> Promociones &amp; Combos ⚡</a></li>
+        <li><a href="index.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined text-neon-cyan">home</span> Inicio</a></li>
+        <li><a href="promociones.html" class="mobile-nav-link active" onclick="closeMobileNav()"><span class="material-symbols-outlined text-neon-magenta">local_fire_department</span> Promociones &amp; Combos ⚡</a></li>
         <li><a href="catalogo.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">format_list_bulleted</span> Catálogo Técnico</a></li>
         <li><a href="categorias.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">grid_view</span> Categorías</a></li>
         <li><a href="destacados.html" class="mobile-nav-link" onclick="closeMobileNav()"><span class="material-symbols-outlined">star</span> Destacados</a></li>
@@ -73,50 +73,21 @@
   </header>
 
   <!-- ==========================================================================
-       HERO PRINCIPAL (DARK NEO-TECH)
+       CABECERA DE PÁGINA (HERO DARK)
        ========================================================================== -->
   <section class="hero-dark">
     <div class="container">
       <div class="hero-content">
-        <div class="badge badge-neon-cyan">
-          <span class="material-symbols-outlined">bolt</span>
-          Lote Importado Directo • Bodega Mayorista
+        <div class="badge badge-neon-magenta">
+          <span class="material-symbols-outlined">local_fire_department</span>
+          Edición Especial • Lotes Sellados
         </div>
-
         <h1 class="hero-title">
-          Electrodomésticos de Alta Gama <span class="text-gradient">Directo de Bodega</span>
+          Temporada de <span class="text-neon-cyan">Combos</span> &amp; <span class="text-neon-magenta">Paquetes Especiales</span>
         </h1>
-
         <p class="hero-lead">
-          Distribución técnica sin intermediarios. Calibra especificaciones, confirma disponibilidad de inventario sellado y recibe cotización personalizada al instante vía WhatsApp.
+          Equipamiento integral para hogar, proyectos u oficinas con accesorios bonificados, garantía oficial directa de fábrica y cotización personalizada por WhatsApp.
         </p>
-
-        <div class="flex flex-wrap gap-md">
-          <a href="promociones.html" class="btn btn-neon-magenta btn-lg">
-            <span class="material-symbols-outlined">auto_awesome</span>
-            <span>Ver Combos del Mes</span>
-          </a>
-          <a href="catalogo.html" class="btn btn-neon-cyan btn-lg">
-            <span class="material-symbols-outlined">format_list_bulleted</span>
-            <span>Explorar Catálogo Técnico</span>
-          </a>
-        </div>
-
-        <!-- Métricas en vivo -->
-        <div class="hero-stats-grid">
-          <div class="hero-stat-card">
-            <span class="hero-stat-num">&lt; 5 min</span>
-            <span class="hero-stat-label">Respuesta WhatsApp</span>
-          </div>
-          <div class="hero-stat-card">
-            <span class="hero-stat-num text-neon-magenta">100%</span>
-            <span class="hero-stat-label">Garantía Directa</span>
-          </div>
-          <div class="hero-stat-card">
-            <span class="hero-stat-num text-electric-blue">0 Intermediarios</span>
-            <span class="hero-stat-label">Lotes Sellados</span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -133,84 +104,20 @@
   </section>
 
   <!-- ==========================================================================
-       SECCIÓN DE PROMOCIONES Y PUBLICACIONES DE COMBOS
+       LISTA DE COMBOS EN PROMOCIÓN (SIN PRECIOS)
        ========================================================================== -->
   <section class="section-padding" style="background: var(--deep-obsidian); color: var(--pure-white);">
     <div class="container">
       <div class="section-header">
-        <div class="section-badge badge badge-neon-magenta">
-          <span class="material-symbols-outlined">local_fire_department</span>
-          Temporada de Paquetes
-        </div>
+        <span class="section-badge badge badge-neon-cyan">Ahorro de Conjunto</span>
         <h2 class="section-title section-title-light">
-          Publicaciones de <span class="text-neon-cyan">Combos</span> &amp; <span class="text-neon-magenta">Paquetes Especiales</span>
+          Publicaciones de Combos Disponibles
         </h2>
-        <p class="section-subtitle section-subtitle-light">
-          Equipa tu hogar o proyecto en un solo despacho. Combos con accesorios bonificados, flete técnico y garantía directa de fábrica.
-        </p>
       </div>
 
-      <!-- Contenedor Dinámico de Combos -->
+      <!-- Contenedor de Combos -->
       <div id="combosContainer" class="combos-container">
-        <!-- Renderizado desde js/app.js con datos de js/data.js -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       CATÁLOGO TÉCNICO DE PRODUCTOS (SIN PRECIOS)
-       ========================================================================== -->
-  <section class="section-padding">
-    <div class="container">
-      <div class="catalog-toolbar">
-        <div>
-          <span class="section-badge badge badge-electric-blue">Inventario Mayorista</span>
-          <h2 class="section-title">Catálogo de Fichas Técnicas</h2>
-          <p class="section-subtitle">
-            Filtra por categoría técnica, revisa especificaciones y solicita la cotización inmediata.
-          </p>
-        </div>
-
-        <!-- Buscador en Vivo -->
-        <div class="search-box-wrapper">
-          <span class="material-symbols-outlined search-box-icon">search</span>
-          <input 
-            type="text" 
-            id="catalogSearchInput" 
-            placeholder="Buscar por SKU, marca o modelo..."
-            class="search-box-input"
-          >
-        </div>
-      </div>
-
-      <!-- Barra de Filtros por Categoría -->
-      <div class="category-filters-container" id="categoriesFilterContainer">
-        <!-- Renderizado desde js/app.js -->
-      </div>
-
-      <!-- Grid de Productos -->
-      <div class="products-grid" id="allProductsGrid" style="margin-top: var(--space-xl);">
-        <!-- Renderizado desde js/app.js -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       VÍDEO CATÁLOGO (TIKTOK / REELS SHOWCASE)
-       ========================================================================== -->
-  <section class="section-padding" style="background: var(--deep-obsidian); color: var(--pure-white);">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-badge badge badge-neon-cyan">Formato Inmersivo</span>
-        <h2 class="section-title section-title-light">Vídeo Catálogo &amp; Pruebas en Vivo</h2>
-        <p class="section-subtitle section-subtitle-light centered">
-          Conoce el funcionamiento real de cada equipo antes de cotizar con demostraciones técnicas.
-        </p>
-      </div>
-
-      <!-- Grid de Vídeos Estilo TikTok -->
-      <div class="tiktok-grid" id="tiktokGrid">
-        <!-- Renderizado desde js/app.js -->
+        <!-- Renderizado dinámico desde js/app.js -->
       </div>
     </div>
   </section>
@@ -229,8 +136,8 @@
         </div>
 
         <div class="footer-nav-links">
-          <a href="index.html" class="text-neon-cyan">Inicio</a>
-          <a href="promociones.html">Promociones</a>
+          <a href="index.html">Inicio</a>
+          <a href="promociones.html" class="text-neon-magenta">Promociones</a>
           <a href="catalogo.html">Catálogo</a>
           <a href="categorias.html">Categorías</a>
           <a href="destacados.html">Destacados</a>
@@ -246,28 +153,19 @@
     </div>
   </footer>
 
-  <!-- ==========================================================================
-       MODAL DE PRODUCTO / FICHA TÉCNICA
-       ========================================================================== -->
+  <!-- Modal y Dock Flotante -->
   <div id="productModal" class="modal-backdrop">
     <div class="modal-card">
       <button class="modal-close-btn" onclick="closeProductModal()">
         <span class="material-symbols-outlined">close</span>
       </button>
-      <div id="modalContent">
-        <!-- Inyectado dinámicamente -->
-      </div>
+      <div id="modalContent"></div>
     </div>
   </div>
 
-  <!-- ==========================================================================
-       DOCK FLOTANTE WHATSAPP (NEON CYAN)
-       ========================================================================== -->
-  <div id="floatingDock" class="floating-dock">
-    <!-- Inyectado dinámicamente -->
-  </div>
+  <div id="floatingDock" class="floating-dock"></div>
 
-  <!-- Scripts Javascript Modulares -->
+  <!-- Scripts -->
   <script src="./js/config.js"></script>
   <script src="./js/data.js"></script>
   <script src="./js/app.js"></script>
