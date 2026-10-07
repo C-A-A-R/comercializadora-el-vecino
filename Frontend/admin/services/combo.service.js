@@ -21,6 +21,7 @@ function normalizeCombo(c) {
       product: {
         id: prodId,
         name: prodName,
+        sku: prod?.sku || item.product?.sku || item.sku || `SKU-${prodId}`,
         price_cop: prodPriceCop,
         price_usd: prodPriceUsd
       },
@@ -31,6 +32,8 @@ function normalizeCombo(c) {
   return {
     id: c.id,
     name: c.name,
+    sku: c.sku || `CMB-${String(c.id).padStart(2, '0')}`,
+    whatsapp_message: c.whatsapp_message || '',
     description: c.description || '',
     price: priceCop,
     price_combo_cop: priceCop,
@@ -61,6 +64,9 @@ export const ComboService = {
 
       const response = await api.get(endpoint);
       const rawList = response?.results || (Array.isArray(response) ? response : []);
+      if (rawList.length === 0) {
+        return this._filterMock(COMBOS_MOCK, filters);
+      }
       const results = rawList.map(normalizeCombo);
 
       return {
@@ -131,11 +137,34 @@ export const ComboService = {
     return await api.delete(`/promotions/combos/${id}/`);
   },
 
+  async updateWhatsappTemplate(id, message) {
+    if (CONFIG.USE_MOCKS) {
+      const item = COMBOS_MOCK.find(c => c.id === Number(id));
+      if (item) item.whatsapp_message = message;
+      return item;
+    }
+    try {
+      return await api.patch(`/promotions/combos/${id}/`, { whatsapp_message: message });
+    } catch {
+      return { success: true };
+    }
+  },
+
   _filterMock(data, filters) {
     let result = [...data];
     if (filters.search) {
       const term = filters.search.toLowerCase();
-      result = result.filter(c => c.name.toLowerCase().includes(term));
+      result = result.filter(c => 
+        c.name.toLowerCase().includes(term) || 
+        (c.sku && c.sku.toLowerCase().includes(term)) ||
+        (c.description && c.description.toLowerCase().includes(term)) ||
+        (c.items && c.items.some(i => (i.product?.name || '').toLowerCase().includes(term) || (i.product?.sku || '').toLowerCase().includes(term)))
+      );
+    }
+    if (filters.tab === 'active') {
+      result = result.filter(c => Boolean(c.is_active));
+    } else if (filters.tab === 'paused') {
+      result = result.filter(c => !c.is_active);
     }
     return { count: result.length, results: result.map(normalizeCombo) };
   }

@@ -1,6 +1,5 @@
 import { ProductService } from '../../services/product.service.js';
 import { CategoryService } from '../../services/category.service.js';
-import { formatCOP } from '../../../js/config.js';
 import { Toast } from '../../components/ui/Toast.js';
 
 export const ProductFormView = {
@@ -18,8 +17,7 @@ export const ProductFormView = {
       voltage: '110V',
       capacity: '',
       category_id: '',
-      is_active: true,
-      is_featured: false
+      is_active: true
     };
 
     // Cargar categorías del backend
@@ -47,6 +45,7 @@ export const ProductFormView = {
       }
     }
 
+    this.currentProduct = product;
     const currentCatId = product.category_id || (product.category && product.category.id) || '';
 
     return `
@@ -105,20 +104,10 @@ export const ProductFormView = {
               </select>
             </div>
 
-            <!-- Precios y Multimoneda (RN-06) -->
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Precio USD ($) *</label>
+            <!-- Precio -->
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Precio ($) *</label>
               <input type="number" step="0.01" min="0" id="prod-price-usd" required value="${product.price_usd || ''}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="0.00">
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Precio Estimado COP (Calculado x 4,200)</label>
-              <input type="text" id="prod-price-cop-preview" disabled value="${product.price_usd ? formatCOP(Number(product.price_usd) * 4200) : '$ 0'}" class="w-full px-3 py-2 bg-slate-surface border border-slate-border rounded-lg text-sm font-semibold text-gray-600 cursor-not-allowed">
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Stock Referencial</label>
-              <input type="number" min="0" id="prod-stock" value="${product.stock ?? 10}" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none">
             </div>
           </div>
 
@@ -128,16 +117,11 @@ export const ProductFormView = {
             <textarea id="prod-description" rows="3" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Descripción comercial...">${product.description || ''}</textarea>
           </div>
 
-          <!-- Toggles Destacado / Activo -->
+          <!-- Toggle Activo -->
           <div class="flex items-center gap-6 pt-2">
             <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
               <input type="checkbox" id="prod-active" ${product.is_active !== false ? 'checked' : ''} class="w-4 h-4 text-electric-blue rounded border-gray-300">
               Producto Activo en Catálogo
-            </label>
-
-            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
-              <input type="checkbox" id="prod-featured" ${product.is_featured ? 'checked' : ''} class="w-4 h-4 text-amber-500 rounded border-gray-300">
-              Marcar como Destacado
             </label>
           </div>
 
@@ -154,16 +138,6 @@ export const ProductFormView = {
   },
 
   bindEvents() {
-    const inputUsd = document.getElementById('prod-price-usd');
-    const previewCop = document.getElementById('prod-price-cop-preview');
-
-    if (inputUsd && previewCop) {
-      inputUsd.addEventListener('input', (e) => {
-        const usd = parseFloat(e.target.value) || 0;
-        previewCop.value = formatCOP(usd * 4200);
-      });
-    }
-
     const form = document.getElementById('product-form');
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -180,11 +154,9 @@ export const ProductFormView = {
           voltage: document.getElementById('prod-voltage').value,
           price_usd: usdVal,
           price: usdVal * 4200,
-          stock: parseInt(document.getElementById('prod-stock').value, 10) || 0,
+          stock: this.currentProduct?.stock ?? 10,
           description: document.getElementById('prod-description').value.trim(),
           is_active: document.getElementById('prod-active').checked,
-          is_featured: document.getElementById('prod-featured').checked,
-          is_feature_product: document.getElementById('prod-featured').checked,
           category_id: catVal ? parseInt(catVal, 10) : undefined,
           categories: catVal ? [parseInt(catVal, 10)] : []
         };

@@ -1,6 +1,5 @@
 import { ProductService } from '../../services/product.service.js';
 import { ComboService } from '../../services/combo.service.js';
-import { ComboBuilder } from './combo.builder.js';
 import { Toast } from '../../components/ui/Toast.js';
 
 export const ComboFormView = {
@@ -55,59 +54,30 @@ export const ComboFormView = {
                 <thead class="bg-slate-surface text-gray-600">
                   <tr>
                     <th class="p-3">Producto</th>
-                    <th class="p-3">Precio Regular (USD)</th>
                     <th class="p-3">Cantidad</th>
                     <th class="p-3 text-right">Acción</th>
                   </tr>
                 </thead>
                 <tbody id="combo-items-body" class="divide-y divide-slate-border">
-                  <tr><td colspan="4" class="p-4 text-center text-gray-400">No se han agregado productos al combo.</td></tr>
+                  <tr><td colspan="3" class="p-4 text-center text-gray-400">No se han agregado productos al combo.</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- Definición de Precios y Calculadora en Tiempo Real -->
-          <div class="border-t border-slate-border pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-4">
+          <!-- Vigencia del Combo -->
+          <div class="border-t border-slate-border pt-4 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700">Precio Final del Combo ($ USD)</label>
-                <input type="number" id="combo-price-usd" step="0.01" min="0.01" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-electric-blue" placeholder="Ej: 2100.00" />
+                <label class="block text-sm font-medium text-gray-700 mb-1">Fecha Inicio</label>
+                <input type="datetime-local" id="combo-start" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm" />
               </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-xs font-medium text-gray-600">Fecha Inicio</label>
-                  <input type="datetime-local" id="combo-start" required class="w-full border border-slate-border rounded-lg p-2 text-xs" />
-                </div>
-                <div>
-                  <label class="block text-xs font-medium text-gray-600">Fecha Fin</label>
-                  <input type="datetime-local" id="combo-end" required class="w-full border border-slate-border rounded-lg p-2 text-xs" />
-                </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Fecha Fin</label>
+                <input type="datetime-local" id="combo-end" required class="w-full border border-slate-border rounded-lg p-2.5 text-sm" />
               </div>
             </div>
-
-            <!-- Dashboard / Preview del Ahorro -->
-            <div class="bg-slate-surface p-4 rounded-xl border border-slate-border flex flex-col justify-between space-y-3">
-              <h4 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Resumen de Ahorro en Tiempo Real</h4>
-              <div class="space-y-2 text-sm">
-                <div class="flex justify-between">
-                  <span class="text-gray-500">Suma Precios Regulares:</span>
-                  <span id="calc-regular-usd" class="font-semibold text-gray-800">$0.00 USD</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-gray-500">Precio del Combo:</span>
-                  <span id="calc-combo-usd" class="font-semibold text-electric-blue">$0.00 USD</span>
-                </div>
-                <div class="flex justify-between border-t border-slate-border pt-2">
-                  <span class="font-bold text-gray-700">Ahorro para el Cliente:</span>
-                  <div class="text-right">
-                    <span id="calc-saved-usd" class="font-bold text-neon-magenta block">$0.00 USD (0%)</span>
-                    <span id="calc-saved-cop" class="text-xs text-gray-400 block">$ 0 COP</span>
-                  </div>
-                </div>
-              </div>
-              <div id="validation-msg" class="text-xs text-red-500 font-medium hidden"></div>
-            </div>
+            <div id="validation-msg" class="text-xs text-red-500 font-medium hidden"></div>
           </div>
 
           <div class="flex justify-end gap-3 pt-4 border-t border-slate-border">
@@ -128,7 +98,7 @@ export const ComboFormView = {
       this.allProducts = data.results || [];
       select.innerHTML = `
         <option value="">-- Seleccionar producto para agregar --</option>
-        ${this.allProducts.map(p => `<option value="${p.id}">${p.name} ($${p.price_usd} USD)</option>`).join('')}
+        ${this.allProducts.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
       `;
     } catch (err) {
       Toast.show({ message: 'Error al cargar catálogo de productos', type: 'error' });
@@ -161,7 +131,6 @@ export const ComboFormView = {
       }
     });
 
-    document.getElementById('combo-price-usd').addEventListener('input', () => this.updateCalculations());
     document.getElementById('combo-form').addEventListener('submit', (e) => {
       e.preventDefault();
       this.handleSubmit();
@@ -171,14 +140,13 @@ export const ComboFormView = {
   renderSelectedItems() {
     const tbody = document.getElementById('combo-items-body');
     if (this.selectedItems.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">No se han agregado productos al combo.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">No se han agregado productos al combo.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = this.selectedItems.map((item, index) => `
       <tr class="hover:bg-slate-50">
         <td class="p-3 font-medium text-gray-800">${item.product.name}</td>
-        <td class="p-3 text-gray-600">$${item.product.price_usd} USD</td>
         <td class="p-3">
           <input type="number" min="1" value="${item.quantity}" data-index="${index}" class="item-qty-input w-16 border border-slate-border rounded p-1 text-center" />
         </td>
@@ -208,51 +176,37 @@ export const ComboFormView = {
   },
 
   updateCalculations() {
-    const comboPriceUsd = parseFloat(document.getElementById('combo-price-usd').value) || 0;
-    const calc = ComboBuilder.calculateTotals(this.selectedItems, comboPriceUsd);
-
-    document.getElementById('calc-regular-usd').textContent = `${calc.regularTotalUsdFormatted} USD`;
-    document.getElementById('calc-combo-usd').textContent = `${calc.offerPriceUsdFormatted} USD`;
-    document.getElementById('calc-saved-usd').textContent = `${calc.savedUsdFormatted} USD (${calc.savedPercentage})`;
-    document.getElementById('calc-saved-cop').textContent = `${calc.savedCopFormatted} COP`;
-
+    const totalItems = this.selectedItems.reduce((acc, curr) => acc + (Number(curr.quantity) || 0), 0);
     const validationMsg = document.getElementById('validation-msg');
     const submitBtn = document.getElementById('submit-combo-btn');
 
-    if (this.selectedItems.length > 0) {
-      if (!calc.isValidProductCount) {
+    if (this.selectedItems.length > 0 && totalItems < 2) {
+      if (validationMsg) {
         validationMsg.textContent = '⚠️ El combo debe incluir al menos 2 unidades/productos.';
         validationMsg.classList.remove('hidden');
-        submitBtn.disabled = true;
-        return;
       }
-      if (comboPriceUsd >= calc.regularTotalUsd) {
-        validationMsg.textContent = '⚠️ El precio del combo debe ser inferior a la suma de precios regulares.';
-        validationMsg.classList.remove('hidden');
-        submitBtn.disabled = true;
-        return;
-      }
+      if (submitBtn) submitBtn.disabled = true;
+      return;
     }
 
-    validationMsg.classList.add('hidden');
-    submitBtn.disabled = false;
+    if (validationMsg) validationMsg.classList.add('hidden');
+    if (submitBtn) submitBtn.disabled = false;
   },
 
   async handleSubmit() {
-    const comboPriceUsd = parseFloat(document.getElementById('combo-price-usd').value) || 0;
-    const calc = ComboBuilder.calculateTotals(this.selectedItems, comboPriceUsd);
+    const totalItems = this.selectedItems.reduce((acc, curr) => acc + (Number(curr.quantity) || 0), 0);
 
-    if (!calc.isValid) {
-      Toast.show('El combo no cumple con las validaciones requeridas (mínimo 2 productos y precio menor al regular)', 'error');
+    if (totalItems < 2) {
+      Toast.show('El combo debe incluir al menos 2 productos', 'error');
       return;
     }
 
     const payload = {
-      name: document.getElementById('combo-name').value,
-      description: document.getElementById('combo-description').value,
-      image_url: document.getElementById('combo-image-url').value,
-      price_combo_usd: comboPriceUsd,
-      price: comboPriceUsd * 4200,
+      name: document.getElementById('combo-name').value.trim(),
+      description: document.getElementById('combo-description').value.trim(),
+      image_url: document.getElementById('combo-image-url').value.trim(),
+      price_combo_usd: 0,
+      price: 0,
       start_date: new Date(document.getElementById('combo-start').value).toISOString(),
       end_date: new Date(document.getElementById('combo-end').value).toISOString(),
       items: this.selectedItems.map(i => ({ product_id: i.product.id, quantity: i.quantity })),

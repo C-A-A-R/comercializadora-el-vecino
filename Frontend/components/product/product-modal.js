@@ -1,4 +1,4 @@
-﻿/**
+/**
  * product-modal.js - Quick technical view modal for product inspection
  */
 
@@ -55,8 +55,8 @@ const ProductModal = {
       detailUrl = `./client/modules/product/detail.html?id=${product.id}`;
     }
 
-    const formattedPrice = window.CONFIG?.formatCurrency(product.price) || `$ ${product.price}`;
-    const formattedOldPrice = product.originalPrice ? window.CONFIG?.formatCurrency(product.originalPrice) : null;
+    const formattedPrice = null; // Precio ocultado
+    const formattedOldPrice = null; // Precio ocultado
     const waUrl = window.OrderService?.buildDirectProductQuoteUrl(product) || '#';
 
     const specsHtml = (product.specs || []).map(spec => `
