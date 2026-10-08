@@ -1,0 +1,74 @@
+{
+  "categories": [
+    {
+      "id_slug": "refrigeracion",
+      "category_name": "Refrigeración",
+      "description": "Neveras Neofrost, Side by Side, French Door y congeladores industriales."
+    },
+    {
+      "id_slug": "smart-tvs-audio",
+      "category_name": "Smart TVs & Audio",
+      "description": "Pantallas OLED, QLED 4K/8K, barras de sonido Dolby Atmos y audio profesional."
+    },
+    {
+      "id_slug": "lavado-secado",
+      "category_name": "Lavado & Secado",
+      "description": "Torres de lavado inteligentes, lavadoras carga frontal/superior y secadoras a gas."
+    },
+    {
+      "id_slug": "gaming-tech",
+      "category_name": "Gaming & Tech",
+      "description": "Consolas de última generación, periféricos pro, monitores gamers y portátiles."
+    },
+    {
+      "id_slug": "pequenos-electro",
+      "category_name": "Pequeños Electro",
+      "description": "Airfryers, cafeteras espresso, microondas Inverter y robots aspiradores."
+    }
+  ],
+  "products": [
+    {
+      "id_slug": "prod-001",
+      "product_name": "Nevera French Door Samsung SpaceMax Bespoke 602L",
+      "category_slug": "refrigeracion",
+      "price": 5299000,
+      "brand": "Samsung",
+      "is_feature_product": true,
+      "total_views": 342,
+      "specs": [
+        "Capacidad total neta: 602 Litros",
+        "Compresor Digital Inverter con 20 años de garantía",
+        "Sistema Twin Cooling Plus™ de doble enfriamiento",
+        "Acabado Glass Obsidian resistente a huellas",
+        "Garantía: 3 Años Oficial + Factura Legal DIAN"
+      ],
+      "description": "Tecnología Twin Cooling Plus™ con compresor Digital Inverter y acabado en cristal satinado de alta reflectividad arquitectónica."
+    },
+    {
+      "id_slug": "prod-002",
+      "product_name": "Smart TV LG OLED 65\" evo C3 4K AI ThinQ",
+      "category_slug": "smart-tvs-audio",
+      "price": 6499000,
+      "brand": "LG",
+      "is_feature_product": true,
+      "total_views": 289,
+      "specs": [
+        "Panel OLED evo 4K 120Hz nativo",
+        "Procesador α9 Gen6 AI 4K de alto rango dinámico",
+        "Dolby Vision & Dolby Atmos integrado",
+        "4 puertos HDMI 2.1 compatibles con G-Sync & FreeSync",
+        "Garantía: 2 Años Directo con Marca LG"
+      ],
+      "description": "El referente mundial en imagen cinematográfica y gaming ultra responsivo."
+    }
+  ],
+  "promotions": [
+    {
+      "id_slug": "promo-001",
+      "name": "Combo Dúo Cocina Chef Línea Blanca",
+      "description": "Paquete de alta gama: Nevera Samsung SpaceMax 602L + Microondas Panasonic Inverter.",
+      "price": 5890000,
+      "product_slugs": ["prod-001"]
+    }
+  ]
+}

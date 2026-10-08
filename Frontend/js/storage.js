@@ -175,13 +175,20 @@ const Storage = {
   // Products Cache / Persistence
   getProducts() {
     const key = window.CONFIG?.STORAGE_KEYS?.PRODUCTS_CACHE || 'el_vecino_products_cache';
-    const cached = this.get(key, null);
-    if (!cached || !Array.isArray(cached) || cached.length === 0) {
-      const initial = window.CONFIG?.INITIAL_PRODUCTS || [];
-      this.set(key, initial);
-      return initial;
+    const initial = window.CONFIG?.INITIAL_PRODUCTS || [];
+
+    try {
+      const cached = this.get(key, null);
+      if (Array.isArray(cached) && cached.length > 0) {
+        // Always prefer the fresh source configuration during development
+        return initial;
+      }
+    } catch (error) {
+      console.warn('[Storage] Error reading cache, falling back to initial products.', error);
     }
-    return cached;
+
+    this.set(key, initial);
+    return initial;
   },
 
   saveProducts(products) {

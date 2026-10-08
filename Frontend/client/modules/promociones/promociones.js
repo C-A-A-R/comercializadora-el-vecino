@@ -9,11 +9,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   const promosContainer = document.getElementById('promotionsGrid');
 
   async function loadPromotions() {
+    if (promosContainer) {
+      promosContainer.innerHTML = `
+        <div class="col-span-full flex flex-col items-center justify-center py-16">
+          <div class="w-10 h-10 border-4 border-electric-blue border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="text-sm font-semibold text-gray-500">Cargando promociones y combos exclusivos...</p>
+        </div>
+      `;
+    }
     try {
       const promos = await window.PromocionesApi.getPromociones();
       renderPromotions(promos);
     } catch (error) {
       console.error('[promociones.js] Error cargando promociones:', error);
+      if (promosContainer) {
+        promosContainer.innerHTML = `
+          <div class="col-span-full text-center py-12 text-gray-500">
+            No fue posible cargar las promociones en este momento.
+          </div>
+        `;
+      }
     }
   }
 

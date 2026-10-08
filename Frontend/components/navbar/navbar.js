@@ -47,7 +47,7 @@ const Navbar = {
               type="text"
               id="globalNavSearch"
               class="navbar-search-input"
-              placeholder="Buscar electrodomésticos, TVs..."
+              placeholder="Buscar "
             />
           </div>
 
@@ -56,7 +56,6 @@ const Navbar = {
             <a href="${rootPrefix}index.html" class="navbar-link ${activePath === 'inicio' ? 'active' : ''}">Inicio</a>
             <a href="${rootPrefix}client/modules/product/product.html" class="navbar-link ${activePath === 'catalogo' ? 'active' : ''}">Catálogo</a>
             <a href="${rootPrefix}client/modules/categorias/categorias.html" class="navbar-link ${activePath === 'categorias' ? 'active' : ''}">Categorías</a>
-            <a href="${rootPrefix}client/modules/promociones/promociones.html" class="navbar-link ${activePath === 'promociones' ? 'active' : ''}">Promociones</a>
             <a href="${rootPrefix}client/modules/destacados/destacados.html" class="navbar-link ${activePath === 'destacados' ? 'active' : ''}">Destacados</a>
             <a href="${rootPrefix}client/modules/tiktok/tiktok.html" class="navbar-link ${activePath === 'tiktok' ? 'active' : ''}">TikTok</a>
             <a href="${rootPrefix}client/modules/contacto/contacto.html" class="navbar-link ${activePath === 'contacto' ? 'active' : ''}">Contacto</a>
@@ -81,15 +80,6 @@ const Navbar = {
               <span class="hidden sm:inline">Cotizar WhatsApp</span>
             </a>
 
-            <!-- Admin / Login Portal Link -->
-            <a
-              href="${rootPrefix}loguin.html"
-              class="btn-nav-admin"
-              title="${user ? 'Sesión: ' + user.name : 'Iniciar Sesión'}"
-            >
-              <span class="material-symbols-outlined text-[20px] text-neon-magenta">${user ? 'account_circle' : 'shield_person'}</span>
-              <span class="hidden md:inline">${user ? (user.role === 'admin' ? 'Admin' : 'Mi Cuenta') : 'Ingreso'}</span>
-            </a>
 
             <!-- Mobile Hamburger -->
             <button class="btn-nav-hamburger" id="btnToggleMobileMenu" type="button" aria-label="Abrir Menú">

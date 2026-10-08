@@ -1,4 +1,4 @@
-/**
+﻿/**
  * product-modal.js - Quick technical view modal for product inspection
  */
 
@@ -43,11 +43,17 @@ const ProductModal = {
       return;
     }
 
+    product = window.Api?.normalizeProduct ? window.Api.normalizeProduct(product) : product;
+
     const content = document.getElementById('productModalContent');
-    const isModule = window.location.pathname.includes('/client/modules/');
-    const detailUrl = isModule
-      ? `detail.html?id=${product.id}`
-      : `./client/modules/product/detail.html?id=${product.id}`;
+    let detailUrl = `detail.html?id=${product.id}`;
+    if (window.location.pathname.includes('/client/modules/product/')) {
+      detailUrl = `detail.html?id=${product.id}`;
+    } else if (window.location.pathname.includes('/client/modules/')) {
+      detailUrl = `../product/detail.html?id=${product.id}`;
+    } else {
+      detailUrl = `./client/modules/product/detail.html?id=${product.id}`;
+    }
 
     const formattedPrice = window.CONFIG?.formatCurrency(product.price) || `$ ${product.price}`;
     const formattedOldPrice = product.originalPrice ? window.CONFIG?.formatCurrency(product.originalPrice) : null;
@@ -66,7 +72,7 @@ const ProductModal = {
           ${product.badge ? `<span class="product-card-badge">${product.badge}</span>` : ''}
           <img class="product-modal-img" src="${product.image || 'https://placehold.co/400'}" alt="${product.name}">
           <div class="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">
-            <span class="w-2 h-2 rounded-full bg-whatsapp-green animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
             <span>Verificado en Bodega Central</span>
           </div>
         </div>
@@ -155,3 +161,4 @@ const ProductModal = {
 if (typeof window !== 'undefined') {
   window.ProductModal = ProductModal;
 }
+

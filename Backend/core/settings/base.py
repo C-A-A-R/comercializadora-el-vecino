@@ -31,6 +31,7 @@ LOCAL_APPS = [
     'apps.base',
     'apps.product',
     'apps.promotions',
+    'apps.notifications',
 ]
 
 THIRD_APPS = [
@@ -181,6 +182,10 @@ EMAIL_HOST_PASSWORD = env('DJANGO_EMAIL_HOST_PASSWORD')  # Contraseña de la cue
 EMAIL_USE_SSL = env.bool('DJANGO_EMAIL_USE_SSL', default=True)  # Activar SSL
 EMAIL_USE_TLS = env.bool('DJANGO_EMAIL_USE_TLS', default=False)  # Desactivar TLS (solo uno debe estar activo)
 DEFAULT_FROM_EMAIL = env('DJANGO_EMAIL_HOST_USER')  # Email por defecto
+
+# Configuración de Telegram Bot
+TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
+TELEGRAM_ADMIN_CHAT_ID = env('TELEGRAM_ADMIN_CHAT_ID', default='')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

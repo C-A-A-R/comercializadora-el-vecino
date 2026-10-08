@@ -1,7 +1,7 @@
 from django.contrib import admin
 from apps.base.admin import BaseAdmin, BaseTabularInline
 from apps.product.models import (
-    Category, ProductType, Product, ProductFeature,
+    Category, Product, ProductFeature,
     ProductColorImage, ProductAngleImage,
     ProductReview, ProductViewLog
 )
@@ -48,22 +48,6 @@ class CategoryAdmin(BaseAdmin):
     ordering = ('id',)
 
 
-@admin.register(ProductType)
-class ProductTypeAdmin(BaseAdmin):
-    """Configuración del panel de administración para el modelo ProductType."""
-
-    list_display = (
-        'product_type_name',
-        'description',
-        'product_type_image',
-        'created_at',
-        'updated_at'
-    )
-    search_fields = ('product_type_name', 'description')
-    list_filter = ('created_at',)
-    ordering = ('id',)
-
-
 @admin.register(Product)
 class ProductAdmin(BaseAdmin):
     """Configuración del panel de administración para el modelo Product."""
@@ -76,7 +60,6 @@ class ProductAdmin(BaseAdmin):
         'voltage',
         'weight',
         'get_categories',
-        'product_type',
         'price',
         'is_feature_product',
         'total_views',
@@ -85,8 +68,8 @@ class ProductAdmin(BaseAdmin):
         'created_at'
     )
     list_editable = ('is_feature_product',)
-    search_fields = ('product_name', 'brand', 'capacity', 'voltage', 'description', 'product_type__product_type_name', 'security')
-    list_filter = ('is_feature_product', 'brand', 'categories', 'product_type', 'created_at')
+    search_fields = ('product_name', 'brand', 'capacity', 'voltage', 'description', 'security')
+    list_filter = ('is_feature_product', 'brand', 'categories', 'created_at')
     ordering = ('id',)
     filter_horizontal = ('categories',)
     readonly_fields = ('total_views', 'sentiment_score', 'ranking_score')

@@ -27,27 +27,6 @@ class Category(BaseModel):
         super().save(*args, **kwargs)
 
 
-class ProductType(BaseModel):
-    """Modelo para representar los Tipos de Productos."""
-
-    product_type_name = models.CharField('Nombre del Tipo', max_length=100, unique=True)
-    description = models.TextField('Descripción', null=True, blank=True)
-    product_type_image = models.ImageField('Imagen del Tipo', upload_to=rename_image_upload_to, null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'Tipo de Producto'
-        verbose_name_plural = 'Tipos de Productos'
-        ordering = ['product_type_name']
-
-    def __str__(self):
-        return self.product_type_name
-
-    def save(self, *args, **kwargs):
-        if self.product_type_image:
-            compress_and_save_image(self.product_type_image)
-        super().save(*args, **kwargs)
-
-
 class Product(BaseModel):
     """Modelo para representar los Productos."""
 
@@ -56,12 +35,6 @@ class Product(BaseModel):
         related_name='products',
         verbose_name='Categorías',
         blank=True
-    )
-    product_type = models.ForeignKey(
-        ProductType,
-        on_delete=models.CASCADE,
-        related_name='products',
-        verbose_name='Tipo de Producto'
     )
     product_name = models.CharField('Nombre del Producto', max_length=200)
     brand = models.CharField('Marca', max_length=150, null=True, blank=True)

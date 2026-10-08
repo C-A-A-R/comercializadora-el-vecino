@@ -6,19 +6,22 @@ const CategoriasApi = {
   async getCategories() {
     try {
       const response = await window.Api.get('/categories');
-      return response.data || response || [];
+      const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response.results || response.data || response || []);
+      return raw.map(c => window.Api?.normalizeCategory ? window.Api.normalizeCategory(c) : c);
     } catch (error) {
       console.error('[CategoriasApi] Error fetching categories:', error);
-      throw error;
+      const fallback = window.CONFIG?.CATEGORIES || [];
+      return fallback.map(c => window.Api?.normalizeCategory ? window.Api.normalizeCategory(c) : c);
     }
   },
 
-  async getProductsByCategory(categorySlug) {
+  async getProductsByCategory(categoryId) {
     try {
-      const response = await window.Api.get('/products', { category: categorySlug });
-      return response.data || response || [];
+      const response = await window.Api.get('/products', { category: categoryId });
+      const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response.results || response.data || response || []);
+      return raw.map(p => window.Api?.normalizeProduct ? window.Api.normalizeProduct(p) : p);
     } catch (error) {
-      console.error(`[CategoriasApi] Error fetching products for ${categorySlug}:`, error);
+      console.error(`[CategoriasApi] Error fetching products for ${categoryId}:`, error);
       throw error;
     }
   }

@@ -72,29 +72,55 @@ const AuthService = {
   /**
    * Logs in a user, saves token & user profile
    */
-  async login(email, password) {
+  async login(identifier, password) {
     try {
-      const response = await window.Api.post('/auth/login', { email, password });
+      const payload = {
+        username: identifier,
+        email: identifier,
+        identifier: identifier,
+        password
+      };
 
-      if (response && response.token) {
-        // Guardar token JWT
-        window.Storage.setToken(response.token);
+      const response = await window.Api.post('/auth/login', payload);
+
+      if (response && (response.token || response.access)) {
+        const token = response.token || response.access;
 
         // Extraer usuario de la respuesta o del JWT
         let user = response.user;
         if (!user) {
-          const payload = this.parseJwt(response.token);
+          const jwtData = this.parseJwt(token);
           user = {
-            id: payload?.id || payload?.sub,
-            name: payload?.name || email.split('@')[0],
-            email: payload?.email || email,
-            role: payload?.role || 'cliente'
+            id: jwtData?.id || jwtData?.user_id || jwtData?.sub,
+            username: jwtData?.username || identifier,
+            name: jwtData?.name || identifier.split('@')[0],
+            email: jwtData?.email || identifier,
+            role: jwtData?.role || (jwtData?.is_staff || jwtData?.is_superuser ? 'admin' : 'cliente')
           };
         }
 
-        window.Storage.setUser(user);
-        window.dispatchEvent(new CustomEvent('auth:login_success', { detail: { user } }));
-        return { success: true, user, token: response.token };
+        // Guardar token y usuario en storage general
+        if (window.Storage) {
+          window.Storage.setToken(token);
+          window.Storage.setUser(user);
+        }
+
+        // Sincronizar llaves para el panel admin (AuthGuard)
+        try {
+          localStorage.setItem('ev_admin_token', token);
+          localStorage.setItem('ev_admin_user', JSON.stringify(user));
+          sessionStorage.setItem('ev_admin_token', token);
+          sessionStorage.setItem('ev_admin_user', JSON.stringify(user));
+          localStorage.setItem('auth_token', token);
+          localStorage.setItem('user_info', JSON.stringify(user));
+          localStorage.setItem('el_vecino_jwt_token', token);
+          localStorage.setItem('el_vecino_user', JSON.stringify(user));
+        } catch (e) {
+          console.warn('[AuthService] Error sincronizando llaves de sesión:', e);
+        }
+
+        window.dispatchEvent(new CustomEvent('auth:login_success', { detail: { user, token } }));
+        return { success: true, user, token };
       } else {
         throw new Error(response?.message || 'Respuesta de autenticación inválida');
       }
@@ -125,8 +151,22 @@ const AuthService = {
    * Closes session and clears storage
    */
   logout() {
-    window.Storage.removeToken();
-    window.Storage.removeUser();
+    if (window.Storage) {
+      window.Storage.removeToken();
+      window.Storage.removeUser();
+    }
+    try {
+      localStorage.removeItem('ev_admin_token');
+      localStorage.removeItem('ev_admin_user');
+      sessionStorage.removeItem('ev_admin_token');
+      sessionStorage.removeItem('ev_admin_user');
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_info');
+      localStorage.removeItem('el_vecino_jwt_token');
+      localStorage.removeItem('el_vecino_user');
+    } catch (e) {
+      console.warn('[AuthService] Error limpiando storage:', e);
+    }
     window.dispatchEvent(new CustomEvent('auth:logout', {}));
   }
 };

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.admin.sites import AdminSite
-from apps.product.models import Product, ProductType, ProductAngleImage, ProductColorImage, ProductReview, ProductViewLog
+from apps.product.models import Product, ProductAngleImage, ProductColorImage, ProductReview, ProductViewLog
 from apps.product.admin import ProductAngleImageInline, ProductColorImageInline
 from apps.product.api.serializers import ProductSerializer
 from apps.product.services.sentiment import classify_comment
@@ -12,9 +12,7 @@ import concurrent.futures
 
 class ProductInlineSoftDeleteTest(TestCase):
     def setUp(self):
-        self.product_type = ProductType.objects.create(product_type_name="Tipo Test")
         self.product = Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Test",
             price=100.00
         )
@@ -133,9 +131,7 @@ class ReviewFilteringTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.product_type = ProductType.objects.create(product_type_name="Tipo Filtro")
         self.product = Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Filtro Test",
             price=50.00
         )
@@ -215,9 +211,7 @@ class ViewCountAtomicTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.product_type = ProductType.objects.create(product_type_name="Tipo Vistas")
         self.product = Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Vistas Test",
             price=75.00
         )
@@ -283,15 +277,12 @@ class RankingCalculationTest(TestCase):
     """Verifica que el cálculo de ranking pondere correctamente vistas y sentimiento."""
 
     def setUp(self):
-        self.product_type = ProductType.objects.create(product_type_name="Tipo Ranking")
         self.product_a = Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Popular",
             price=100.00,
             total_views=100
         )
         self.product_b = Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Impopular",
             price=100.00,
             total_views=2
@@ -382,12 +373,10 @@ class CatalogPDFExportTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.product_type = ProductType.objects.create(product_type_name="Tipo PDF")
 
     def test_export_pdf_status_and_headers(self):
         """Verifica que el endpoint retorne HTTP 200, Content-Type application/pdf y Content-Disposition."""
         Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto PDF 1",
             price=120.00,
             ranking_score=0.85
@@ -402,7 +391,6 @@ class CatalogPDFExportTest(TestCase):
     def test_export_pdf_starts_with_magic_bytes(self):
         """Verifica que el binario resultante sea un PDF válido comenzando con %PDF."""
         Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Magico",
             price=50.00
         )
@@ -422,7 +410,6 @@ class CatalogPDFExportTest(TestCase):
 
         for i in range(6):
             Product.objects.create(
-                product_type=self.product_type,
                 product_name=f"Producto Cuadrícula {i+1}",
                 price=10.0 * (i + 1),
                 ranking_score=0.1 * (i + 1)
@@ -443,14 +430,12 @@ class CatalogPDFExportTest(TestCase):
         # 5 productos económicos
         for i in range(5):
             Product.objects.create(
-                product_type=self.product_type,
                 product_name=f"Barato {i}",
                 price=20.00,
                 ranking_score=0.2
             )
         # 1 producto premium
         Product.objects.create(
-            product_type=self.product_type,
             product_name="Premium 1",
             price=500.00,
             ranking_score=0.95
@@ -487,7 +472,6 @@ class CatalogPDFExportTest(TestCase):
         uploaded = SimpleUploadedFile("test_img.jpg", img_buffer.getvalue(), content_type="image/jpeg")
 
         Product.objects.create(
-            product_type=self.product_type,
             product_name="Producto Con Imagen",
             price=99.99,
             ranking_score=0.88,
@@ -497,4 +481,119 @@ class CatalogPDFExportTest(TestCase):
         response = self.client.get('/api/catalog/export-pdf/')
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.content.startswith(b'%PDF'))
+
+
+class ImportConfigSeedCommandTest(TestCase):
+    """Prueba unitaria para verificar la correcta importación de datos con import_config_seed."""
+
+    def test_import_config_seed_creates_objects(self):
+        from django.core.management import call_command
+        from apps.product.models import Category, Product, ProductFeature
+        from apps.promotions.models import PromotionCombo
+
+        call_command('import_config_seed')
+
+        # Verificar categorías creadas
+        self.assertGreaterEqual(Category.objects.count(), 5)
+        self.assertTrue(Category.objects.filter(category_name='Refrigeración').exists())
+        self.assertTrue(Category.objects.filter(category_name='Smart TVs & Audio').exists())
+
+        # Verificar productos creados
+        self.assertGreaterEqual(Product.objects.count(), 2)
+        samsung = Product.objects.get(product_name__icontains='Samsung SpaceMax')
+        self.assertTrue(samsung.is_feature_product)
+        self.assertEqual(samsung.price, 5299000)
+
+        # Verificar especificaciones creadas
+        features = ProductFeature.objects.filter(product=samsung)
+        self.assertGreaterEqual(features.count(), 4)
+
+        # Verificar combo promocional creado
+        self.assertTrue(PromotionCombo.objects.filter(name__icontains='Combo Dúo Cocina Chef').exists())
+
+
+class DashboardSummaryAPITest(TestCase):
+    """Pruebas unitarias para el endpoint de analíticas del Dashboard."""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.p1 = Product.objects.create(
+            product_name="Producto Top",
+            price=150.00,
+            total_views=100,
+            sentiment_score=0.95,
+            ranking_score=0.92,
+            is_feature_product=True
+        )
+        self.p2 = Product.objects.create(
+            product_name="Producto Con Reclamos",
+            price=80.00,
+            total_views=40,
+            sentiment_score=0.30,
+            ranking_score=0.35,
+            is_feature_product=False
+        )
+        # Reseña positiva para p1
+        ProductReview.objects.create(
+            product=self.p1,
+            comment="Excelente producto",
+            sentiment_label="positive",
+            sentiment_confidence=0.9
+        )
+        # Reseña negativa para p2 (Alerta de reclamo)
+        ProductReview.objects.create(
+            product=self.p2,
+            comment="Llegó dañado y no funciona",
+            sentiment_label="negative",
+            sentiment_confidence=0.85
+        )
+        # Registros de vistas
+        ProductViewLog.objects.create(product=self.p1, ip_address="192.168.1.1")
+        ProductViewLog.objects.create(product=self.p2, ip_address="192.168.1.2")
+
+    def test_dashboard_summary_endpoint(self):
+        response = self.client.get('/api/dashboard/summary/')
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+
+        # Validar métricas globales
+        self.assertEqual(data['total_productos'], 2)
+        self.assertEqual(data['total_views_catalog'], 140)
+        self.assertIn('satisfaction_index', data)
+        self.assertEqual(data['satisfaction_index']['total_reviews'], 2)
+        self.assertEqual(data['satisfaction_index']['positive_reviews'], 1)
+        self.assertEqual(data['satisfaction_index']['negative_reviews'], 1)
+
+        # Validar producto más amado
+        self.assertIsNotNone(data['most_loved_product'])
+        self.assertEqual(data['most_loved_product']['id'], self.p1.id)
+        self.assertEqual(data['most_loved_product']['name'], "Producto Top")
+
+        # Validar top 5 y alertas
+        self.assertGreaterEqual(len(data['top_5_featured']), 1)
+        self.assertEqual(data['top_5_featured'][0]['id'], self.p1.id)
+
+        self.assertGreaterEqual(len(data['complaint_alerts']), 1)
+        self.assertEqual(data['complaint_alerts'][0]['id'], self.p2.id)
+        self.assertEqual(data['complaint_alerts'][0]['negative_reviews_count'], 1)
+
+    def test_product_serializer_includes_review_analytics(self):
+        response = self.client.get('/api/products/')
+        self.assertEqual(response.status_code, 200)
+        results = response.json().get('results', [])
+        self.assertEqual(len(results), 2)
+
+        prod_top = next(p for p in results if p['id'] == self.p1.id)
+        prod_neg = next(p for p in results if p['id'] == self.p2.id)
+
+        # p1 es top y no tiene quejas
+        self.assertTrue(prod_top['is_top_ranked'])
+        self.assertFalse(prod_top['has_complaints'])
+        self.assertEqual(prod_top['total_views'], 100)
+
+        # p2 tiene reclamos
+        self.assertTrue(prod_neg['has_complaints'])
+        self.assertEqual(prod_neg['negative_reviews_count'], 1)
+
+
 

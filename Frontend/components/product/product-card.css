@@ -1,4 +1,4 @@
-/* Product Card Component Styles */
+﻿/* Product Card Component Styles */
 .product-card {
   background: #FFFFFF;
   border: 1px solid #E2E6EE;
@@ -186,7 +186,7 @@
 .btn-card-quote {
   height: 2.625rem;
   border-radius: 0.75rem;
-  background: #25D366;
+  background: #00F0FF;
   color: #FFFFFF;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
@@ -226,3 +226,4 @@
   color: #FFFFFF;
   border-color: #0800FF;
 }
+

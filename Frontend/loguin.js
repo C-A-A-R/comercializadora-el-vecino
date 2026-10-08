@@ -2,7 +2,7 @@
  * loguin.js - Authentication portal controller with JWT token management
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initLogin() {
   const form = document.getElementById('loginForm');
   const emailInput = document.getElementById('loginEmail');
   const passwordInput = document.getElementById('loginPassword');
@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (selectedRole === 'admin') {
         if (!emailInput.value || emailInput.value === 'cliente@elvecino.com') {
-          emailInput.value = 'admin@elvecino.com';
-          passwordInput.value = 'admin123456';
+          emailInput.value = 'admin';
+          passwordInput.value = 'admin';
         }
       } else {
-        if (!emailInput.value || emailInput.value === 'admin@elvecino.com') {
+        if (!emailInput.value || emailInput.value === 'admin' || emailInput.value === 'admin@elvecino.com') {
           emailInput.value = 'cliente@elvecino.com';
           passwordInput.value = 'cliente123456';
         }
@@ -76,14 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fast Demo Login Admin
+  // Fast Demo Login Admin (Django Backend User)
   if (btnDemoAdmin) {
     btnDemoAdmin.addEventListener('click', () => {
-      emailInput.value = 'admin@elvecino.com';
-      passwordInput.value = 'admin123456';
+      emailInput.value = 'admin';
+      passwordInput.value = 'admin';
       roleButtons.forEach(b => b.classList.toggle('active', b.dataset.role === 'admin'));
       selectedRole = 'admin';
-      performLogin('admin@elvecino.com', 'admin123456');
+      performLogin('admin', 'admin');
     });
   }
 
@@ -101,16 +101,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Form Submit
   if (form) {
     form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = emailInput.value.trim();
+      if (e) e.preventDefault();
+      const identifier = emailInput.value.trim();
       const password = passwordInput.value;
-      performLogin(email, password);
+      performLogin(identifier, password);
     });
   }
 
-  async function performLogin(email, password) {
-    if (!email || !password) {
+  async function performLogin(identifier, password) {
+    if (!identifier || !password) {
       if (window.Toast) window.Toast.warning('Por favor completa todos los campos.');
+      return;
+    }
+
+    if (!window.AuthService) {
+      console.error('[loguin.js] AuthService no está disponible.');
+      if (window.Toast) window.Toast.error('Servicio de autenticación no inicializado.', 'Error');
       return;
     }
 
@@ -119,28 +125,38 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `
           <span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
-          <span>Validando credenciales JWT...</span>
+          <span>Validando credenciales en Backend...</span>
         `;
       }
 
-      const result = await window.AuthService.login(email, password);
+      const result = await window.AuthService.login(identifier, password);
 
+      const displayName = result.user.name || result.user.username || 'Usuario';
       if (window.Toast) {
-        window.Toast.success(`¡Bienvenido ${result.user.name}! Token JWT generado.`, 'Acceso Autorizado');
+        window.Toast.success(`¡Bienvenido ${displayName}! Token JWT obtenido.`, 'Acceso Autorizado');
       }
 
       // Check URL redirect param
       const urlParams = new URLSearchParams(window.location.search);
       const redirect = urlParams.get('redirect');
 
-      setTimeout(() => {
-        if (redirect === 'admin' || result.user.role === 'admin') {
-          // Redirige correctamente al index dentro del módulo admin
-          window.location.href = './admin/index.html'; 
+      const isStaffOrAdmin = result.user.role === 'admin' || result.user.role === 'ADMIN' || Boolean(result.user.is_staff) || Boolean(result.user.is_superuser);
+
+      let targetUrl = './index.html';
+      if (redirect === 'admin' || isStaffOrAdmin) {
+        if (window.location.pathname.includes('/Frontend/')) {
+          targetUrl = window.location.pathname.replace(/loguin\.html.*$/, 'admin/index.html');
         } else {
-          window.location.href = './index.html';
+          targetUrl = './admin/index.html';
         }
-      }, 800);
+      } else if (window.location.pathname.includes('/Frontend/')) {
+        targetUrl = window.location.pathname.replace(/loguin\.html.*$/, 'index.html');
+      }
+
+      console.log('[loguin.js] Redireccionando a:', targetUrl);
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 500);
 
     } catch (error) {
       console.error('[loguin.js] Error durante login:', error);
@@ -157,4 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLogin);
+} else {
+  initLogin();
+}

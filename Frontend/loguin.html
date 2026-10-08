@@ -58,18 +58,19 @@
       </div>
 
       <!-- Login Form -->
-      <form id="loginForm">
+      <form id="loginForm" onsubmit="return false;">
         <div class="login-input-group">
-          <label class="login-input-label" for="loginEmail">Correo Electrónico</label>
+          <label class="login-input-label" for="loginEmail">Usuario o Correo Electrónico</label>
           <div class="login-input-wrapper">
-            <span class="material-symbols-outlined login-input-icon">mail</span>
+            <span class="material-symbols-outlined login-input-icon">account_circle</span>
             <input
-              type="email"
+              type="text"
               id="loginEmail"
               required
               class="login-input"
-              placeholder="admin@elvecino.com"
-              value="admin@elvecino.com"
+              placeholder="admin o admin@elvecino.com"
+              value="admin"
+              autocomplete="username"
             >
           </div>
         </div>
@@ -89,7 +90,8 @@
               required
               class="login-input pr-11"
               placeholder="••••••••••••"
-              value="admin123456"
+              value="admin"
+              autocomplete="current-password"
             >
             <button
               type="button"
@@ -111,10 +113,10 @@
       <!-- Fast Demo Access -->
       <div class="demo-access-box">
         <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center block">
-          Accesos Rápidos de Prueba (JWT Demo)
+          Accesos de Prueba (Backend Django JWT)
         </span>
         <button type="button" id="btnDemoAdmin" class="btn-demo-pill">
-          <span>Ingresar como <strong>Admin Master</strong></span>
+          <span>Ingresar como <strong>Admin (admin / admin)</strong></span>
           <span class="text-cyan-400 text-xs font-bold">Auto Login &rarr;</span>
         </button>
         <button type="button" id="btnDemoCliente" class="btn-demo-pill">

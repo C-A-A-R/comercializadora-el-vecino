@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.product.models import (
-    Category, ProductType, Product, ProductFeature,
+    Category, Product, ProductFeature,
     ProductColorImage, ProductAngleImage, ProductReview
 )
 
@@ -11,15 +11,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'category_name', 'description', 'category_image', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
-
-
-class ProductTypeSerializer(serializers.ModelSerializer):
-    """Serializador para el modelo ProductType."""
-
-    class Meta:
-        model = ProductType
-        fields = ['id', 'product_type_name', 'description', 'product_type_image', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 
@@ -74,10 +65,13 @@ class ProductSerializer(serializers.ModelSerializer):
 
     categories_detail = CategorySerializer(source='categories', many=True, read_only=True)
     category_detail = CategorySerializer(source='category', read_only=True)
-    product_type_detail = ProductTypeSerializer(source='product_type', read_only=True)
     features = serializers.SerializerMethodField()
     color_images = serializers.SerializerMethodField()
     angle_images = serializers.SerializerMethodField()
+    negative_reviews_count = serializers.SerializerMethodField()
+    positive_reviews_count = serializers.SerializerMethodField()
+    has_complaints = serializers.SerializerMethodField()
+    is_top_ranked = serializers.SerializerMethodField()
 
     def get_features(self, obj):
         active_features = [f for f in obj.features.all() if not getattr(f, 'is_deleted', False)]
@@ -91,6 +85,26 @@ class ProductSerializer(serializers.ModelSerializer):
         active_images = [img for img in obj.angle_images.all() if not getattr(img, 'is_deleted', False)]
         return ProductAngleImageSerializer(active_images, many=True, context=self.context).data
 
+    def get_negative_reviews_count(self, obj):
+        if hasattr(obj, 'negative_reviews_count'):
+            return obj.negative_reviews_count
+        return obj.reviews.filter(sentiment_label='negative', is_deleted=False).count()
+
+    def get_positive_reviews_count(self, obj):
+        if hasattr(obj, 'positive_reviews_count'):
+            return obj.positive_reviews_count
+        return obj.reviews.filter(sentiment_label='positive', is_deleted=False).count()
+
+    def get_has_complaints(self, obj):
+        neg_count = self.get_negative_reviews_count(obj)
+        return neg_count > 0 or obj.sentiment_score < 0.40
+
+    def get_is_top_ranked(self, obj):
+        top_ids = self.context.get('top_5_product_ids')
+        if top_ids is not None:
+            return obj.id in top_ids
+        return obj.is_feature_product or obj.ranking_score >= 0.70
+
     class Meta:
         model = Product
         fields = [
@@ -98,8 +112,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'categories',
             'categories_detail',
             'category_detail',
-            'product_type',
-            'product_type_detail',
             'product_name',
             'brand',
             'capacity',
@@ -121,8 +133,16 @@ class ProductSerializer(serializers.ModelSerializer):
             'total_views',
             'sentiment_score',
             'ranking_score',
+            'negative_reviews_count',
+            'positive_reviews_count',
+            'has_complaints',
+            'is_top_ranked',
             'created_at',
             'updated_at'
         ]
-        read_only_fields = ['id', 'total_views', 'sentiment_score', 'ranking_score', 'created_at', 'updated_at']
+        read_only_fields = [
+            'id', 'total_views', 'sentiment_score', 'ranking_score',
+            'negative_reviews_count', 'positive_reviews_count', 'has_complaints', 'is_top_ranked',
+            'created_at', 'updated_at'
+        ]
 
