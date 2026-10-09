@@ -1,14 +1,10 @@
 import { DashboardService } from '../../services/dashboard.service.js';
-import { StoreConfigService } from '../../services/store-config.service.js';
 import { Toast } from '../../components/ui/Toast.js';
 
 export const DashboardView = {
-  settings: {},
-
   async render() {
     const summaryResponse = await DashboardService.getSummary();
-    this.settings = StoreConfigService.getSettings();
-
+    
     // Sanitización y fallback seguro de métricas
     const stats = (summaryResponse?.data || summaryResponse) || {
       total_productos: 0,
@@ -25,7 +21,7 @@ export const DashboardView = {
     const top5Items = Array.isArray(stats.top_5_featured) && stats.top_5_featured.length > 0
       ? stats.top_5_featured
       : (Array.isArray(stats.top_viewed) ? stats.top_viewed.slice(0, 5) : []);
-
+      
     const whatsappTop = Array.isArray(stats.whatsapp_top_consulted) && stats.whatsapp_top_consulted.length > 0
       ? stats.whatsapp_top_consulted
       : [
@@ -53,7 +49,7 @@ export const DashboardView = {
               <span class="text-xs font-semibold text-gray-500">Resumen Operativo</span>
             </div>
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Página Principal</h1>
-            <p class="text-sm text-gray-500">Supervisión general de la tienda, métricas clave y configuración centralizada de WhatsApp.</p>
+            <p class="text-sm text-gray-500">Supervisión general de la tienda, métricas clave y rendimiento del catálogo.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2.5">
             <a href="#/banners" class="px-3.5 py-2 bg-purple-50 text-purple-700 hover:bg-purple-100 font-bold text-xs rounded-xl border border-purple-200 transition flex items-center gap-1.5">
@@ -84,15 +80,12 @@ export const DashboardView = {
               <span class="material-symbols-outlined text-2xl">visibility</span>
             </div>
           </div>
-
           <!-- KPI 2: Tendencia de Tráfico Global -->
           <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between hover:border-blue-300 transition">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tendencia de Tráfico</p>
               <div class="flex items-baseline gap-1.5 mt-1">
-                <p class="text-2xl font-bold text-emerald-600">
-                  +${trend.growth_pct}%
-                </p>
+                <p class="text-2xl font-bold text-emerald-600">+${trend.growth_pct}%</p>
                 <span class="text-xs font-semibold text-emerald-600 flex items-center">
                   <span class="material-symbols-outlined text-sm">trending_up</span>
                 </span>
@@ -103,7 +96,6 @@ export const DashboardView = {
               <span class="material-symbols-outlined text-2xl">monitoring</span>
             </div>
           </div>
-
           <!-- KPI 3: Índice Global de Satisfacción -->
           <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between hover:border-blue-300 transition">
             <div>
@@ -118,7 +110,6 @@ export const DashboardView = {
               <span class="material-symbols-outlined text-2xl">sentiment_very_satisfied</span>
             </div>
           </div>
-
           <!-- KPI 4: Total Productos Activos -->
           <div class="p-5 bg-white rounded-xl border border-slate-border shadow-sm flex items-center justify-between hover:border-blue-300 transition">
             <div>
@@ -132,149 +123,7 @@ export const DashboardView = {
           </div>
         </div>
 
-        <!-- 2. CONFIGURACIÓN GENERAL DE LA TIENDA Y WHATSAPP (Módulo Integrado) -->
-        <div class="bg-white rounded-2xl border border-slate-border p-6 shadow-sm space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-border pb-4">
-            <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 text-whatsapp-green border border-green-200 mb-1">
-                <span class="material-symbols-outlined text-sm">tune</span>
-                Configuración General & Canales de Contacto
-              </div>
-              <h2 class="font-display text-xl font-bold text-deep-obsidian">Ajustes de Tienda y WhatsApp Principal</h2>
-              <p class="text-xs text-gray-500">Actualice el número de atención, horarios, mensaje inicial y redes sociales que ven los clientes.</p>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <button id="btn-test-main-whatsapp" type="button" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-border">
-                <span class="material-symbols-outlined text-sm text-whatsapp-green">open_in_new</span>
-                Probar WhatsApp de Atención
-              </button>
-            </div>
-          </div>
-
-          <form id="form-store-settings" class="space-y-5">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <!-- Teléfono de WhatsApp -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Número Principal de WhatsApp *
-                </label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-whatsapp-green text-lg">chat</span>
-                  <input 
-                    type="text" 
-                    id="setting-whatsapp-number" 
-                    required 
-                    value="${this.settings.whatsapp_number || ''}" 
-                    placeholder="Ej: +57 312 456 7890" 
-                    class="w-full pl-10 pr-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-xl text-xs font-bold text-deep-obsidian focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                  />
-                </div>
-                <p class="text-[11px] text-gray-400">Número al que se dirigirán todas las consultas y cotizaciones del catálogo.</p>
-              </div>
-
-              <!-- Horarios de Atención -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Horarios de Atención al Público *
-                </label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg">schedule</span>
-                  <input 
-                    type="text" 
-                    id="setting-store-hours" 
-                    required 
-                    value="${this.settings.store_hours || ''}" 
-                    placeholder="Ej: Lunes a Sábado: 8:00 AM - 6:30 PM" 
-                    class="w-full pl-10 pr-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-xl text-xs font-semibold text-deep-obsidian focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                  />
-                </div>
-                <p class="text-[11px] text-gray-400">Visible en el encabezado y pie de página de la tienda.</p>
-              </div>
-
-              <!-- Mensaje de Bienvenida General -->
-              <div class="space-y-1.5 md:col-span-2">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Mensaje de Bienvenida General (WhatsApp) *
-                </label>
-                <textarea 
-                  id="setting-welcome-msg" 
-                  rows="2" 
-                  required 
-                  class="w-full p-3 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian leading-relaxed focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                  placeholder="Escriba el saludo inicial que recibirá el asesor al abrir el chat..."
-                >${this.settings.whatsapp_welcome_message || ''}</textarea>
-              </div>
-
-              <!-- Dirección Física del Local -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Dirección del Local / Punto de Venta
-                </label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg">store</span>
-                  <input 
-                    type="text" 
-                    id="setting-store-address" 
-                    value="${this.settings.store_address || ''}" 
-                    placeholder="Ej: Carrera 15 # 34-20, Local 102" 
-                    class="w-full pl-10 pr-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                  />
-                </div>
-              </div>
-
-              <!-- Ciudad / Región -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Ciudad / Municipio
-                </label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg">location_on</span>
-                  <input 
-                    type="text" 
-                    id="setting-store-city" 
-                    value="${this.settings.store_city || ''}" 
-                    placeholder="Ej: Bucaramanga, Santander" 
-                    class="w-full pl-10 pr-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                  />
-                </div>
-              </div>
-
-              <!-- Redes Sociales: Instagram -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Instagram</label>
-                <input 
-                  type="text" 
-                  id="setting-instagram" 
-                  value="${this.settings.social_instagram || ''}" 
-                  placeholder="https://instagram.com/comercializadoraelvecino" 
-                  class="w-full px-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition font-mono"
-                />
-              </div>
-
-              <!-- Redes Sociales: Facebook -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Facebook</label>
-                <input 
-                  type="text" 
-                  id="setting-facebook" 
-                  value="${this.settings.social_facebook || ''}" 
-                  placeholder="https://facebook.com/comercializadoraelvecino" 
-                  class="w-full px-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition font-mono"
-                />
-              </div>
-            </div>
-
-            <div class="flex justify-end gap-3 pt-3 border-t border-slate-border">
-              <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
-                <span class="material-symbols-outlined text-base">save</span>
-                Guardar Ajustes de la Tienda
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- 3. BARRA DE PRODUCTOS MÁS PREGUNTADOS POR WHATSAPP / MAYOR COTIZADOS -->
+        <!-- 2. BARRA DE PRODUCTOS MÁS PREGUNTADOS POR WHATSAPP / MAYOR COTIZADOS -->
         <div class="bg-white rounded-2xl border border-slate-border p-6 shadow-sm space-y-5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-border pb-4">
             <div class="flex items-center gap-3">
@@ -293,14 +142,12 @@ export const DashboardView = {
               En Vivo
             </span>
           </div>
-
           <!-- Barras de Progreso Comparativas -->
           <div class="space-y-4 pt-1">
             ${whatsappTop.map((item, index) => {
               const rankColor = index === 0 
                 ? 'bg-amber-500 text-white' 
                 : (index === 1 ? 'bg-slate-400 text-white' : (index === 2 ? 'bg-amber-700 text-white' : 'bg-slate-200 text-gray-700'));
-
               return `
                 <div class="p-3.5 bg-slate-surface/60 rounded-xl border border-slate-border hover:bg-slate-surface transition space-y-2">
                   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -313,7 +160,6 @@ export const DashboardView = {
                         <p class="text-[11px] text-gray-500">${item.brand || 'El Vecino'} · <span class="font-medium text-gray-600">${item.category || 'Electrodoméstico'}</span></p>
                       </div>
                     </div>
-
                     <div class="flex items-center gap-3 self-end sm:self-center">
                       <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${item.badge_color || 'bg-blue-50 text-blue-700 border-blue-200'}">
                         ${item.tendencia || 'Frecuente'}
@@ -324,7 +170,6 @@ export const DashboardView = {
                       </div>
                     </div>
                   </div>
-
                   <!-- Barra de Progreso Visual -->
                   <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                     <div 
@@ -339,7 +184,7 @@ export const DashboardView = {
           </div>
         </div>
 
-        <!-- 4. Sección Comparativa: Top 5 Productos Destacados vs. Alertas de Reclamos -->
+        <!-- 3. Sección Comparativa: Top 5 Productos Destacados vs. Alertas de Reclamos -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Columna A: Top 5 Productos Destacados -->
           <div class="bg-white rounded-xl border border-slate-border p-5 shadow-sm flex flex-col justify-between">
@@ -356,7 +201,6 @@ export const DashboardView = {
                 </div>
                 <span class="text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">Top 5</span>
               </div>
-
               <div class="divide-y divide-slate-border">
                 ${top5Items.length > 0 ? top5Items.map((item, index) => `
                   <div class="py-3 flex items-center justify-between gap-3">
@@ -379,7 +223,6 @@ export const DashboardView = {
                 `).join('') : '<p class="text-sm text-gray-500 py-6 text-center">No hay productos destacados disponibles.</p>'}
               </div>
             </div>
-
             <div class="mt-4 pt-3 border-t border-slate-border">
               <a href="#/products" class="text-xs font-semibold text-electric-blue hover:underline flex items-center justify-between">
                 <span>Ver catálogo completo de productos</span>
@@ -405,7 +248,6 @@ export const DashboardView = {
                   ${complaintAlerts.length} ${complaintAlerts.length === 1 ? 'Alerta' : 'Alertas'}
                 </a>
               </div>
-
               <div class="divide-y divide-slate-border">
                 ${complaintAlerts.length > 0 ? complaintAlerts.map(alert => `
                   <div class="py-3 space-y-1.5">
@@ -431,7 +273,6 @@ export const DashboardView = {
                 `}
               </div>
             </div>
-
             <div class="mt-4 pt-3 border-t border-slate-border">
               <a href="#/reviews" class="text-xs font-semibold text-rose-600 hover:underline flex items-center justify-between">
                 <span>Ir al módulo de moderación de reseñas</span>
@@ -445,36 +286,7 @@ export const DashboardView = {
   },
 
   bindEvents() {
-    const form = document.getElementById('form-store-settings');
-    const btnTestWa = document.getElementById('btn-test-main-whatsapp');
-
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const updated = {
-        whatsapp_number: document.getElementById('setting-whatsapp-number')?.value.trim(),
-        store_hours: document.getElementById('setting-store-hours')?.value.trim(),
-        whatsapp_welcome_message: document.getElementById('setting-welcome-msg')?.value.trim(),
-        store_address: document.getElementById('setting-store-address')?.value.trim(),
-        store_city: document.getElementById('setting-store-city')?.value.trim(),
-        social_instagram: document.getElementById('setting-instagram')?.value.trim(),
-        social_facebook: document.getElementById('setting-facebook')?.value.trim()
-      };
-
-      try {
-        await StoreConfigService.saveSettings(updated);
-        Toast.show('Configuración de la tienda guardada con éxito', 'success');
-      } catch (err) {
-        console.error(err);
-        Toast.show('Error al guardar la configuración', 'error');
-      }
-    });
-
-    btnTestWa?.addEventListener('click', () => {
-      const phoneInput = document.getElementById('setting-whatsapp-number')?.value || '+573124567890';
-      const cleanPhone = phoneInput.replace(/[^0-9]/g, '');
-      const msg = document.getElementById('setting-welcome-msg')?.value || 'Hola';
-      const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
-    });
+    // NOTA: Se eliminaron los eventos de "form-store-settings" y "btn-test-main-whatsapp" 
+    // ya que ese bloque visual fue removido del render() para evitar código muerto.
   }
 };

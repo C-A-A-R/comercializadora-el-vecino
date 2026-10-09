@@ -8,6 +8,28 @@ export const CategoryListView = {
   categories: [],
   products: [],
 
+  // Helper para leer archivo como Base64
+  readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  },
+
+  // Helper para renderizar una fila de tag dinámico
+  renderTagRow(value = '') {
+    return `
+      <div class="tag-row flex gap-2 items-center">
+        <input type="text" class="tag-value flex-1 px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none" placeholder="Ej: No Frost, Side by Side, Inverter" value="${value}">
+        <button type="button" class="btn-remove-tag p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar">
+          <span class="material-symbols-outlined text-base">delete</span>
+        </button>
+      </div>
+    `;
+  },
+
   async render() {
     try {
       const [categoriesData, productsData] = await Promise.all([
@@ -27,8 +49,6 @@ export const CategoryListView = {
     const totalCategories = this.allCategories.length;
     const activeCategories = this.allCategories.filter(c => c.is_active).length;
     const totalClassifiedProducts = this.products.length;
-
-    // Distribución de demanda/vistas por categoría
     const distribution = this.calculateCategoryDistribution();
 
     return `
@@ -66,7 +86,6 @@ export const CategoryListView = {
               <span class="material-symbols-outlined text-xl">folder_open</span>
             </div>
           </div>
-
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Categorías Activas</p>
@@ -77,7 +96,6 @@ export const CategoryListView = {
               <span class="material-symbols-outlined text-xl">check_circle</span>
             </div>
           </div>
-
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Modelos Clasificados</p>
@@ -99,15 +117,11 @@ export const CategoryListView = {
             </div>
             <span class="text-xs font-semibold text-gray-400">Métricas de Catálogo</span>
           </div>
-
-          <!-- Barra segmentada de progreso -->
           <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden flex">
             ${distribution.map(d => `
               <div class="${d.colorClass} h-full transition-all duration-500" style="width: ${d.percentage}%" title="${d.name}: ${d.percentage}%"></div>
             `).join('')}
           </div>
-
-          <!-- Leyenda de categorías -->
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1">
             ${distribution.map(d => `
               <div class="flex items-center gap-1.5 text-xs text-gray-600">
@@ -165,7 +179,7 @@ export const CategoryListView = {
       </div>
 
       <!-- Modal de Creación / Edición de Categoría -->
-      <dialog id="modal-category" class="rounded-2xl border border-slate-border shadow-2xl p-6 max-w-lg w-full backdrop:bg-slate-900/50">
+      <dialog id="modal-category" class="rounded-2xl border border-slate-border shadow-2xl p-6 max-w-2xl w-full backdrop:bg-slate-900/50">
         <form id="form-category" class="space-y-4">
           <div class="flex items-center justify-between border-b border-slate-border pb-3">
             <h3 class="font-bold text-lg text-deep-obsidian font-display" id="cat-modal-title">Nueva Categoría</h3>
@@ -173,25 +187,51 @@ export const CategoryListView = {
               <span class="material-symbols-outlined text-lg">close</span>
             </button>
           </div>
-
           <input type="hidden" id="cat-id">
-
+          
+          <!-- Nombre -->
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Nombre de la Categoría *</label>
             <input type="text" id="cat-name" required placeholder="Ej: Refrigeradores" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none">
           </div>
 
-          <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Subcategorías & Tags</label>
-            <input type="text" id="cat-tags" placeholder="Ej: No Frost, Side by Side, Inverter (separados por coma)" class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none">
-            <p class="text-[11px] text-gray-400 mt-1">Escriba las subcategorías separadas por comas para agrupar productos.</p>
+          <!-- IMAGEN DE CATEGORÍA -->
+          <div class="border-t border-slate-border pt-4">
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Imagen de la Categoría</label>
+            <div class="flex items-start gap-6">
+              <div id="cat-image-preview-container" class="w-24 h-24 border-2 border-dashed border-slate-border rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden flex-shrink-0">
+                <span class="text-gray-400 text-xs text-center px-2">Vista previa</span>
+              </div>
+              <div class="flex-1 space-y-2">
+                <input type="file" id="cat-image" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-electric-blue hover:file:bg-blue-100 cursor-pointer">
+                <p class="text-xs text-gray-500">Formatos: JPG, PNG. Se recomienda imagen cuadrada.</p>
+                <button type="button" id="btn-remove-cat-image" class="text-xs text-red-500 hover:text-red-700 underline hidden">Quitar imagen actual</button>
+              </div>
+            </div>
           </div>
 
+          <!-- SUBCATEGORÍAS & TAGS DINÁMICOS -->
+          <div class="border-t border-slate-border pt-4">
+            <div class="flex items-center justify-between mb-3">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Subcategorías & Tags</label>
+              <button type="button" id="btn-add-tag" class="flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-200 transition font-medium">
+                <span class="material-symbols-outlined text-base">add</span>
+                Añadir
+              </button>
+            </div>
+            <div id="tags-container" class="space-y-2">
+              <!-- Las filas dinámicas se insertarán aquí -->
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Agregue subcategorías o etiquetas para agrupar productos (ej: No Frost, Side by Side, Inverter).</p>
+          </div>
+
+          <!-- Descripción -->
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Descripción</label>
             <textarea id="cat-desc" rows="3" placeholder="Descripción clara para orientar la clasificación..." class="w-full px-3 py-2 border border-slate-border rounded-lg text-sm focus:ring-2 focus:ring-electric-blue outline-none"></textarea>
           </div>
 
+          <!-- Activo -->
           <div class="flex items-center gap-2 pt-1">
             <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-gray-700">
               <input type="checkbox" id="cat-active" checked class="w-4 h-4 text-electric-blue rounded border-gray-300">
@@ -199,6 +239,7 @@ export const CategoryListView = {
             </label>
           </div>
 
+          <!-- Acciones -->
           <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-border">
             <button type="button" id="btn-cancel-cat-modal" class="px-4 py-2 border border-slate-border text-gray-600 rounded-lg text-xs font-bold hover:bg-slate-surface transition">
               Cancelar
@@ -221,11 +262,9 @@ export const CategoryListView = {
       'bg-indigo-500',
       'bg-gray-400'
     ];
-
     if (this.allCategories.length === 0) {
       return [{ name: 'Sin categorías', percentage: 100, colorClass: 'bg-gray-300' }];
     }
-
     const counts = this.allCategories.map(cat => {
       const count = this.products.filter(p => {
         const pCatId = p.category_id || p.category?.id;
@@ -234,9 +273,7 @@ export const CategoryListView = {
       }).length;
       return { name: cat.name, count };
     });
-
     const total = counts.reduce((acc, c) => acc + c.count, 0) || 1;
-
     return counts.map((c, idx) => ({
       name: c.name,
       percentage: Math.max(5, Math.round((c.count / total) * 100)),
@@ -255,22 +292,17 @@ export const CategoryListView = {
 
   renderTableRows(categories) {
     if (!categories || categories.length === 0) {
-      return `
-        <tr>
-          <td colspan="6" class="px-6 py-12 text-center text-gray-500">
-            <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">search_off</span>
-            <p class="font-bold text-sm text-gray-700">No se encontraron categorías</p>
-            <p class="text-xs text-gray-400 mt-1">Intente con otro término de búsqueda.</p>
-          </td>
-        </tr>
-      `;
+      return `<tr>
+        <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+          <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">search_off</span>
+          <p class="font-bold text-sm text-gray-700">No se encontraron categorías</p>
+          <p class="text-xs text-gray-400 mt-1">Intente con otro término de búsqueda.</p>
+        </td>
+      </tr>`;
     }
-
     return categories.map(cat => {
       const tags = cat.tags || [];
       const prodCount = this.getProductsCountForCategory(cat);
-
-      // Chips de subcategorías y tags
       const tagsHtml = tags.length > 0
         ? tags.map(tag => `
             <span class="px-2 py-0.5 rounded-md bg-slate-surface border border-slate-border text-gray-700 text-[11px] font-medium">
@@ -278,10 +310,8 @@ export const CategoryListView = {
             </span>
           `).join('')
         : '<span class="text-xs text-gray-400">Sin tags configurados</span>';
-
       return `
         <tr class="hover:bg-slate-surface/40 transition">
-          <!-- 1. Categoría y Slug -->
           <td class="px-5 py-4">
             <div class="space-y-0.5">
               <p class="font-bold text-deep-obsidian text-sm">${cat.name}</p>
@@ -290,29 +320,21 @@ export const CategoryListView = {
               </code>
             </div>
           </td>
-
-          <!-- 2. Subcategorías & Tags -->
           <td class="px-5 py-4">
             <div class="flex flex-wrap items-center gap-1.5 max-w-sm">
               ${tagsHtml}
             </div>
           </td>
-
-          <!-- 3. Productos Asociados -->
           <td class="px-5 py-4 whitespace-nowrap">
             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-electric-blue border border-blue-100">
               ${prodCount} ${prodCount === 1 ? 'modelo' : 'modelos'}
             </span>
           </td>
-
-          <!-- 4. Descripción -->
           <td class="px-5 py-4">
             <p class="text-xs text-gray-600 line-clamp-2 max-w-xs leading-relaxed">
               ${cat.description || 'Sin descripción'}
             </p>
           </td>
-
-          <!-- 5. Estado (Switch Toggle Activo/Inactivo) -->
           <td class="px-5 py-4 whitespace-nowrap text-center">
             <div class="flex flex-col items-center gap-1">
               <label class="relative inline-flex items-center cursor-pointer">
@@ -330,8 +352,6 @@ export const CategoryListView = {
               </span>
             </div>
           </td>
-
-          <!-- 6. Acciones -->
           <td class="px-5 py-4 whitespace-nowrap text-right">
             <div class="flex items-center justify-end gap-1.5">
               <button 
@@ -362,26 +382,20 @@ export const CategoryListView = {
     const clearBtn = document.getElementById('cat-search-clear');
     const tableBody = document.getElementById('cat-table-body');
     const countBadge = document.getElementById('cat-count-badge');
-
     const query = (searchInput?.value || '').toLowerCase().trim();
-
     if (clearBtn) {
       clearBtn.classList.toggle('hidden', query.length === 0);
     }
-
     this.categories = this.allCategories.filter(cat => {
       const name = (cat.name || '').toLowerCase();
       const slug = (cat.slug || '').toLowerCase();
       const desc = (cat.description || '').toLowerCase();
       const tagsMatch = (cat.tags || []).some(t => t.toLowerCase().includes(query));
-
       return !query || name.includes(query) || slug.includes(query) || desc.includes(query) || tagsMatch;
     });
-
     if (countBadge) {
       countBadge.textContent = `${this.categories.length} ${this.categories.length === 1 ? 'categoría' : 'categorías'}`;
     }
-
     if (tableBody) {
       tableBody.innerHTML = this.renderTableRows(this.categories);
     }
@@ -393,9 +407,13 @@ export const CategoryListView = {
     const btnCloseCat = document.getElementById('btn-close-cat-modal');
     const btnCancelCat = document.getElementById('btn-cancel-cat-modal');
     const formCat = document.getElementById('form-category');
-
     const searchInput = document.getElementById('cat-search-input');
     const clearBtn = document.getElementById('cat-search-clear');
+    const tagsContainer = document.getElementById('tags-container');
+    const btnAddTag = document.getElementById('btn-add-tag');
+    const catImageInput = document.getElementById('cat-image');
+    const catImagePreview = document.getElementById('cat-image-preview-container');
+    const btnRemoveCatImage = document.getElementById('btn-remove-cat-image');
 
     // 1. Buscador
     searchInput?.addEventListener('input', () => this.filterCategories());
@@ -412,10 +430,18 @@ export const CategoryListView = {
       btnOpenCat.addEventListener('click', () => {
         document.getElementById('cat-id').value = '';
         document.getElementById('cat-name').value = '';
-        document.getElementById('cat-tags').value = '';
         document.getElementById('cat-desc').value = '';
         document.getElementById('cat-active').checked = true;
         document.getElementById('cat-modal-title').innerText = 'Nueva Categoría';
+        
+        // Limpiar imagen
+        if (catImageInput) catImageInput.value = '';
+        if (catImagePreview) catImagePreview.innerHTML = '<span class="text-gray-400 text-xs text-center px-2">Vista previa</span>';
+        if (btnRemoveCatImage) btnRemoveCatImage.classList.add('hidden');
+        
+        // Limpiar tags dinámicos
+        if (tagsContainer) tagsContainer.innerHTML = '';
+        
         modalCat.showModal();
       });
     }
@@ -423,35 +449,94 @@ export const CategoryListView = {
     if (btnCloseCat && modalCat) {
       btnCloseCat.addEventListener('click', () => modalCat.close());
     }
-
     if (btnCancelCat && modalCat) {
       btnCancelCat.addEventListener('click', () => modalCat.close());
     }
 
-    // 3. Envío del Formulario (Guardar / Actualizar)
+    // 3. Lógica para añadir tags dinámicos
+    if (btnAddTag && tagsContainer) {
+      btnAddTag.addEventListener('click', () => {
+        tagsContainer.insertAdjacentHTML('beforeend', this.renderTagRow());
+      });
+
+      // Delegación de eventos para botones de eliminar tag
+      tagsContainer.addEventListener('click', (e) => {
+        const btnRemove = e.target.closest('.btn-remove-tag');
+        if (btnRemove) {
+          btnRemove.closest('.tag-row').remove();
+        }
+      });
+    }
+
+    // 4. Lógica para preview de imagen de categoría
+    if (catImageInput && catImagePreview) {
+      catImageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            catImagePreview.innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (btnRemoveCatImage) {
+      btnRemoveCatImage.addEventListener('click', () => {
+        catImagePreview.innerHTML = '<span class="text-gray-400 text-xs text-center px-2">Vista previa</span>';
+        catImageInput.value = '';
+        this.currentCategoryImage = null;
+      });
+    }
+
+    // 5. Envío del Formulario (Guardar / Actualizar)
     if (formCat) {
       formCat.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('cat-id').value;
         const name = document.getElementById('cat-name').value.trim();
-        const tagsStr = document.getElementById('cat-tags').value.trim();
         const desc = document.getElementById('cat-desc').value.trim();
         const isActive = document.getElementById('cat-active').checked;
+
+        // Recolectar tags dinámicos
+        const tags = [];
+        document.querySelectorAll('.tag-row').forEach(row => {
+          const value = row.querySelector('.tag-value').value.trim();
+          if (value) {
+            tags.push(value);
+          }
+        });
 
         const data = {
           name,
           category_name: name,
           description: desc,
-          tags: tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [],
+          tags: tags,
           is_active: isActive
         };
+
+        // Manejo de imagen (convertir a Base64 si hay archivo nuevo)
+        if (catImageInput && catImageInput.files.length > 0) {
+          try {
+            const base64Image = await this.readFileAsBase64(catImageInput.files[0]);
+            data.image = base64Image;
+          } catch (err) {
+            console.error('Error al procesar imagen:', err);
+            Toast.show('Error al procesar la imagen', 'error');
+            return;
+          }
+        } else if (this.currentCategoryImage === null) {
+          // Si el usuario dio click en "Quitar imagen actual"
+          data.image = null;
+        }
+
         if (id) data.id = id;
 
         try {
           await CategoryService.saveCategory(data);
           Toast.show(`Categoría ${id ? 'actualizada' : 'creada'} con éxito`, 'success');
           modalCat.close();
-
           // Recargar lista
           const updated = await CategoryService.listCategories();
           this.allCategories = updated.results || [];
@@ -463,7 +548,7 @@ export const CategoryListView = {
       });
     }
 
-    // 4. Switch Toggle de Estado Activo/Inactivo
+    // 6. Switch Toggle de Estado Activo/Inactivo
     document.addEventListener('change', async (e) => {
       const toggle = e.target.closest('[data-action="toggle-cat-status"]');
       if (toggle) {
@@ -472,14 +557,11 @@ export const CategoryListView = {
         try {
           await CategoryService.toggleCategoryActive(id, newStatus);
           Toast.show(`Categoría ${newStatus ? 'activada' : 'desactivada'} en catálogo`, 'success');
-
           const cat = this.allCategories.find(c => c.id == id);
           if (cat) cat.is_active = newStatus;
-
           const activeCount = this.allCategories.filter(c => c.is_active).length;
           const kpiActive = document.getElementById('kpi-active-cats');
           if (kpiActive) kpiActive.textContent = activeCount;
-
           this.filterCategories();
         } catch (err) {
           console.error(err);
@@ -489,7 +571,7 @@ export const CategoryListView = {
       }
     });
 
-    // 5. Editar y Eliminar Categoría
+    // 7. Editar y Eliminar Categoría
     document.addEventListener('click', async (e) => {
       const btnEdit = e.target.closest('[data-action="edit-cat"]');
       if (btnEdit) {
@@ -498,10 +580,28 @@ export const CategoryListView = {
         if (cat && modalCat) {
           document.getElementById('cat-id').value = cat.id;
           document.getElementById('cat-name').value = cat.name || cat.category_name || '';
-          document.getElementById('cat-tags').value = (cat.tags || []).join(', ');
           document.getElementById('cat-desc').value = cat.description || '';
           document.getElementById('cat-active').checked = cat.is_active !== false;
           document.getElementById('cat-modal-title').innerText = 'Editar Categoría';
+          
+          // Cargar imagen existente si hay
+          if (cat.image && catImagePreview) {
+            catImagePreview.innerHTML = `<img src="${cat.image}" class="w-full h-full object-cover">`;
+            if (btnRemoveCatImage) btnRemoveCatImage.classList.remove('hidden');
+          } else {
+            if (catImagePreview) catImagePreview.innerHTML = '<span class="text-gray-400 text-xs text-center px-2">Vista previa</span>';
+            if (btnRemoveCatImage) btnRemoveCatImage.classList.add('hidden');
+          }
+          
+          // Cargar tags dinámicos
+          if (tagsContainer) {
+            tagsContainer.innerHTML = '';
+            const tags = cat.tags || [];
+            tags.forEach(tag => {
+              tagsContainer.insertAdjacentHTML('beforeend', this.renderTagRow(tag));
+            });
+          }
+          
           modalCat.showModal();
         }
         return;
@@ -517,7 +617,6 @@ export const CategoryListView = {
           cancelText: 'Cancelar',
           type: 'danger'
         });
-
         if (confirmed) {
           try {
             await CategoryService.deleteCategory(id);
