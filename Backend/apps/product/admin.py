@@ -59,7 +59,7 @@ class ProductAdmin(BaseAdmin):
         'capacity',
         'voltage',
         'weight',
-        'get_categories',
+        'get_sub_categories',
         'price',
         'is_feature_product',
         'total_views',
@@ -69,13 +69,17 @@ class ProductAdmin(BaseAdmin):
     )
     list_editable = ('is_feature_product',)
     search_fields = ('product_name', 'brand', 'capacity', 'voltage', 'description', 'security')
-    list_filter = ('is_feature_product', 'brand', 'categories', 'created_at')
+    list_filter = ('is_feature_product', 'brand', 'sub_categories', 'created_at')
     ordering = ('id',)
-    filter_horizontal = ('categories',)
+    filter_horizontal = ('sub_categories',)
     readonly_fields = ('total_views', 'sentiment_score', 'ranking_score')
 
+    def get_sub_categories(self, obj):
+        return ", ".join([c.sub_category_name for c in obj.sub_categories.all()])
+    get_sub_categories.short_description = 'Sub Categorías'
+    
     def get_categories(self, obj):
-        return ", ".join([c.category_name for c in obj.categories.all()])
+        return obj.sub_categories.first().category.category_name
     get_categories.short_description = 'Categorías'
 
 

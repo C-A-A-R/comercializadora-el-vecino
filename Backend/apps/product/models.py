@@ -26,14 +26,39 @@ class Category(BaseModel):
             compress_and_save_image(self.category_image)
         super().save(*args, **kwargs)
 
+class SubCategory(BaseModel):
+    """Modelo para representar las Sub Categorías de productos."""
+    categories = models.ManyToManyField(
+        Category,
+        related_name='sub_categories',
+        verbose_name='Categorías',
+        blank=True
+    )
+    sub_category_name = models.CharField('Nombre de Sub Categoría', max_length=150, unique=True)
+    description = models.TextField('Descripción', null=True, blank=True)
+    sub_category_image = models.ImageField('Imagen de Sub Categoría', upload_to=rename_image_upload_to, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Sub Categoría'
+        verbose_name_plural = 'Sub Categorías'
+        ordering = ['sub_category_name']
+
+    def __str__(self):
+        return self.sub_category_name
+
+    def save(self, *args, **kwargs):
+        if self.category_image:
+            compress_and_save_image(self.category_image)
+        super().save(*args, **kwargs)
+
 
 class Product(BaseModel):
     """Modelo para representar los Productos."""
 
-    categories = models.ManyToManyField(
-        Category,
+    sub_categories = models.ManyToManyField(
+        SubCategory,
         related_name='products',
-        verbose_name='Categorías',
+        verbose_name='Sub Categorías',
         blank=True
     )
     product_name = models.CharField('Nombre del Producto', max_length=200)

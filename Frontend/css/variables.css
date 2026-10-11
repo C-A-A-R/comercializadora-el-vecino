@@ -1,0 +1,318 @@
+/**
+ * ==============================================================================
+ * VARIABLES.CSS — SISTEMA DE DISEÑO MODULAR & MULTI-TEMA (NEO-TECH ARCHITECTURE)
+ * COMERCIALIZADORA EL VECINO
+ * ==============================================================================
+ * Arquitectura modular de tokens preparada para:
+ * 1. Tokens de diseño desacoplados (Primitivas -> Semántica -> Componentes).
+ * 2. Soporte nativo para temas alternables ([data-theme="dark|light|high-contrast"]).
+ * 3. Inyección dinámica desde el Backend (Personalización de marca por tenant/categoría).
+ */
+
+:root {
+  /* ============================================================================
+     1. PRIMITIVAS DE COLOR (PALETA BASE GLOBAL)
+     ============================================================================ */
+  /* Azules */
+  --raw-blue-900: #04008B;
+  --raw-blue-700: #0400BC;
+  --raw-blue-600: #0800FF;
+  --raw-blue-500: #2B24FF;
+  --raw-blue-100: #EDF0FF;
+
+  /* Magentas */
+  --raw-magenta-700: #B20074;
+  --raw-magenta-600: #DE0092;
+  --raw-magenta-500: #FF00A8;
+  --raw-magenta-100: #FFF0F8;
+
+  /* Cyans / WhatsApp */
+  --raw-cyan-600: #00B4C4;
+  --raw-cyan-500: #00CCE0;
+  --raw-cyan-400: #00F0FF;
+  --raw-cyan-100: #E6FDFF;
+  --raw-cyan-dark: #041E26;
+
+  /* Neutros Oscuros (Obsidian) */
+  --raw-obsidian-950: #050505;
+  --raw-obsidian-900: #0A0A0A;
+  --raw-obsidian-850: #12141C;
+  --raw-obsidian-800: #141414;
+  --raw-obsidian-700: #1A1A1A;
+  --raw-obsidian-600: #222222;
+
+  /* Neutros Claros (Pure White & Slate) */
+  --raw-white: #FFFFFF;
+  --raw-slate-50: #FCF8F8;
+  --raw-slate-100: #F4F6FB;
+  --raw-slate-200: #ECEEF4;
+  --raw-slate-300: #E2E6EE;
+  --raw-slate-400: #C5C4DB;
+  --raw-slate-500: #94A3B8;
+  --raw-slate-600: #64748B;
+  --raw-slate-700: #454558;
+  --raw-slate-900: #1C1B1B;
+
+  /* ============================================================================
+     2. TOKENS SEMÁNTICOS (MODO PREDETERMINADO: ELECTRIC NEO-TECH HYBRID)
+     ============================================================================ */
+  --theme-id: 'electric-neo-tech';
+
+  /* Color Primario de Marca (Electric Blue) */
+  --color-primary: var(--raw-blue-600);
+  --color-primary-hover: var(--raw-blue-700);
+  --color-primary-subtle: var(--raw-blue-100);
+  --color-primary-glow: rgba(8, 0, 255, 0.35);
+  --color-primary-border: rgba(8, 0, 255, 0.25);
+
+  /* Color Promocional / Énfasis (Neon Magenta) */
+  --color-promo: var(--raw-magenta-500);
+  --color-promo-hover: var(--raw-magenta-600);
+  --color-promo-subtle: var(--raw-magenta-100);
+  --color-promo-glow: rgba(255, 0, 168, 0.35);
+  --color-promo-border: rgba(255, 0, 168, 0.25);
+
+  /* Color Comercial / Acción WhatsApp (Neon Cyan) */
+  --color-accent: var(--raw-cyan-400);
+  --color-accent-hover: var(--raw-cyan-500);
+  --color-accent-subtle: var(--raw-cyan-100);
+  --color-accent-glow: rgba(0, 240, 255, 0.45);
+  --color-accent-border: rgba(0, 240, 255, 0.3);
+  --color-accent-text: var(--raw-cyan-dark);
+
+  /* Superficies y Fondos */
+  --color-bg-base: var(--raw-slate-50);
+  --color-bg-surface: var(--raw-slate-100);
+  --color-bg-card: var(--raw-white);
+  --color-bg-card-hover: var(--raw-white);
+  --color-bg-dark: var(--raw-obsidian-900);
+  --color-bg-dark-surface: var(--raw-obsidian-800);
+  --color-bg-dark-card: var(--raw-obsidian-700);
+
+  /* Bordes */
+  --color-border: var(--raw-slate-300);
+  --color-border-light: var(--raw-slate-200);
+  --color-border-dark: var(--raw-obsidian-600);
+  --color-border-glass: rgba(255, 255, 255, 0.12);
+
+  /* Textos */
+  --color-text-main: var(--raw-obsidian-900);
+  --color-text-heading: var(--raw-slate-900);
+  --color-text-muted: var(--raw-slate-600);
+  --color-text-muted-light: var(--raw-slate-500);
+  --color-text-light: var(--raw-slate-100);
+  --color-text-white: var(--raw-white);
+
+  /* Componentes Globales */
+  --header-bg: rgba(255, 255, 255, 0.94);
+  --header-border: var(--color-border);
+  --footer-bg: var(--raw-obsidian-900);
+  --footer-border: var(--color-border-glass);
+
+  /* ============================================================================
+     3. ALIASES DE COMPATIBILIDAD RETROACTIVA (PRESERVA CÓDIGO EXISTENTE)
+     ============================================================================ */
+  --electric-blue: var(--color-primary);
+  --electric-blue-hover: var(--color-primary-hover);
+  --electric-blue-subtle: var(--color-primary-subtle);
+  --electric-blue-glow: var(--color-primary-glow);
+  --electric-blue-border: var(--color-primary-border);
+
+  --neon-magenta: var(--color-promo);
+  --neon-magenta-hover: var(--color-promo-hover);
+  --neon-magenta-subtle: var(--color-promo-subtle);
+  --neon-magenta-glow: var(--color-promo-glow);
+  --neon-magenta-border: var(--color-promo-border);
+
+  --neon-cyan: var(--color-accent);
+  --neon-cyan-hover: var(--color-accent-hover);
+  --neon-cyan-subtle: var(--color-accent-subtle);
+  --neon-cyan-glow: var(--color-accent-glow);
+  --neon-cyan-border: var(--color-accent-border);
+  --neon-cyan-text: var(--color-accent-text);
+
+  --deep-obsidian: var(--color-bg-dark);
+  --obsidian-surface: var(--color-bg-dark-surface);
+  --obsidian-card: var(--color-bg-dark-card);
+  --obsidian-card-hover: var(--raw-obsidian-600);
+  --obsidian-glass: rgba(10, 10, 10, 0.85);
+
+  --pure-white: var(--raw-white);
+  --slate-surface: var(--color-bg-surface);
+  --slate-card: var(--color-bg-card);
+  --slate-border: var(--color-border);
+  --slate-border-light: var(--color-border-light);
+  --slate-border-dark: var(--color-border-dark);
+  --border-glass: var(--color-border-glass);
+
+  --text-main: var(--color-text-main);
+  --text-heading: var(--color-text-heading);
+  --text-muted: var(--color-text-muted);
+  --text-muted-light: var(--color-text-muted-light);
+  --text-light: var(--color-text-light);
+  --text-white: var(--color-text-white);
+
+  /* Estados de Inventario y Notificaciones */
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-info: #0284C7;
+  --status-error: #BA1A1A;
+
+  /* ============================================================================
+     4. TIPOGRAFÍA Y ESCALAS
+     ============================================================================ */
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --font-size-3xs: 0.65rem;
+  --font-size-2xs: 0.72rem;
+  --font-size-xs: 0.78rem;
+  --font-size-sm: 0.88rem;
+  --font-size-base: 1rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 1.85rem;
+  --font-size-3xl: 2.25rem;
+  --font-size-4xl: 3rem;
+
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+  --fw-black: 900;
+
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.65;
+
+  /* ============================================================================
+     5. SISTEMA DE ESPACIADOS (SPACING TOKENS)
+     ============================================================================ */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.375rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  --space-4xl: 6rem;
+
+  /* ============================================================================
+     6. RADIOS DE BORDE (BORDER RADIUS)
+     ============================================================================ */
+  --radius-none: 0px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-3xl: 36px;
+  --radius-full: 9999px;
+
+  /* ============================================================================
+     7. SOMBRAS Y ELEVACIONES (SHADOWS & GLOWS)
+     ============================================================================ */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 45px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 4px 20px rgba(10, 10, 10, 0.06);
+  --shadow-card-hover: 0 14px 34px rgba(8, 0, 255, 0.12);
+
+  --shadow-glow-cyan: 0 4px 20px var(--color-accent-glow);
+  --shadow-glow-cyan-hover: 0 8px 30px rgba(0, 240, 255, 0.65);
+  --shadow-glow-blue: 0 4px 20px var(--color-primary-glow);
+  --shadow-glow-blue-hover: 0 8px 30px rgba(8, 0, 255, 0.6);
+  --shadow-glow-magenta: 0 4px 20px var(--color-promo-glow);
+  --shadow-glow-magenta-hover: 0 8px 30px rgba(255, 0, 168, 0.6);
+
+  /* ============================================================================
+     8. LAYOUT & CAPAS (Z-INDEX)
+     ============================================================================ */
+  --max-width: 1280px;
+  --container-max: 80rem;
+  --max-width-narrow: 1040px;
+  --max-width-reading: 780px;
+  --header-height: 72px;
+  --container-padding: 1.5rem;
+
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-header: 1000;
+  --z-dock: 1100;
+  --z-drawer: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-toast: 1500;
+
+  /* Transiciones */
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ==============================================================================
+   9. EXTENSIÓN MULTI-TEMA (PREPARADO PARA GESTIÓN DESDE BACKEND O ATRIBUTO HTML)
+   Uso: document.documentElement.setAttribute('data-theme', 'dark | light')
+   ============================================================================== */
+
+/* --- TEMA OSCURO TOTAL (OBSIDIAN DARK THEME) --- */
+[data-theme="dark"] {
+  --theme-id: 'obsidian-dark';
+
+  --color-bg-base: #070709;
+  --color-bg-surface: #10121A;
+  --color-bg-card: #151822;
+  --color-bg-card-hover: #1C202E;
+
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-light: rgba(255, 255, 255, 0.08);
+  --color-border-dark: rgba(255, 255, 255, 0.2);
+
+  --color-text-main: #FFFFFF;
+  --color-text-heading: #F8FAFC;
+  --color-text-muted: #94A3B8;
+  --color-text-muted-light: #64748B;
+
+  --header-bg: rgba(10, 10, 10, 0.94);
+  --header-border: rgba(255, 255, 255, 0.1);
+  --footer-bg: #050507;
+  --footer-border: rgba(255, 255, 255, 0.08);
+
+  --pure-white: #151822;
+  --slate-surface: #10121A;
+  --slate-card: #151822;
+  --slate-border: rgba(255, 255, 255, 0.12);
+  --slate-border-light: rgba(255, 255, 255, 0.08);
+  --text-main: #FFFFFF;
+  --text-heading: #F8FAFC;
+  --text-muted: #94A3B8;
+
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 14px 34px rgba(8, 0, 255, 0.25);
+}
+
+/* --- TEMA MINIMALISTA CLARO (CLEAN LIGHT THEME) --- */
+[data-theme="light"] {
+  --theme-id: 'clean-light';
+
+  --color-bg-base: #FFFFFF;
+  --color-bg-surface: #F8FAFC;
+  --color-bg-card: #FFFFFF;
+  --color-border: #E2E8F0;
+
+  --header-bg: rgba(255, 255, 255, 0.96);
+  --header-border: #E2E8F0;
+  --footer-bg: #0F172A;
+}
+
+/* --- HOOKS PARA GESTIÓN DINÁMICA DESDE BACKEND ---
+   El backend puede enviar un estilo o script dinámico:
+   <html style="--color-primary: #nuevoColor; --color-promo: #nuevoPromo;">
+   Todos los componentes y vistas se adaptarán de manera inmediata y reactiva. */

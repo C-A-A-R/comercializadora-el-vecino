@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.product.models import (
-    Category, Product, ProductFeature,
+    Category, Product, ProductFeature, SubCategory
     ProductColorImage, ProductAngleImage, ProductReview
 )
 
@@ -11,6 +11,14 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'category_name', 'description', 'category_image', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+class  SubCategorySerializer(serializers.ModelSerializer):
+    """Serializador para el modelo Category."""
+
+    class Meta:
+        model = SubCategory
+        fields = ['id', 'category', 'sub_category_name', 'description', 'sub_category_image', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 

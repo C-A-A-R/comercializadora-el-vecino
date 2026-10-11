@@ -1,0 +1,1020 @@
+@import url('./variables.css');
+
+/* ==========================================================================
+   RESET Y BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  background-color: var(--slate-surface);
+  color: var(--text-main);
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: var(--transition-fast);
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--slate-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   UTILIDADES & LAYOUT
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.section-padding {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--pure-white) 0%, var(--neon-cyan) 50%, var(--neon-magenta) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-dark {
+  background: linear-gradient(135deg, var(--deep-obsidian) 0%, var(--electric-blue) 60%, var(--neon-magenta) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   BOTONES & ELEMENTOS NEÓN
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  letter-spacing: -0.01em;
+  transition: var(--transition-smooth);
+}
+
+/* Botón Neón Cyan (Reemplazo oficial y premium del verde WhatsApp) */
+.btn-neon-cyan {
+  background-color: var(--neon-cyan);
+  color: var(--neon-cyan-text);
+  box-shadow: 0 4px 18px var(--neon-cyan-glow);
+}
+.btn-neon-cyan:hover {
+  background-color: var(--neon-cyan-hover);
+  box-shadow: 0 8px 25px rgba(0, 240, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Botón Electric Blue */
+.btn-electric-blue {
+  background-color: var(--electric-blue);
+  color: var(--pure-white);
+  box-shadow: 0 4px 18px var(--electric-blue-glow);
+}
+.btn-electric-blue:hover {
+  background-color: var(--electric-blue-hover);
+  box-shadow: 0 8px 25px rgba(8, 0, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Botón Neon Magenta */
+.btn-neon-magenta {
+  background-color: var(--neon-magenta);
+  color: var(--pure-white);
+  box-shadow: 0 4px 18px var(--neon-magenta-glow);
+}
+.btn-neon-magenta:hover {
+  background-color: var(--neon-magenta-hover);
+  box-shadow: 0 8px 25px rgba(255, 0, 168, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-dark {
+  background-color: var(--deep-obsidian);
+  color: var(--pure-white);
+}
+.btn-dark:hover {
+  background-color: var(--obsidian-card);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--slate-border);
+  color: var(--text-main);
+}
+.btn-outline:hover {
+  border-color: var(--electric-blue);
+  color: var(--electric-blue);
+  background: var(--electric-blue-subtle);
+}
+
+/* Badges y Chips */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-neon-cyan {
+  background-color: var(--neon-cyan-subtle);
+  color: #008b99;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+}
+.badge-neon-magenta {
+  background-color: var(--neon-magenta-subtle);
+  color: var(--neon-magenta);
+  border: 1px solid rgba(255, 0, 168, 0.3);
+}
+.badge-electric-blue {
+  background-color: var(--electric-blue-subtle);
+  color: var(--electric-blue);
+  border: 1px solid rgba(8, 0, 255, 0.25);
+}
+.badge-dark {
+  background-color: var(--deep-obsidian);
+  color: var(--pure-white);
+}
+
+/* ==========================================================================
+   HEADER & NAVBAR (DARK NEO-TECH AMBIENT)
+   ========================================================================== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+  gap: 1.5rem;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pure-white);
+  line-height: 1.1;
+}
+
+.brand-tag {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--neon-magenta);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  list-style: none;
+}
+
+.nav-link {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #94A3B8;
+  padding: 0.5rem 0.25rem;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--neon-cyan);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: var(--neon-cyan);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* ==========================================================================
+   HERO MASTERPIECE (DARK NEO-TECH STAGE)
+   ========================================================================== */
+.hero-stage {
+  position: relative;
+  background-color: var(--deep-obsidian);
+  color: var(--pure-white);
+  padding-top: 4.5rem;
+  padding-bottom: 5.5rem;
+  overflow: hidden;
+}
+
+.hero-glow-1 {
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 450px;
+  height: 450px;
+  background: rgba(8, 0, 255, 0.25);
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+}
+
+.hero-glow-2 {
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 240, 255, 0.2);
+  border-radius: 50%;
+  filter: blur(130px);
+  pointer-events: none;
+}
+
+.hero-glow-3 {
+  position: absolute;
+  top: 30%;
+  right: 25%;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 0, 168, 0.18);
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3.5rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: #CBD5E1;
+  max-width: 580px;
+  margin-bottom: 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.metric-number {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  line-height: 1;
+}
+
+.metric-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  margin-top: 0.35rem;
+}
+
+.hero-card-preview {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-2xl);
+  padding: 1.25rem;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.hero-card-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+/* ==========================================================================
+   TARJETAS DE PRODUCTO (SIN PRECIO - COTIZACIÓN INMEDIATA)
+   ========================================================================== */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.75rem;
+}
+
+.product-card {
+  background: var(--pure-white);
+  border: 1px solid var(--slate-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--electric-blue);
+  box-shadow: 0 14px 30px rgba(8, 0, 255, 0.12);
+}
+
+.product-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  background: #F8FAFC;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--slate-border);
+}
+
+.product-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.06);
+}
+
+.product-badge-float {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+.product-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-sku {
+  font-size: 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--electric-blue);
+  text-transform: uppercase;
+}
+
+.product-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--deep-obsidian);
+  margin-top: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-specs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.spec-chip {
+  font-size: 0.75rem;
+  background: var(--slate-surface);
+  color: var(--text-muted);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--slate-border);
+}
+
+.product-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--slate-border);
+}
+
+/* ==========================================================================
+   SECCIÓN DE COMBOS Y PAQUETES (PROMOCIONES)
+   ========================================================================== */
+.combo-card {
+  background: var(--deep-obsidian);
+  color: var(--pure-white);
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  position: relative;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transition: var(--transition-smooth);
+}
+
+.combo-card:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 20px 48px rgba(0, 240, 255, 0.15);
+}
+
+.combo-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 2.25rem;
+}
+
+.combo-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.combo-title {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.combo-tagline {
+  color: #CBD5E1;
+  font-size: 0.98rem;
+  margin-bottom: 1.25rem;
+}
+
+.combo-inclusions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.combo-inclusion-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.combo-inclusion-icon {
+  color: var(--neon-cyan);
+  font-size: 1.4rem;
+  margin-top: 2px;
+}
+
+.combo-inclusion-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--pure-white);
+}
+
+.combo-inclusion-detail {
+  font-size: 0.82rem;
+  color: #94A3B8;
+  margin-top: 2px;
+}
+
+.combo-img-box {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.combo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+/* ==========================================================================
+   CABECERAS DE PÁGINAS INDIVIDUALES (PAGE HEADERS)
+   ========================================================================== */
+.page-header {
+  position: relative;
+  background: var(--deep-obsidian);
+  color: var(--pure-white);
+  padding: 3.5rem 0 3.5rem 0;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-header-glow {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 380px;
+  height: 380px;
+  background: rgba(0, 240, 255, 0.22);
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.page-header-glow-magenta {
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 0, 168, 0.2);
+  border-radius: 50%;
+  filter: blur(110px);
+  pointer-events: none;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.page-subtitle {
+  font-size: 1.05rem;
+  color: #94A3B8;
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   CATEGORÍAS EXPLORER & CARDS
+   ========================================================================== */
+.category-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+}
+
+.category-card {
+  background: var(--pure-white);
+  border: 1px solid var(--slate-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 14px 30px rgba(0, 240, 255, 0.15);
+}
+
+.category-card-img-wrap {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--slate-border);
+}
+
+.category-card-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-card-img {
+  transform: scale(1.06);
+}
+
+.category-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.categories-filter-bar {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  scrollbar-width: none;
+}
+
+.category-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--pure-white);
+  border: 1.5px solid var(--slate-border);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.category-filter-btn:hover {
+  border-color: var(--neon-cyan);
+  color: #008b99;
+}
+
+.category-filter-btn.active {
+  background: var(--deep-obsidian);
+  border-color: var(--deep-obsidian);
+  color: var(--neon-cyan);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   VÍDEO CATÁLOGO (TIKTOK / REELS FORMAT)
+   ========================================================================== */
+.tiktok-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.tiktok-card {
+  background: var(--deep-obsidian);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 9 / 16;
+  max-height: 520px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tiktok-video-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tiktok-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.6) 100%);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tiktok-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: center;
+  position: absolute;
+  right: 12px;
+  bottom: 85px;
+}
+
+.tiktok-stat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--pure-white);
+  font-size: 0.75rem;
+  font-family: var(--font-display);
+}
+
+.tiktok-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+/* ==========================================================================
+   MODAL DE PRODUCTO / COTIZACIÓN
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: var(--pure-white);
+  border-radius: var(--radius-2xl);
+  max-width: 780px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modal-backdrop.open .modal-card {
+  transform: scale(1);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--slate-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  background: var(--deep-obsidian);
+  color: var(--pure-white);
+}
+
+/* ==========================================================================
+   DOCK FLOTANTE WHATSAPP (MÓVIL Y DESKTOP)
+   ========================================================================== */
+.floating-dock {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.floating-whatsapp-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.4rem;
+  background-color: var(--neon-cyan);
+  color: var(--neon-cyan-text);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 8px 25px var(--neon-cyan-glow);
+  transition: var(--transition-smooth);
+}
+
+.floating-whatsapp-btn:hover {
+  background-color: var(--neon-cyan-hover);
+  box-shadow: 0 12px 32px rgba(0, 240, 255, 0.65);
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD & NAVEGACIÓN MÓVIL
+   ========================================================================== */
+.mobile-menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  align-items: center;
+  justify-content: center;
+  color: var(--pure-white);
+}
+.mobile-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.mobile-nav-drawer {
+  display: none;
+  background: #0A0A0A;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.mobile-nav-drawer.open {
+  display: block;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #CBD5E1;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobile-nav-link:hover, .mobile-nav-link.active {
+  color: var(--neon-cyan);
+}
+
+@media (max-width: 960px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .combo-grid {
+    grid-template-columns: 1fr;
+  }
+  .combo-img-box {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  .hero-metrics {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .section-padding {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+

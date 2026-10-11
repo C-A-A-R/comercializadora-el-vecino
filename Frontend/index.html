@@ -1,498 +1,240 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comercializadora EL VECINO — Electrodomésticos de Alta Gama Directo de Comercializadora El Vecino</title>
-  <meta name="description" content="Flota de distribución liderada por el vecino sin intermediarios. Consulta las especificaciones de los productos con los mejores asistentes comerciales y recibe cotización personalizada al instante sin precios inflados.">
-  <!-- Google Fonts & Material Symbols -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300F0FF'><path d='M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.9 17.55 11 21 11 21z'/></svg>">
+  <title>EL VECINO — Catálogo Digital &amp; Combos Mayoristas</title>
+  
+  <!-- Tipografías de Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'deep-obsidian': '#0A0A0A',
-            'electric-blue': '#0800FF',
-            'neon-magenta': '#FF00A8',
-            'neon-cyan': '#00F0FF',
-            'slate-surface': '#F4F6FB',
-            'slate-border': '#E2E6EE'
-          }
-        }
-      }
-    };
-  </script>
-
-  <!-- Modular Stylesheets -->
-  <link rel="stylesheet" href="./index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Iconos de Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  
+  <!-- Hojas de Estilos con Variables CSS y Componentes Modulares -->
+  <link rel="stylesheet" href="./css/variables.css">
   <link rel="stylesheet" href="./components/navbar/navbar.css">
   <link rel="stylesheet" href="./components/footer/footer.css">
-  <link rel="stylesheet" href="./components/cart-modal/cart-modal.css">
-  <link rel="stylesheet" href="./components/toast/toast.css">
   <link rel="stylesheet" href="./components/product/product-card.css">
   <link rel="stylesheet" href="./components/product/product-modal.css">
+  <link rel="stylesheet" href="./index.css">
 </head>
-<body class="bg-[#FCF8F8] font-['Plus_Jakarta_Sans'] text-[#1C1B1B] antialiased">
-  <!-- Navbar Mount Container -->
+<body>
+
+  <!-- ==========================================================================
+       HEADER & BARRA DE NAVEGACIÓN (Componente Reutilizable)
+       ========================================================================== -->
   <div id="navbar-mount"></div>
 
-  <!-- Main Storefront Content -->
-  <main class="w-full pt-20">
-    <!-- HERO SECTION: ELECTRIC NEO-TECH SPEED & CATALOG ENTRANCE -->
-    <section class="relative w-full bg-[#0A0A0A] text-white overflow-hidden -mt-20 pt-32 pb-16 lg:pb-24">
-      <!-- Ambient Neon Electric Glow Blobs -->
-      <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#0800FF]/30 blur-[130px] pointer-events-none"></div>
-      <div class="absolute top-1/2 -right-24 w-80 h-80 rounded-full bg-[#FF00A8]/25 blur-[120px] pointer-events-none"></div>
-      <div class="absolute bottom-0 left-1/3 w-[500px] h-32 bg-[#0800FF]/15 blur-[90px] pointer-events-none"></div>
+  <!-- ==========================================================================
+       HERO PRINCIPAL (DARK NEO-TECH)
+       ========================================================================== -->
+  <section class="hero-dark">
+    <div class="container">
+      <div class="hero-content">
+        <div class="badge badge-neon-cyan">
+          <span class="material-symbols-outlined">bolt</span>
+          Lote Importado Directo • Bodega Mayorista
+        </div>
 
-      <div class="max-w-[80rem] mx-auto px-6 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <!-- Left Column: Editorial Assertive Messaging -->
-          <div class="lg:col-span-7 flex flex-col items-start gap-4">
-            <!-- Neon Magenta Tag & Live Inventory Status -->
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FF00A8]/15 border border-[#FF00A8]/20 shadow-sm">
-              <span class="w-2 h-2 rounded-full bg-[#FF00A8] animate-ping"></span>
-              <span class="font-['Outfit'] font-bold text-xs text-[#FF00A8] uppercase tracking-widest">
-                Lote Importado Directo • Comercializadora EL VECINO
-              </span>
-            </div>
+        <h1 class="hero-title">
+          Electrodomésticos de Alta Gama <span class="text-gradient">Directo de Bodega</span>
+        </h1>
 
-            <h1 class="font-['Outfit'] font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.08] max-w-2xl">
-              Electrodomésticos de Alta Gama <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-[#FF00A8]">Directo de Comercializadora El Vecino</span>
-            </h1>
+        <p class="hero-lead">
+          Distribución técnica sin intermediarios. Calibra especificaciones, confirma disponibilidad de inventario sellado y recibe cotización personalizada al instante vía WhatsApp.
+        </p>
 
-            <p class="text-base sm:text-lg text-gray-300 max-w-xl leading-relaxed">
-              Flota de distribución técnica sin intermediarios. Calibra especificaciones, confirma disponibilidad de inventario sellado y recibe cotización personalizada al instante sin precios inflados.
-            </p>
+        <div class="flex flex-wrap gap-md">
+          <a href="promociones.html" class="btn btn-neon-magenta btn-lg">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <span>Ver Combos del Mes</span>
+          </a>
+          <a href="catalogo.html" class="btn btn-neon-cyan btn-lg">
+            <span class="material-symbols-outlined">format_list_bulleted</span>
+            <span>Explorar Catálogo Técnico</span>
+          </a>
+        </div>
 
-            <!-- Action Station: Direct WhatsApp + Live Catalog CTA -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto pt-2">
-              <a
-                href="https://wa.me/573001234567?text=¡Hola%20EL%20VECINO!%20Deseo%20cotizar%20equipos%20con%20despacho%20directo."
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-primary-glow h-14 px-8 rounded-xl font-['Outfit'] font-bold text-base flex items-center justify-center gap-2"
-              >
-                <span class="material-symbols-outlined text-[24px]">chat</span>
-                <span>Cotizar por WhatsApp</span>
-              </a>
-
-              <a
-                href="./client/modules/product/product.html"
-                class="h-14 px-7 rounded-xl bg-white/10 hover:bg-white/20 text-white font-['Outfit'] font-bold text-base flex items-center justify-center gap-2 transition-all border border-white/10"
-              >
-                <span class="material-symbols-outlined text-[22px]">format_list_bulleted</span>
-                <span>Explorar Catálogo</span>
-              </a>
-            </div>
-
-            <!-- Fast Live Metrics Bar -->
-            <div class="grid grid-cols-3 gap-6 w-full max-w-lg pt-6 border-t border-white/10">
-              <div class="flex flex-col">
-                <span class="font-['Outfit'] font-extrabold text-2xl text-white">&lt; 4 min</span>
-                <span class="font-['Outfit'] font-semibold text-xs text-gray-400 uppercase tracking-wider">Respuesta WhatsApp</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="font-['Outfit'] font-extrabold text-2xl text-[#FF00A8]">100%</span>
-                <span class="font-['Outfit'] font-semibold text-xs text-gray-400 uppercase tracking-wider">Garantía de Comercializadora</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="font-['Outfit'] font-extrabold text-2xl text-cyan-400">0</span>
-                <span class="font-['Outfit'] font-semibold text-xs text-gray-400 uppercase tracking-wider">Intermediarios</span>
-              </div>
-            </div>
+        <!-- Métricas en vivo -->
+        <div class="hero-stats-grid">
+          <div class="hero-stat-card">
+            <span class="hero-stat-num">&lt; 5 min</span>
+            <span class="hero-stat-label">Respuesta WhatsApp</span>
           </div>
-
-          <!-- Right Column: Hero Visual Appliance Matrix Canvas -->
-          <div class="lg:col-span-5 relative flex justify-center">
-            <div class="relative w-full max-w-md lg:max-w-none aspect-[4/5] rounded-3xl overflow-hidden bg-gradient-to-b from-white/10 to-white/5 p-3.5 shadow-2xl border border-white/10">
-              <img
-                class="w-full h-full object-cover rounded-2xl"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdxhrkvTS3uywQH4fUxAOufIIaRHRm0nf-13D4hEKqy5wJ3G4Xezefy2zVPJwgJWez1jvtJutOFUSmU9B3VD2q-weyU5go8hYE-CyMCUhSx3ShkTlteB-9UXce_7rGMzg8kMZhXFSx7oMkx_oz02Wx64AhbDyUYCZ_fFAauToOw07UtA1dpGsZyZrYleTAhuHhKE5AavnhBboTifexovV1M2wiTWdVu8O_Q_3WS1JS4w3c8En2cTTqHg"
-                alt="Electrodomésticos de Alta Gama EL VECINO"
-              >
-              <!-- Floating Spec Badge 1 -->
-              <div class="absolute top-6 left-6 bg-[#0A0A0A]/90 backdrop-blur-md rounded-xl p-3 flex items-center gap-3 shadow-xl max-w-[210px] border border-white/10">
-                <div class="w-10 h-10 rounded-lg bg-[#0800FF] flex items-center justify-center shrink-0 text-white">
-                  <span class="material-symbols-outlined text-[20px]">precision_manufacturing</span>
-                </div>
-                <div class="flex flex-col min-w-0">
-                  <span class="text-[10px] uppercase font-bold text-cyan-400">Inventario Sellado</span>
-                  <span class="font-['Outfit'] font-bold text-xs text-white truncate">Línea Bespoke &amp; OLED</span>
-                </div>
-              </div>
-
-              <!-- Floating Spec Badge 2 -->
-              <div class="absolute bottom-6 right-6 bg-[#0A0A0A]/90 backdrop-blur-md rounded-xl p-3 flex items-center gap-3 shadow-xl max-w-[220px] border border-white/10">
-                <div class="w-10 h-10 rounded-lg bg-[#FF00A8] flex items-center justify-center shrink-0 text-white">
-                  <span class="material-symbols-outlined text-[20px]">verified</span>
-                </div>
-                <div class="flex flex-col min-w-0">
-                  <span class="text-[10px] uppercase font-bold text-[#FF00A8]">Garantía Certificada</span>
-                  <span class="font-['Outfit'] font-bold text-xs text-white truncate">Factura Legal del Seniat</span>
-                </div>
-              </div>
-            </div>
+          <div class="hero-stat-card">
+            <span class="hero-stat-num text-neon-magenta">100%</span>
+            <span class="hero-stat-label">Garantía Directa</span>
+          </div>
+          <div class="hero-stat-card">
+            <span class="hero-stat-num text-electric-blue">0 Intermediarios</span>
+            <span class="hero-stat-label">Lotes Sellados</span>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- EXPLORA POR CATEGORÍAS (LÍNEAS DE EQUIPAMIENTO) -->
-    <section class="max-w-[80rem] mx-auto px-6 py-16">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+  <!-- ==========================================================================
+       BARRA DE BENEFICIOS DE BODEGA
+       ========================================================================== -->
+  <section class="benefits-bar">
+    <div class="container">
+      <div id="benefitsContainer" class="benefits-grid">
+        <!-- Inyectado dinámicamente desde js/app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN DE PROMOCIONES Y PUBLICACIONES DE COMBOS
+       ========================================================================== -->
+  <section class="section-padding" style="background: var(--deep-obsidian); color: var(--pure-white);">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge badge badge-neon-magenta">
+          <span class="material-symbols-outlined">local_fire_department</span>
+          Temporada de Paquetes
+        </div>
+        <h2 class="section-title section-title-light">
+          Publicaciones de <span class="text-neon-cyan">Combos</span> &amp; <span class="text-neon-magenta">Paquetes Especiales</span>
+        </h2>
+        <p class="section-subtitle section-subtitle-light">
+          Equipa tu hogar o proyecto en un solo despacho. Combos con accesorios bonificados, flete técnico y garantía directa de fábrica.
+        </p>
+      </div>
+
+      <!-- Barra de Prueba / Previsualización Dinámica de Modos -->
+      <div class="combos-view-selector">
+        <span class="combos-view-selector-label">
+          <span class="material-symbols-outlined">tune</span>
+          Vistas dinámicas del sistema:
+        </span>
+        <div class="combos-view-buttons">
+          <button type="button" class="btn-view-pill active" data-mode="auto" onclick="setCombosPreviewMode('auto')">
+            Auto (Según datos)
+          </button>
+          <button type="button" class="btn-view-pill" data-mode="1" onclick="setCombosPreviewMode(1)">
+            1 Promoción
+          </button>
+          <button type="button" class="btn-view-pill" data-mode="2" onclick="setCombosPreviewMode(2)">
+            2 Promociones (1 Fila)
+          </button>
+          <button type="button" class="btn-view-pill" data-mode="3" onclick="setCombosPreviewMode(3)">
+            3 Promociones (Espacio Disponible)
+          </button>
+          <button type="button" class="btn-view-pill" data-mode="4" onclick="setCombosPreviewMode(4)">
+            4+ Promociones (Carrusel)
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor Dinámico de Combos -->
+      <div id="combosContainer" class="combos-container">
+        <!-- Renderizado desde js/app.js con datos de js/data.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CATÁLOGO TÉCNICO DE PRODUCTOS (SIN PRECIOS)
+       ========================================================================== -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="catalog-toolbar">
         <div>
-          <span class="text-xs font-bold text-[#0800FF] uppercase tracking-widest">Catálogo Clasificado</span>
-          <h2 class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-deep-obsidian">Líneas de Equipamiento</h2>
-        </div>
-        <a href="./client/modules/categorias/categorias.html" class="text-sm font-bold text-[#0800FF] hover:underline flex items-center gap-1">
-          <span>Ver todas las categorías</span>
-          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-        </a>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" id="homeCategoriesContainer">
-        <!-- Rendered dynamically -->
-      </div>
-    </section>
-
-    <!-- FEATURED CATALOG PRODUCTS WITH LIVE TABS -->
-    <section class="max-w-[80rem] mx-auto px-6 py-12 bg-white rounded-3xl border border-slate-border shadow-sm my-6">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#0800FF] text-xs font-bold uppercase tracking-wider mb-2">
-            <span class="w-2 h-2 rounded-full bg-[#0800FF]"></span>
-            <span>Inventario Disponible</span>
-          </div>
-          <h2 class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-deep-obsidian">
-            Equipos Destacados en Bodega
-          </h2>
+          <span class="section-badge badge badge-electric-blue">Inventario Mayorista</span>
+          <h2 class="section-title">Catálogo de Fichas Técnicas</h2>
+          <p class="section-subtitle">
+            Filtra por categoría técnica, revisa especificaciones y solicita la cotización inmediata.
+          </p>
         </div>
 
-        <div class="flex items-center gap-2 overflow-x-auto pb-1" id="homeProductFilterTabs">
-          <button class="px-4 py-2 rounded-xl text-xs font-['Outfit'] font-bold bg-[#0A0A0A] text-white" data-filter="all">
-            Todos
-          </button>
-          <button class="px-4 py-2 rounded-xl text-xs font-['Outfit'] font-bold bg-slate-surface text-gray-700 hover:bg-gray-200" data-filter="refrigeracion">
-            Refrigeración
-          </button>
-          <button class="px-4 py-2 rounded-xl text-xs font-['Outfit'] font-bold bg-slate-surface text-gray-700 hover:bg-gray-200" data-filter="smart-tvs-audio">
-            Smart TVs
-          </button>
-          <button class="px-4 py-2 rounded-xl text-xs font-['Outfit'] font-bold bg-slate-surface text-gray-700 hover:bg-gray-200" data-filter="gaming-tech">
-            Gaming &amp; Tech
-          </button>
+        <!-- Buscador en Vivo -->
+        <div class="search-box-wrapper">
+          <span class="material-symbols-outlined search-box-icon">search</span>
+          <input 
+            type="text" 
+            id="catalogSearchInput" 
+            placeholder="Buscar por marca o modelo..."
+            class="search-box-input"
+          >
         </div>
       </div>
 
-      <!-- Products Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="homeProductsGrid">
-        <!-- Rendered dynamically -->
+      <!-- Barra de Filtros por Categoría -->
+      <div class="category-filters-container" id="categoriesFilterContainer">
+        <!-- Renderizado desde js/app.js -->
       </div>
 
-      <div class="mt-10 text-center">
-        <a
-          href="./client/modules/product/product.html"
-          class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-slate-surface text-deep-obsidian font-['Outfit'] font-bold text-sm hover:bg-[#0A0A0A] hover:text-white transition-all shadow-sm"
-        >
-          <span>Ver el Catálogo Completo de 148 Referencias</span>
-          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-        </a>
+      <!-- Grid de Productos -->
+      <div class="products-grid" id="allProductsGrid" style="margin-top: var(--space-xl);">
+        <!-- Renderizado desde js/app.js -->
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- PROMOTIONS CALLOUT SHOWCASE -->
-    <section class="max-w-[80rem] mx-auto px-6 py-12">
-      <div class="promo-carousel-shell bg-[#0A0A0A] text-white border border-white/10">
-        <div id="promoCarouselTrack" class="promo-carousel-track"></div>
-
-        <button id="promoPrev" class="promo-nav-btn prev" type="button" aria-label="Promoción anterior">
-          <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-        </button>
-        <button id="promoNext" class="promo-nav-btn next" type="button" aria-label="Siguiente promoción">
-          <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-        </button>
-
-        <div id="promoDots" class="promo-dots" aria-label="Paginación de promociones"></div>
-      </div>
-    </section>
-
-    <!-- TIKTOK VIDEO CATALOG REELS PREVIEW -->
-    <section class="max-w-[80rem] mx-auto px-6 py-12">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-        <div>
-          <span class="text-xs font-bold text-[#FF00A8] uppercase tracking-widest">Video Catálogo</span>
-          <h2 class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-deep-obsidian">Demostraciones en Vivo</h2>
-        </div>
-        <a href="./client/modules/tiktok/tiktok.html" class="text-sm font-bold text-[#0800FF] hover:underline flex items-center gap-1">
-          <span>Ver todos los videos</span>
-          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-        </a>
+  <!-- ==========================================================================
+       VÍDEO CATÁLOGO (TIKTOK / REELS SHOWCASE)
+       ========================================================================== -->
+  <section class="section-padding" style="background: var(--deep-obsidian); color: var(--pure-white);">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge badge badge-neon-cyan">Formato Inmersivo</span>
+        <h2 class="section-title section-title-light">Vídeo Catálogo &amp; Pruebas en Vivo</h2>
+        <p class="section-subtitle section-subtitle-light centered">
+          Conoce el funcionamiento real de cada equipo antes de cotizar con demostraciones técnicas.
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="homeTiktokGrid">
-        <!-- Rendered dynamically -->
+      <!-- Grid de Vídeos Estilo TikTok -->
+      <div class="tiktok-grid" id="tiktokGrid">
+        <!-- Renderizado desde js/app.js -->
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- TESTIMONIALS STRIP -->
-    <section class="max-w-[80rem] mx-auto px-6 py-12 pb-24">
-      <div class="bg-white border border-slate-border rounded-3xl p-8 shadow-sm">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="flex flex-col gap-2 border-b md:border-b-0 md:border-r border-slate-border pb-4 md:pb-0 md:pr-4">
-            <div class="flex items-center text-amber-400">
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-            </div>
-            <p class="text-xs text-gray-700 italic">
-              "Compré la LG OLED C3 de 65\" por el canal WhatsApp. La asesoría comercial fue instantánea y llegó impecable al día siguiente. 10/10 recomendados."
-            </p>
-            <span class="font-bold text-xs text-deep-obsidian">Valentina Gómez • Medellín</span>
-          </div>
-
-          <div class="flex flex-col gap-2 border-b md:border-b-0 md:border-r border-slate-border pb-4 md:pb-0 md:pr-4">
-            <div class="flex items-center text-amber-400">
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-            </div>
-            <p class="text-xs text-gray-700 italic">
-              "Dotamos 4 apartamentos con neveras Bespoke y lavadoras LG TurboWash. Los precios sin intermediarios marcan una gran diferencia comercial."
-            </p>
-            <span class="font-bold text-xs text-deep-obsidian">Arq. Mauricio Delgado • Bogotá</span>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center text-amber-400">
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-              <span class="material-symbols-outlined text-[20px]">star</span>
-            </div>
-            <p class="text-xs text-gray-700 italic">
-              "PS5 Slim sellada de paquete con factura legal directa. Despacho seguro y atención por chat personalizada en menos de 5 minutos."
-            </p>
-            <span class="font-bold text-xs text-deep-obsidian">Andrés Morales • Cali</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer Mount Container -->
+  <!-- ==========================================================================
+       FOOTER (Componente Reutilizable)
+       ========================================================================== -->
   <div id="footer-mount"></div>
 
-  <!-- Scripts -->
-  <script type="module" src="./js/config.js"></script>
-  <script src="./js/storage.js"></script>
-  <script type="module" src="./js/api.js"></script>
-  <script src="./js/service/auth.service.js"></script>
-  <script src="./js/service/order.service.js"></script>
-  <script src="./js/service/product.service.js"></script>
-  <script src="./components/toast/toast.js"></script>
+  <!-- ==========================================================================
+       MODAL DE PRODUCTO / FICHA TÉCNICA
+       ========================================================================== -->
+  <div id="productModal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeProductModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <div id="modalContent">
+        <!-- Inyectado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       DOCK FLOTANTE WHATSAPP (NEON CYAN)
+       ========================================================================== -->
+  <div id="floatingDock" class="floating-dock">
+    <!-- Inyectado dinámicamente -->
+  </div>
+
+  <!-- Datos & Configuración de Catálogo -->
+  <script src="./js/config.js"></script>
+  <script src="./js/data.js"></script>
+
+  <!-- Componentes Modulares Reutilizables -->
   <script src="./components/navbar/navbar.js"></script>
   <script src="./components/footer/footer.js"></script>
-  <script src="./components/cart-modal/cart-modal.js"></script>
   <script src="./components/product/product-card.js"></script>
   <script src="./components/product/product-modal.js"></script>
-  <script src="./js/main.js"></script>
 
-  <!-- Page In-line Controller -->
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Mount Navigation and Footer
-      if (window.Navbar) window.Navbar.mount('#navbar-mount', 'inicio');
-      if (window.Footer) window.Footer.mount('#footer-mount');
-
-      // 1. Render Categories Strip
-      const categoriesContainer = document.getElementById('homeCategoriesContainer');
-      if (categoriesContainer && window.CONFIG && window.CONFIG.CATEGORIES) {
-        categoriesContainer.innerHTML = window.CONFIG.CATEGORIES.map(cat => `
-          <a href="./client/modules/product/product.html?cat=${cat.slug}" class="home-category-card bg-white border border-slate-border hover:border-electric-blue hover:shadow-md transition-all group">
-            <div class="home-category-icon bg-slate-surface text-electric-blue group-hover:bg-electric-blue group-hover:text-white transition-colors">
-              <span class="material-symbols-outlined">${cat.icon || 'inventory_2'}</span>
-            </div>
-            <span class="home-category-name font-['Outfit'] font-bold text-deep-obsidian">${cat.name}</span>
-            <span class="home-category-count text-gray-500">${cat.count}+ Equipos</span>
-          </a>
-        `).join('');
-      }
-
-      // 2. Render Products
-      const productsGrid = document.getElementById('homeProductsGrid');
-      let products = [];
-      if (window.ProductService) {
-        products = await window.ProductService.getAll();
-      }
-
-      function renderHomeProducts(list) {
-        if (!productsGrid) return;
-        productsGrid.innerHTML = list.slice(0, 6).map(p => window.ProductCard.renderHTML(p)).join('');
-      }
-
-      renderHomeProducts(products);
-
-      // 3. Filter tabs on home
-      const tabsContainer = document.getElementById('homeProductFilterTabs');
-      if (tabsContainer) {
-        tabsContainer.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            tabsContainer.querySelectorAll('button').forEach(b => {
-              b.className = 'px-4 py-2 rounded-xl text-xs font-[\'Outfit\'] font-bold bg-slate-surface text-gray-700 hover:bg-gray-200';
-            });
-            btn.className = 'px-4 py-2 rounded-xl text-xs font-[\'Outfit\'] font-bold bg-[#0A0A0A] text-white';
-
-            const filter = btn.dataset.filter;
-            if (filter === 'all') {
-              renderHomeProducts(products);
-            } else {
-              renderHomeProducts(products.filter(p => p.category === filter));
-            }
-          });
-        });
-      }
-
-      // 4. Render Promo Carousel
-      const promoSlides = [
-        {
-          tag: '🔥 Combo Especial de Bodega',
-          title: 'Combo Dúo Cocina Chef Línea Blanca',
-          description: 'Nevera Samsung SpaceMax 602L + Microondas Inverter Panasonic 32L con transporte prioritario y kit de conexión de regalo.',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4BzSlYuos4wRZUD1h0A976CFR0pmPQ5rrTlpc40DhyI8HEsUcM02wOT1wyAxMVqLhQn8sZtskycGG9tCx1R083jQ_56nPalMk7SfLy6FLboAplkbMHseOamUo0Rj-ib1mxX1xB_pIEz8GCtYAkqFVTcwHOXxBjF8rjZOlIleqYOyJizVshIN3cX6MtIRvWD4aHkr0AZugiYhx2jRc7ZO7wWQvJrDr_6RKbRobyacg8KSlpNva16VWAA',
-          href: 'https://wa.me/573001234567?text=¡Hola%20EL%20VECINO!%20Deseo%20adquirir%20el%20Combo%20Dúo%20Cocina%20Chef.'
-        },
-        {
-          tag: '💡 Oferta de Tecnología',
-          title: 'Smart TV + Soundbar 4K Premium',
-          description: 'Televisor LG OLED 65” con barra de sonido Dolby Atmos y conexión inteligente para cine en casa.',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeBL4fPXDkLGZzWfh6YUrdanBDk7Ch9ssyVTtPMMZclrImzdpEliJIHtorDnnaCtxZSpUzitLKx9601fsRkEI-xGpHfAaDPRZwHp-XEu5-2O2vdPcuPYq3BvW8PKlWd_npd5uULz3bdSDlNeQCozIj7G_NfWkv0deXAbCksn6bBO4ZpQ4xXvLwkWtFtdKnh7UVV_ZfYinIVsnOhcx5S60iVHHMmEWVj3YMtQIkaw13-I0aTSbDtu1Iqg',
-          href: 'https://wa.me/573001234567?text=¡Hola%20EL%20VECINO!%20Deseo%20consultar%20la%20oferta%20de%20Smart%20TV%20y%20Soundbar.'
-        },
-        {
-          tag: '🏡 Bodega Total',
-          title: 'Línea Blanca + Lavado en Oferta',
-          description: 'Lavadora LG 22kg y refrigeración Samsung premium con respaldo directo de fábrica y atención inmediata.',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDx1q9S6Av-tDBuLVrI8_pSH4KN-w0zblvJgtZOz0ObFvrcVayRClJgQk1Eo5h3x5juq-taLxaK8vDgrvUiJi6wWmGgGxobjWTebpGaznzr8EiuasBbbfoPGXzOI37SX4dQfsxGBV-fv6zHRv96_zy2zB7JR9nrQzLey0cgwiFTHl7Dg7HESrvrygYEkPjMPCN6k_rV-bBeq8Dje9H_1rDzNrrG13ofgMxLa3wbdNagCWpcQzjLcA6bWQ',
-          href: 'https://wa.me/573001234567?text=¡Hola%20EL%20VECINO!%20Deseo%20cotizar%20la%20oferta%20de%20línea%20blanca%20y%20lavado.'
-        }
-      ];
-
-      const promoTrack = document.getElementById('promoCarouselTrack');
-      const promoDots = document.getElementById('promoDots');
-      const promoPrev = document.getElementById('promoPrev');
-      const promoNext = document.getElementById('promoNext');
-
-      if (promoTrack && promoDots) {
-        let promoIndex = 0;
-
-        function renderPromoCarousel() {
-          promoTrack.innerHTML = promoSlides.map((promo, index) => `
-            <article class="promo-slide ${index === promoIndex ? 'active' : ''}">
-              <div class="bg-[#0A0A0A] text-white rounded-[2rem] p-8 lg:p-12 relative overflow-hidden border border-white/10 h-full w-full">
-                <div class="absolute -top-20 -right-20 w-80 h-80 bg-[#0800FF]/25 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10 h-full">
-                  <div class="lg:col-span-8 flex flex-col gap-3">
-                    <span class="px-3 py-1 rounded-full bg-[#FF00A8] text-white text-xs font-['Outfit'] font-bold uppercase tracking-wider w-fit">
-                      ${promo.tag}
-                    </span>
-                    <h2 class="font-['Outfit'] font-extrabold text-2xl sm:text-4xl text-white tracking-tight">
-                      ${promo.title}
-                    </h2>
-                    <p class="text-sm sm:text-base text-gray-300 max-w-xl">
-                      ${promo.description}
-                    </p>
-                    <div class="pt-3">
-                      <a
-                        href="${promo.href}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="btn-whatsapp-glow inline-flex items-center gap-2 h-12 px-6 rounded-xl font-['Outfit'] font-bold text-sm"
-                      >
-                        <span class="material-symbols-outlined text-[20px]">chat</span>
-                        <span>Apartar por WhatsApp</span>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="lg:col-span-4 flex justify-center items-center">
-                    <img
-                      src="${promo.image}"
-                      alt="${promo.title}"
-                      class="max-h-56 object-contain rounded-2xl shadow-2xl"
-                    >
-                  </div>
-                </div>
-              </div>
-            </article>
-          `).join('');
-
-          promoDots.innerHTML = promoSlides.map((_, dotIndex) => `
-            <button
-              type="button"
-              class="promo-dot ${dotIndex === promoIndex ? 'active' : ''}"
-              aria-label="Ir a la promoción ${dotIndex + 1}"
-              data-index="${dotIndex}"
-            ></button>
-          `).join('');
-
-          promoDots.querySelectorAll('.promo-dot').forEach(dot => {
-            dot.addEventListener('click', () => {
-              promoIndex = Number(dot.dataset.index);
-              renderPromoCarousel();
-            });
-          });
-        }
-
-        function changeSlide(step) {
-          promoIndex = (promoIndex + step + promoSlides.length) % promoSlides.length;
-          renderPromoCarousel();
-        }
-
-        promoPrev.addEventListener('click', () => changeSlide(-1));
-        promoNext.addEventListener('click', () => changeSlide(1));
-
-        renderPromoCarousel();
-        setInterval(() => changeSlide(1), 5000);
-      }
-
-      // 5. Render TikTok Reels preview
-      const tiktokGrid = document.getElementById('homeTiktokGrid');
-      if (tiktokGrid && window.CONFIG && window.CONFIG.TIKTOK_REELS) {
-        tiktokGrid.innerHTML = window.CONFIG.TIKTOK_REELS.map(reel => {
-          const waUrl = `https://wa.me/${window.CONFIG.WHATSAPP_PHONE}?text=${encodeURIComponent(`¡Hola EL VECINO! Vi su video "${reel.title}" y deseo cotizarlo.`)}`;
-          return `
-            <div class="relative rounded-2xl overflow-hidden aspect-[9/14] bg-black shadow-lg group border border-slate-border">
-              <img src="${reel.thumbnail}" alt="${reel.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
-              <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] text-white font-bold flex items-center gap-1">
-                <span class="material-symbols-outlined text-[#FF00A8] text-[14px]">visibility</span>
-                <span>${reel.views}</span>
-              </div>
-              <div class="absolute bottom-4 left-4 right-4 text-white flex flex-col gap-2">
-                <span class="text-xs text-cyan-400 font-bold">${reel.author}</span>
-                <h4 class="font-['Outfit'] font-bold text-sm leading-snug">${reel.title}</h4>
-                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-quote h-9 text-xs justify-center mt-1">
-                  <span class="material-symbols-outlined text-[16px]">chat</span>
-                  <span>Cotizar este Producto</span>
-                </a>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-    });
-  </script>
+  <!-- Lógica y Controladores Exclusivos de la Portada -->
+  <script src="./index.js"></script>
 </body>
 </html>
 
