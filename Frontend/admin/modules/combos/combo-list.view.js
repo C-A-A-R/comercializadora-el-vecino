@@ -441,11 +441,17 @@ export const ComboListView = {
     });
 
     // 3. Switch de Estado Activo/Pausado rápido
+    let isProcessingToggle = false; // Flag para evitar múltiples ejecuciones
+
     document.addEventListener('change', async (e) => {
       const toggle = e.target.closest('[data-action="toggle-status"]');
-      if (toggle) {
+      
+      if (toggle && !isProcessingToggle) {
+        isProcessingToggle = true; // Bloquear ejecuciones adicionales
+        
         const id = toggle.dataset.id;
         const newStatus = toggle.checked;
+        
         try {
           await ComboService.toggleActive(id, newStatus);
           Toast.show(`Combo ${newStatus ? 'activado' : 'pausado'} con éxito`, 'success');
@@ -461,12 +467,17 @@ export const ComboListView = {
           const kpiPaused = document.getElementById('kpi-paused-combos');
           if (kpiActive) kpiActive.textContent = activeCount;
           if (kpiPaused) kpiPaused.textContent = pausedCount;
-
+          
           this.filterCombos();
         } catch (err) {
           console.error(err);
           toggle.checked = !newStatus;
           Toast.show('Error al cambiar estado del combo', 'error');
+        } finally {
+          // Liberar el bloqueo después de 500ms
+          setTimeout(() => {
+            isProcessingToggle = false;
+          }, 500);
         }
       }
     });

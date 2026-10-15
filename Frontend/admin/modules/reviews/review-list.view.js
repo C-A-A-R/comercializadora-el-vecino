@@ -1,7 +1,7 @@
 import { ReviewService } from '../../services/review.service.js';
 import { Toast } from '../../components/ui/Toast.js';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog.js';
-import { REVIEWS_MOCK } from '../../services/mocks/reviews.mock.js'; // Importación del mock
+import { REVIEWS_MOCK } from '../../services/mocks/reviews.mock.js';
 
 export const ReviewListView = {
   reviews: [],
@@ -54,7 +54,6 @@ export const ReviewListView = {
               <span class="material-symbols-outlined text-xl">sentiment_very_satisfied</span>
             </div>
           </div>
-
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Reseñas</p>
@@ -65,7 +64,6 @@ export const ReviewListView = {
               <span class="material-symbols-outlined text-xl">rate_review</span>
             </div>
           </div>
-
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">En Portada</p>
@@ -76,7 +74,6 @@ export const ReviewListView = {
               <span class="material-symbols-outlined text-xl">hotel_class</span>
             </div>
           </div>
-
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alertas / Reclamos</p>
@@ -110,7 +107,6 @@ export const ReviewListView = {
               Mostrando ${total} reseñas
             </span>
           </div>
-
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xl pointer-events-none">search</span>
             <input 
@@ -132,19 +128,16 @@ export const ReviewListView = {
 
   renderReviewItems(reviews) {
     if (!reviews || reviews.length === 0) {
-      return `
-        <div class="bg-white p-12 rounded-2xl border border-slate-border text-center">
-          <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">reviews</span>
-          <p class="font-bold text-sm text-gray-700">No se encontraron reseñas con los filtros seleccionados</p>
-          <p class="text-xs text-gray-400 mt-1">Intente cambiando el término de búsqueda o seleccione otra pestaña.</p>
-        </div>
-      `;
+      return `<div class="bg-white p-12 rounded-2xl border border-slate-border text-center">
+        <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">reviews</span>
+        <p class="font-bold text-sm text-gray-700">No se encontraron reseñas con los filtros seleccionados</p>
+        <p class="text-xs text-gray-400 mt-1">Intente cambiando el término de búsqueda o seleccione otra pestaña.</p>
+      </div>`;
     }
 
     return reviews.map(r => {
       const isComplaint = r.is_complaint || r.rating <= 2;
       const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString() : 'Reciente';
-
       const starsHtml = Array.from({ length: 5 }, (_, i) => {
         const isFilled = i < (r.rating || 5);
         return `<span class="material-symbols-outlined text-base ${isFilled ? 'text-amber-400' : 'text-gray-200'}">star</span>`;
@@ -165,7 +158,6 @@ export const ReviewListView = {
                 <p class="text-xs text-gray-500">Producto: <strong class="text-gray-700">${r.product_name}</strong> · ${dateStr}</p>
               </div>
             </div>
-
             <div class="flex items-center gap-2">
               ${isComplaint ? `
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
@@ -180,14 +172,13 @@ export const ReviewListView = {
             </div>
           </div>
 
-          <!-- Comentario -->
-          <div class="bg-slate-surface p-3.5 rounded-xl border border-slate-border text-xs text-gray-700 leading-relaxed italic">
+          <!-- ✅ COMENTARIO CON SCROLL INTERNO (ALTURA MÁXIMA FIJA) -->
+          <div class="bg-slate-surface p-3.5 rounded-xl border border-slate-border text-xs text-gray-700 leading-relaxed italic max-h-32 overflow-y-auto custom-scrollbar">
             "${r.comment}"
           </div>
 
-          <!-- Barra de Acciones: Destacar en Portada + Contactar por WhatsApp + Eliminar -->
+          <!-- Barra de Acciones -->
           <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-            <!-- Toggle Destacar en Portada -->
             <button 
               data-action="toggle-featured-review" 
               data-id="${r.id}" 
@@ -197,9 +188,7 @@ export const ReviewListView = {
               <span class="material-symbols-outlined text-base ${r.is_featured ? 'text-amber-600' : 'text-gray-400'}">hotel_class</span>
               <span>${r.is_featured ? 'Destacado en Portada' : 'Destacar en Portada'}</span>
             </button>
-
             <div class="flex items-center gap-2">
-              <!-- Botón Contactar por WhatsApp -->
               <button 
                 data-action="whatsapp-contact-review" 
                 data-id="${r.id}" 
@@ -213,8 +202,6 @@ export const ReviewListView = {
                 <span class="material-symbols-outlined text-base">chat</span>
                 <span>${isComplaint ? 'Resolver Inconformidad (WhatsApp)' : 'Escribir por WhatsApp'}</span>
               </button>
-
-              <!-- Botón Eliminar -->
               <button 
                 data-action="delete-review" 
                 data-id="${r.id}" 
@@ -281,7 +268,6 @@ export const ReviewListView = {
         const id = btnFeatured.dataset.id;
         const currentFeatured = btnFeatured.dataset.featured === 'true';
         const nextState = !currentFeatured;
-
         try {
           await ReviewService.toggleFeatured(id, nextState);
           Toast.show(`Testimonio ${nextState ? 'destacado en portada' : 'retirado de portada'}`, 'success');
@@ -289,13 +275,10 @@ export const ReviewListView = {
           console.warn('Backend indisponible, actualizando interfaz localmente:', err);
           Toast.show(`Testimonio ${nextState ? 'destacado en portada' : 'retirado de portada'}`, 'success');
         }
-
         const r = this.reviews.find(item => item.id == id);
         if (r) r.is_featured = nextState;
-
         const kpi = document.getElementById('kpi-featured-reviews');
         if (kpi) kpi.textContent = this.reviews.filter(x => x.is_featured).length;
-
         this.filter();
         return;
       }
@@ -308,18 +291,15 @@ export const ReviewListView = {
         const name = btnWa.dataset.name;
         const product = btnWa.dataset.product;
         const isComplaint = btnWa.dataset.complaint === 'true';
-
         let message = '';
         if (isComplaint) {
           message = `Hola ${name}, te escribimos de Comercializadora El Vecino respecto a tu experiencia con el producto *${product}*. Queremos ayudarte y darte atención prioritaria para resolver cualquier inconveniente. ¿Podrías comentarnos más detalles?`;
         } else {
           message = `Hola ${name}, te saludamos de Comercializadora El Vecino. Muchas gracias por tu reseña sobre *${product}*. ¡Nos alegra mucho haberte atendido! Recuerda que estamos a tu orden para futuras cotizaciones.`;
         }
-
         const url = phone 
           ? `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`
           : `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-
         window.open(url, '_blank');
         return;
       }

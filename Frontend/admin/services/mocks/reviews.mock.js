@@ -35,7 +35,7 @@ export const REVIEWS_MOCK = [
     product_id: 104,
     product_name: 'Aire Acondicionado Split 12000 BTU',
     rating: 2,
-    comment: 'El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía.',
+    comment: 'El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía.',
     is_featured: false,
     status: 'pending',
     is_complaint: true,
