@@ -116,20 +116,10 @@ const Api = {
 
       return await response.json();
     } catch (networkError) {
-      if (networkError.isAuthError || networkError.isForbidden || networkError.status) {
-        if (!window.CONFIG?.USE_MOCKS) {
-          throw networkError;
-        }
-      }
-      if (window.CONFIG?.USE_MOCKS) {
-        console.info(`[Api] Modo mock activo o red caída en "${url}". Ejecutando fallback:`, networkError.message);
-        return this.mockFallback(endpoint, config, networkError);
-      }
-      console.warn(`[Api] Falló la petición a "${url}":`, networkError.message);
-      if (endpoint.includes('/auth/login')) {
+      if (networkError.isAuthError || networkError.isForbidden) {
         throw networkError;
       }
-      // Fallback seguro de contingencia para catálogo
+      console.warn(`[Api] Conexión con servidor ("${url}") no disponible. Activando fallback local:`, networkError.message);
       return this.mockFallback(endpoint, config, networkError);
     }
   },
@@ -190,6 +180,8 @@ const Api = {
       product_image: img,
       category: catId,
       categoryName: catName,
+      subcategory: (Array.isArray(p.sub_categories) && p.sub_categories.length ? (typeof p.sub_categories[0] === 'object' ? p.sub_categories[0].sub_category_name : p.sub_categories[0]) : (p.subcategory || p.sub_category || '')),
+      brand: p.brand || '',
       specs: specs,
       badge: p.badge || (p.is_feature_product ? 'LÍNEA DESTACADA' : ''),
       featured: p.is_feature_product ?? p.featured ?? false,
@@ -197,7 +189,8 @@ const Api = {
       inStock: p.inStock ?? true,
       clicks: p.total_views ?? p.clicks ?? 0,
       total_views: p.total_views ?? p.clicks ?? 0,
-      description: p.description || '',
+      description: p.description || p.summary || '',
+      summary: p.summary || p.description || '',
       warranty: p.warranty || 'Garantía Oficial Directa'
     };
   },
@@ -346,7 +339,7 @@ const Api = {
 
     // 2. Endpoint /products
     if (cleanPath.includes('/products')) {
-      const products = window.Storage?.getProducts() || window.CONFIG?.INITIAL_PRODUCTS || [];
+      const products = window.Storage?.getProducts() || window.CONFIG?.INITIAL_PRODUCTS || window.PRODUCTS_DATA || [];
 
       // Detalle de producto /products/:id
       const idMatch = cleanPath.match(/\/products\/([^/?]+)/);
@@ -373,7 +366,7 @@ const Api = {
     if (cleanPath.includes('/promociones')) {
       return {
         success: true,
-        data: window.CONFIG?.PROMOTIONS || []
+        data: window.CONFIG?.PROMOTIONS || window.COMBOS_DATA || []
       };
     }
 
@@ -381,7 +374,7 @@ const Api = {
     if (cleanPath.includes('/categories')) {
       return {
         success: true,
-        data: window.CONFIG?.CATEGORIES || []
+        data: window.CONFIG?.CATEGORIES || window.CATEGORIES_DATA || []
       };
     }
 

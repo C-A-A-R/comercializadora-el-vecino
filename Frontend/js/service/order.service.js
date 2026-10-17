@@ -7,6 +7,14 @@ const OrderService = {
     return window.CONFIG?.WHATSAPP_PHONE || '573001234567';
   },
 
+  formatCurrency(amount) {
+    if (window.CONFIG?.formatCurrency && typeof window.CONFIG.formatCurrency === 'function') {
+      return window.CONFIG.formatCurrency(amount);
+    }
+    const num = Number(amount) || 0;
+    return `$ ${num.toLocaleString('es-CO')}`;
+  },
+
   /**
    * Generates a structured, professional WhatsApp message from cart items
    */
@@ -24,7 +32,7 @@ const OrderService = {
     cartItems.forEach((item, index) => {
       const itemTotal = (item.price || 0) * (item.quantity || 1);
       total += itemTotal;
-      const formattedPrice = window.CONFIG.formatCurrency(item.price);
+      const formattedPrice = this.formatCurrency(item.price);
       message += `*${index + 1}. ${item.name}*\n`;
       if (item.sku) message += `   • *SKU:* ${item.sku}\n`;
       message += `   • *Cantidad:* ${item.quantity || 1} un.\n`;
@@ -34,7 +42,7 @@ const OrderService = {
 
     message += `──────────────────────\n`;
     if (total > 0) {
-      message += `💰 *Subtotal Estimado:* ${window.CONFIG.formatCurrency(total)}\n`;
+      message += `💰 *Subtotal Estimado:* ${this.formatCurrency(total)}\n`;
     }
     message += `📦 *Modalidad:* Despacho Directo Bodega\n`;
 
@@ -56,7 +64,7 @@ const OrderService = {
     let message = `¡Hola EL VECINO! Deseo cotizar disponibilidad y tiempo de entrega para:\n\n`;
     message += `📌 *${product.name}*\n`;
     if (product.sku) message += `• *SKU:* ${product.sku}\n`;
-    if (product.price) message += `• *Precio Ref.:* ${window.CONFIG.formatCurrency(product.price)}\n`;
+    if (product.price) message += `• *Precio Ref.:* ${this.formatCurrency(product.price)}\n`;
     message += `• *Cantidad:* ${quantity} unidad(es)\n`;
     if (customNote) message += `• *Consulta:* ${customNote}\n`;
     message += `\n¿Tienen entrega inmediata y garantía oficial?`;

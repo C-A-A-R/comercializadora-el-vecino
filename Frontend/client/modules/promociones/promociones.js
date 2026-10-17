@@ -45,10 +45,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     promosContainer.innerHTML = promos.map(promo => {
-      const waUrl = window.OrderService.buildPromoQuoteUrl(promo);
-      const formattedPromoPrice = window.CONFIG.formatCurrency(promo.promoPrice);
-      const formattedOriginal = window.CONFIG.formatCurrency(promo.originalPrice);
-      const formattedSaving = window.CONFIG.formatCurrency(promo.saving);
+      const formatFn = typeof window.CONFIG?.formatCurrency === 'function'
+        ? (val) => window.CONFIG.formatCurrency(val)
+        : (val) => `$ ${Number(val || 0).toLocaleString('es-CO')}`;
+      const formattedPromoPrice = formatFn(promo.promoPrice);
+      const formattedOriginal = formatFn(promo.originalPrice);
+      const formattedSaving = formatFn(promo.saving);
 
       return `
         <div class="promo-card">

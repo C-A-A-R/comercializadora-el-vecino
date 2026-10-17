@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300F0FF'><path d='M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.9 17.55 11 21 11 21z'/></svg>">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300F0FF'><path d='M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.9 17.55 11 21 11 21z'/></svg>">
   <title>EL VECINO — Catálogo Digital &amp; Combos Mayoristas</title>
-  
+
   <!-- Tipografías de Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <!-- Iconos de Material Symbols -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet">
+
   <!-- Hojas de Estilos con Variables CSS y Componentes Modulares -->
   <link rel="stylesheet" href="./css/variables.css">
   <link rel="stylesheet" href="./components/navbar/navbar.css">
@@ -22,6 +28,7 @@
   <link rel="stylesheet" href="./components/product/product-modal.css">
   <link rel="stylesheet" href="./index.css">
 </head>
+
 <body>
 
   <!-- ==========================================================================
@@ -45,7 +52,8 @@
         </h1>
 
         <p class="hero-lead">
-          Distribución técnica sin intermediarios. Calibra especificaciones, confirma disponibilidad de inventario sellado y recibe cotización personalizada al instante vía WhatsApp.
+          Distribución técnica sin intermediarios. Calibra especificaciones, confirma disponibilidad de inventario
+          sellado y recibe cotización personalizada al instante vía WhatsApp.
         </p>
 
         <div class="flex flex-wrap gap-md">
@@ -79,17 +87,6 @@
   </section>
 
   <!-- ==========================================================================
-       BARRA DE BENEFICIOS DE BODEGA
-       ========================================================================== -->
-  <section class="benefits-bar">
-    <div class="container">
-      <div id="benefitsContainer" class="benefits-grid">
-        <!-- Inyectado dinámicamente desde js/app.js -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
        SECCIÓN DE PROMOCIONES Y PUBLICACIONES DE COMBOS
        ========================================================================== -->
   <section class="section-padding" style="background: var(--deep-obsidian); color: var(--pure-white);">
@@ -100,10 +97,12 @@
           Temporada de Paquetes
         </div>
         <h2 class="section-title section-title-light">
-          Publicaciones de <span class="text-neon-cyan">Combos</span> &amp; <span class="text-neon-magenta">Paquetes Especiales</span>
+          Publicaciones de <span class="text-neon-cyan">Combos</span> &amp; <span class="text-neon-magenta">Paquetes
+            Especiales</span>
         </h2>
         <p class="section-subtitle section-subtitle-light">
-          Equipa tu hogar o proyecto en un solo despacho. Combos con accesorios bonificados, flete técnico y garantía directa de fábrica.
+          Equipa tu hogar o proyecto en un solo despacho. Combos con accesorios bonificados, flete técnico y garantía
+          directa de fábrica.
         </p>
       </div>
 
@@ -139,40 +138,329 @@
     </div>
   </section>
 
+
   <!-- ==========================================================================
-       CATÁLOGO TÉCNICO DE PRODUCTOS (SIN PRECIOS)
+       SECCIÓN DE CATEGORÍAS SHOWCASE (CARRUSEL EN DOS FILAS / IMÁGENES JUNTAS)
+       Estilo Dark Neo-Tech con imágenes unidas, tono oscuro, descripciones concisas y botón "Ver categoría"
        ========================================================================== -->
-  <section class="section-padding">
+  <section class="categories-showcase-section" id="seccion-categorias">
+    <!-- Encabezado Centrado de la Sección de Categorías -->
+    <div class="categories-showcase-header container">
+      <div class="categories-header-content text-center">
+        <h2 class="section-title section-title-light">
+          Explora por <span class="text-neon-cyan">Categorías</span>
+        </h2>
+        <p class="section-subtitle section-subtitle-light centered">
+          Equipamiento de alta gama por familias técnicas directo de bodega mayorista. Desliza para explorar y filtra
+          el inventario.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contenedor del Carrusel en Dos Filas con Imágenes Juntas (Padding Lateral Reducido) -->
+    <div class="categories-carousel-wrapper">
+      <!-- Botones Flotantes de Navegación Sobre las Tarjetas -->
+      <button type="button" class="carousel-float-arrow carousel-float-prev" id="catCarouselFloatPrev"
+        aria-label="Deslizar categorías a la izquierda">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <button type="button" class="carousel-float-arrow carousel-float-next" id="catCarouselFloatNext"
+        aria-label="Deslizar categorías a la derecha">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+
+      <div class="categories-carousel-viewport" id="catCarouselViewport">
+        <div class="categories-carousel-track" id="catCarouselTrack">
+          <!-- COLUMNA 1 (Fila 1 Arriba / Fila 2 Abajo) -->
+          <!-- Tarjeta 1: Refrigeración -->
+          <a href="./client/modules/product/product.html?cat=refrigeracion" class="category-showcase-card"
+            aria-label="Ver categoría Refrigeración">
+            <img src="https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=700&q=80"
+              alt="Línea de Refrigeración de Alta Gama" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Refrigeración</h3>
+              <p class="category-showcase-desc">
+                Neveras French Door, Side by Side y tecnología Inverter Linear.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- Tarjeta 2: Neveras Side by Side -->
+          <a href="./client/modules/product/product.html?cat=refrigeracion&subcat=Side%20by%20Side"
+            class="category-showcase-card" aria-label="Ver categoría Side by Side">
+            <img src="https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=700&q=80"
+              alt="Neveras Side by Side" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Side by Side</h3>
+              <p class="category-showcase-desc">
+                Gran capacidad con dispensador de agua y cubos de hielo.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- COLUMNA 2 -->
+          <!-- Tarjeta 3: Lavado & Secado -->
+          <a href="./client/modules/product/product.html?cat=lavado" class="category-showcase-card"
+            aria-label="Ver categoría Lavado y Secado">
+            <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=700&q=80"
+              alt="Línea de Lavado Inteligente y Secado" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Lavado &amp; Secado</h3>
+              <p class="category-showcase-desc">
+                Torres de lavado con calibración inteligente y ciclo vapor.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- Tarjeta 4: Secadoras Eléctricas -->
+          <a href="./client/modules/product/product.html?cat=lavado&subcat=Secadoras%20Eléctricas"
+            class="category-showcase-card" aria-label="Ver categoría Secadoras Eléctricas">
+            <img src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=700&q=80"
+              alt="Secadoras Eléctricas de Ropa" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Secadoras de Ropa</h3>
+              <p class="category-showcase-desc">
+                Secado por condensación, bomba de calor y protección textil.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- COLUMNA 3 -->
+          <!-- Tarjeta 5: Climatización -->
+          <a href="./client/modules/product/product.html?cat=climatizacion" class="category-showcase-card"
+            aria-label="Ver categoría Climatización">
+            <img src="https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=700&q=80"
+              alt="Línea de Climatización y Aires Split" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Climatización</h3>
+              <p class="category-showcase-desc">
+                Sistemas Split Inverter de alto confort térmico silencioso.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- Tarjeta 6: Aires Split Inverter -->
+          <a href="./client/modules/product/product.html?cat=climatizacion&subcat=Aires%20Split%20Inverter"
+            class="category-showcase-card" aria-label="Ver categoría Aires Split Inverter">
+            <img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=700&q=80"
+              alt="Aires Split Inverter de Alta Eficiencia" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Aires Split Inverter</h3>
+              <p class="category-showcase-desc">
+                Ahorro hasta del 70%, gas ecológico y filtros antibacteriales.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- COLUMNA 4 -->
+          <!-- Tarjeta 7: Smart TV 4K & OLED -->
+          <a href="./client/modules/product/product.html?cat=tv-audio" class="category-showcase-card"
+            aria-label="Ver categoría Smart TV y Audio">
+            <img src="https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=700&q=80"
+              alt="Smart TV 4K y Paneles OLED" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Smart TV 4K &amp; OLED</h3>
+              <p class="category-showcase-desc">
+                Paneles Neo QLED 4K, negros absolutos OLED y 144Hz.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- Tarjeta 8: Barras de Sonido & Audio -->
+          <a href="./client/modules/product/product.html?cat=tv-audio&subcat=Barras%20de%20Sonido"
+            class="category-showcase-card" aria-label="Ver categoría Barras de Sonido">
+            <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=700&q=80"
+              alt="Barras de Sonido Cinematográficas" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Audio &amp; Soundbars</h3>
+              <p class="category-showcase-desc">
+                Barras de sonido inalámbricas Dolby Atmos para cine en casa.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- COLUMNA 5 -->
+          <!-- Tarjeta 9: Dormitorios & Confort -->
+          <a href="./client/modules/product/product.html?cat=dormitorios" class="category-showcase-card"
+            aria-label="Ver categoría Dormitorios">
+            <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=700&q=80"
+              alt="Línea de Dormitorios y Camas" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Dormitorios</h3>
+              <p class="category-showcase-desc">
+                Tu descanso empieza aquí. Diseños para cada estilo y espacio.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+
+          <!-- Tarjeta 10: Salas & Confort -->
+          <a href="./client/modules/product/product.html?cat=salas" class="category-showcase-card"
+            aria-label="Ver categoría Salas">
+            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=700&q=80"
+              alt="Línea de Salas y Muebles de Confort" class="category-showcase-img" loading="lazy">
+            <div class="category-showcase-overlay"></div>
+            <div class="category-showcase-content">
+              <h3 class="category-showcase-title">Salas</h3>
+              <p class="category-showcase-desc">
+                Con diseño y confort, transformamos tu sala en calidez y bienestar.
+              </p>
+              <span class="category-showcase-btn">
+                <span>Ver categoría</span>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PRODUCTOS DESTACADOS & MEJOR VALORADOS (MÁXIMO 8 / 2 FILAS EN PANTALLAS GRANDES)
+       ========================================================================== -->
+  <section class="section-padding featured-products-section" id="seccion-destacados">
     <div class="container">
-      <div class="catalog-toolbar">
+      <div class="catalog-toolbar featured-toolbar flex items-center justify-between flex-wrap gap-md">
         <div>
-          <span class="section-badge badge badge-electric-blue">Inventario Mayorista</span>
-          <h2 class="section-title">Catálogo de Fichas Técnicas</h2>
+          <span class="section-badge badge badge-neon-magenta flex items-center gap-xs" style="width: fit-content;">
+            <span class="material-symbols-outlined" style="font-size: 16px;">stars</span>
+            Selección Exclusiva
+          </span>
+          <h2 class="section-title">
+            Productos <span class="text-neon-cyan">Destacados</span>
+          </h2>
           <p class="section-subtitle">
-            Filtra por categoría técnica, revisa especificaciones y solicita la cotización inmediata.
+            Equipos de alta demanda y mejor valoración técnica por profesionales y mayoristas.
           </p>
         </div>
 
-        <!-- Buscador en Vivo -->
-        <div class="search-box-wrapper">
-          <span class="material-symbols-outlined search-box-icon">search</span>
-          <input 
-            type="text" 
-            id="catalogSearchInput" 
-            placeholder="Buscar por marca o modelo..."
-            class="search-box-input"
-          >
+        <!-- Enlace de Acceso Rápido al Catálogo Completo -->
+        <div class="featured-catalog-cta">
+          <a href="./catalogo.html" class="btn btn-outline-cyan flex items-center gap-xs"
+            style="text-decoration: none;">
+            <span>Ver Catálogo Completo</span>
+            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+          </a>
         </div>
       </div>
 
-      <!-- Barra de Filtros por Categoría -->
-      <div class="category-filters-container" id="categoriesFilterContainer">
-        <!-- Renderizado desde js/app.js -->
+      <!-- Grid de 8 Productos Destacados (2 Filas en Pantallas Grandes) -->
+      <div class="products-grid featured-products-grid" id="allProductsGrid" style="margin-top: var(--space-xl);">
+        <!-- Renderizado dinámicamente desde index.js -->
       </div>
 
-      <!-- Grid de Productos -->
-      <div class="products-grid" id="allProductsGrid" style="margin-top: var(--space-xl);">
-        <!-- Renderizado desde js/app.js -->
+      <!-- Botón Inferior para Explorar Todo el Inventario -->
+      <div class="text-center" style="margin-top: var(--space-2xl);">
+        <a href="./catalogo.html" class="btn btn-primary"
+          style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2.25rem; font-weight: 700; text-decoration: none;">
+          <span class="material-symbols-outlined" style="font-size: 20px;">inventory_2</span>
+          <span>Explorar Catálogo Completo de Bodega</span>
+          <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN DE CONTACTO & ASESORÍA
+       ========================================================================== -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="contact-banner">
+
+        <!-- Tarjeta de Información -->
+        <div>
+          <span class="badge badge-neon-magenta" style="margin-bottom: var(--space-sm);">Atención Mayorista</span>
+          <h2 class="section-title" style="margin-bottom: var(--space-sm);">
+            Bodega Central EL VECINO
+          </h2>
+          <p class="text-muted" style="margin-bottom: var(--space-xl); font-size: var(--font-size-base);">
+            Despachos técnicos directos para hogares, constructoras, arquitectos y compras por lote sin intermediarios.
+          </p>
+
+          <div class="flex flex-col gap-md">
+            <div class="contact-info-item">
+              <span class="material-symbols-outlined text-neon-cyan">schedule</span>
+              <span>Lunes a Sábado: 8:00 AM – 6:00 PM</span>
+            </div>
+
+            <div class="contact-info-item">
+              <span class="material-symbols-outlined text-electric-blue">local_shipping</span>
+              <span>Despacho directo y asegurado a todo el país</span>
+            </div>
+
+            <div class="contact-info-item">
+              <span class="material-symbols-outlined text-neon-magenta">verified_user</span>
+              <span>Equipos sellados con garantía oficial de fábrica</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Acción Inmediata WhatsApp -->
+        <div class="contact-card-box">
+          <div class="badge badge-neon-cyan" style="margin-bottom: var(--space-sm);">
+            <span class="material-symbols-outlined">support_agent</span>
+            Asesores en línea
+          </div>
+
+          <h3 class="font-display font-extrabold text-xl"
+            style="color: var(--deep-obsidian); margin-bottom: var(--space-xs);">
+            Cotización Inmediata por WhatsApp
+          </h3>
+          <p class="text-muted" style="font-size: var(--font-size-sm); margin-bottom: var(--space-lg);">
+            Inicia una conversación directa con un asesor comercial asignado en tiempo real. Respondemos en menos de 5
+            minutos.
+          </p>
+
+          <div class="flex flex-col gap-sm">
+            <a href="https://wa.me/584120000000?text=¡Hola%20El%20Vecino!%20Deseo%20solicitar%20una%20cotización%20y%20consultar%20disponibilidad%20de%20equipos."
+              target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-full btn-lg">
+              <span class="material-symbols-outlined">chat</span>
+              <span>Abrir WhatsApp Oficial</span>
+            </a>
+
+            <a href="catalogo.html" class="btn btn-outline btn-full">
+              <span class="material-symbols-outlined">format_list_bulleted</span>
+              <span>Explorar Fichas del Catálogo</span>
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -236,5 +524,5 @@
   <!-- Lógica y Controladores Exclusivos de la Portada -->
   <script src="./index.js"></script>
 </body>
-</html>
 
+</html>

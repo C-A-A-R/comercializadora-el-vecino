@@ -23,31 +23,14 @@ const ProductCard = {
     let waUrl = '#';
     if (window.OrderService?.buildDirectProductQuoteUrl) {
       waUrl = window.OrderService.buildDirectProductQuoteUrl(product);
-    } else if (typeof window.getWhatsAppLink === 'function' && window.CONFIG?.whatsappTemplates?.productQuote) {
-      waUrl = window.getWhatsAppLink(window.CONFIG.whatsappTemplates.productQuote(product.name, product.sku));
     } else {
       const phone = window.CONFIG?.whatsappNumber || window.CONFIG?.WHATSAPP_PHONE || '573001234567';
-      const msg = `¡Hola EL VECINO! Me interesa consultar disponibilidad y cotización técnica del equipo: *${product.name}* (SKU: ${product.sku || 'N/A'}).`;
+      const msg = `¡Hola EL VECINO! Me interesa consultar disponibilidad y cotización técnica del equipo: *${product.name}*.`;
       waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
     }
 
-    // Procesar especificaciones técnicas (soporta objetos {label, value} o strings)
-    const specsPreview = (product.specs || []).slice(0, 3).map(spec => {
-      if (typeof spec === 'object' && spec !== null) {
-        return `
-          <li class="product-card-spec-item">
-            <span class="material-symbols-outlined">check</span>
-            <span class="truncate"><strong>${spec.label ? spec.label + ': ' : ''}</strong>${spec.value || ''}</span>
-          </li>
-        `;
-      }
-      return `
-        <li class="product-card-spec-item">
-          <span class="material-symbols-outlined">check</span>
-          <span class="truncate">${spec}</span>
-        </li>
-      `;
-    }).join('');
+    // Procesar descripción técnica del equipo
+    const descriptionText = product.description || product.summary || '';
 
     const hasPrice = Number(product?.price) > 0;
     const hasOldPrice = Number(product?.originalPrice) > 0;
@@ -68,15 +51,24 @@ const ProductCard = {
         </div>
 
         <div class="product-card-body">
-          <div>
+          <div class="product-card-main-content">
             <div class="product-card-meta">
               <span class="product-card-category">${product.categoryName || product.category || product.brand || 'Equipo'}</span>
-              <span class="product-card-sku">SKU: ${product.sku || 'N/A'}</span>
+              ${product.rating ? `
+                <div class="product-card-rating" style="display: inline-flex; align-items: center; gap: 3px; font-weight: 700; color: #f59e0b; font-size: 0.75rem;">
+                  <span class="material-symbols-outlined" style="font-size: 14px; font-variation-settings: 'FILL' 1; color: #f59e0b;">star</span>
+                  <span>${Number(product.rating).toFixed(1)}</span>
+                </div>
+              ` : (product.sku ? `<span class="product-card-sku">SKU: ${product.sku}</span>` : '')}
             </div>
             <h3 class="product-card-title" onclick="ProductCard.openDetail('${product.id}', '${detailUrl}')" title="${product.name}">
               ${product.name}
             </h3>
-            ${specsPreview ? `<ul class="product-card-specs">${specsPreview}</ul>` : ''}
+            ${descriptionText ? `
+              <p class="product-card-description" title="${descriptionText}">
+                ${descriptionText}
+              </p>
+            ` : ''}
           </div>
 
           <div class="product-card-footer-box">

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * product-modal.js - Quick technical view modal for product inspection
  */
 
@@ -55,8 +55,11 @@ const ProductModal = {
       detailUrl = `./client/modules/product/detail.html?id=${product.id}`;
     }
 
-    const formattedPrice = window.CONFIG?.formatCurrency(product.price) || `$ ${product.price}`;
-    const formattedOldPrice = product.originalPrice ? window.CONFIG?.formatCurrency(product.originalPrice) : null;
+    const formatFn = typeof window.CONFIG?.formatCurrency === 'function'
+      ? (val) => window.CONFIG.formatCurrency(val)
+      : (val) => `$ ${Number(val || 0).toLocaleString('es-CO')}`;
+    const formattedPrice = formatFn(product.price);
+    const formattedOldPrice = product.originalPrice ? formatFn(product.originalPrice) : null;
     const waUrl = window.OrderService?.buildDirectProductQuoteUrl(product) || '#';
 
     const specsHtml = (product.specs || []).map(spec => `

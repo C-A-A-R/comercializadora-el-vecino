@@ -17,8 +17,10 @@ function initApp() {
   }
   renderBenefits();
   renderFeaturedProducts();
-  renderAllProducts("todas");
-  renderCategoriesFilter();
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialCategory = urlParams.get("cat") || "todas";
+  renderAllProducts(initialCategory);
+  renderCategoriesFilter(initialCategory);
   renderCombos();
   renderTikTokVideos();
   setupEventListeners();
@@ -54,20 +56,23 @@ function renderBenefits() {
 /**
  * Renderiza los botones de filtrado por categoría
  */
-function renderCategoriesFilter() {
+function renderCategoriesFilter(activeCatId = "todas") {
   const container = document.getElementById("categoriesFilterContainer");
   if (!container) return;
 
-  container.innerHTML = CATEGORIES_DATA.map((cat, idx) => `
-    <button 
-      class="category-filter-btn ${idx === 0 ? 'active' : ''}" 
-      data-category="${cat.id}"
-      onclick="filterProductsByCategory('${cat.id}', this)"
-    >
-      <span>${cat.name}</span>
-      ${cat.count ? `<span>(${cat.count})</span>` : ''}
-    </button>
-  `).join("");
+  container.innerHTML = CATEGORIES_DATA.map((cat, idx) => {
+    const isActive = activeCatId ? (cat.id === activeCatId) : (idx === 0);
+    return `
+      <button 
+        class="category-filter-btn ${isActive ? 'active' : ''}" 
+        data-category="${cat.id}"
+        onclick="filterProductsByCategory('${cat.id}', this)"
+      >
+        <span>${cat.name}</span>
+        ${cat.count ? `<span>(${cat.count})</span>` : ''}
+      </button>
+    `;
+  }).join("");
 }
 
 /**
@@ -153,11 +158,9 @@ function createProductCardHtml(product) {
           <span class="product-brand">${product.brand}</span>
         </div>
         <h3 class="product-name">${product.name}</h3>
-        <div class="product-specs-list">
-          ${product.specs.slice(0, 3).map(s => `
-            <span class="spec-chip"><strong>${s.label}:</strong> ${s.value}</span>
-          `).join("")}
-        </div>
+        ${(product.description || product.summary) ? `
+          <p class="product-card-description">${product.description || product.summary}</p>
+        ` : ''}
         <div class="product-footer">
           <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-sm flex-1">
             <span class="material-symbols-outlined">chat</span>

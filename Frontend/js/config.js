@@ -9,6 +9,24 @@ const CONFIG = {
   
   // WhatsApp oficial (puedes cambiar este número libremente)
   whatsappNumber: "584120000000",
+  WHATSAPP_PHONE: "584120000000",
+
+  // Formateador de moneda oficial y seguro
+  formatCurrency(amount) {
+    if (amount === null || amount === undefined || amount === '' || isNaN(Number(amount))) {
+      return '$ 0';
+    }
+    const num = Number(amount);
+    return `$ ${num.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+  },
+
+  // Claves de almacenamiento local
+  STORAGE_KEYS: {
+    JWT_TOKEN: 'el_vecino_jwt_token',
+    USER_DATA: 'el_vecino_user',
+    CART: 'el_vecino_cart',
+    FAVORITES: 'el_vecino_favorites'
+  },
   
   // Plantillas de mensajes WhatsApp dinámicos
   whatsappTemplates: {
@@ -33,3 +51,11 @@ const CONFIG = {
     { icon: "warehouse", title: "Directo de Bodega", subtitle: "Sin intermediarios" }
   ]
 };
+
+// Exportar globalmente
+if (typeof window !== 'undefined') {
+  window.CONFIG = CONFIG;
+}
+if (typeof globalThis !== 'undefined') {
+  globalThis.CONFIG = CONFIG;
+}

@@ -7,29 +7,38 @@ const ProductApi = {
    * Fetches products with optional category, search, and ordering filters
    */
   async getProducts(filters = {}) {
+    let prods = [];
     try {
-      const params = {};
-      if (filters.category && filters.category !== 'all') {
-        params.category = filters.category;
-      }
-      if (filters.search) {
-        params.search = filters.search;
-      }
-      if (filters.featuredOnly || filters.is_feature_product) {
-        params.is_feature_product = true;
-      }
-      if (filters.ordering) {
-        params.ordering = filters.ordering;
-      }
+      if (window.Api && window.CONFIG?.API_BASE_URL) {
+        const params = {};
+        if (filters.category && filters.category !== 'all') {
+          params.category = filters.category;
+        }
+        if (filters.search) {
+          params.search = filters.search;
+        }
+        if (filters.featuredOnly || filters.is_feature_product) {
+          params.is_feature_product = true;
+        }
+        if (filters.ordering) {
+          params.ordering = filters.ordering;
+        }
 
-      const response = await window.Api.get('/products', params);
-      const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response.results || response.data || response || []);
-      return (Array.isArray(raw) ? raw : []).map(p => window.Api?.normalizeProduct ? window.Api.normalizeProduct(p) : p);
+        const response = await window.Api.get('/products', params);
+        const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response?.results || response?.data || response || []);
+        if (Array.isArray(raw) && raw.length > 0) {
+          prods = raw;
+        }
+      }
     } catch (error) {
-      console.error('[ProductApi] Error fetching products:', error);
-      const fallback = window.CONFIG?.INITIAL_PRODUCTS || [];
-      return fallback.map(p => window.Api?.normalizeProduct ? window.Api.normalizeProduct(p) : p);
+      console.warn('[ProductApi] API offline o inaccesible:', error);
     }
+
+    if (!prods || prods.length === 0) {
+      prods = window.CONFIG?.INITIAL_PRODUCTS || window.PRODUCTS_DATA || [];
+    }
+
+    return prods.map(p => window.Api?.normalizeProduct ? window.Api.normalizeProduct(p) : p);
   },
 
   /**
@@ -37,15 +46,17 @@ const ProductApi = {
    */
   async getProductById(id) {
     try {
-      const response = await window.Api.get(`/products/${id}`);
-      const raw = response.data || response;
-      if (raw && (raw.id || raw.product_name || raw.name)) {
-        return window.Api?.normalizeProduct ? window.Api.normalizeProduct(raw) : raw;
+      if (window.Api && window.CONFIG?.API_BASE_URL) {
+        const response = await window.Api.get(`/products/${id}`);
+        const raw = response?.data || response;
+        if (raw && (raw.id || raw.product_name || raw.name)) {
+          return window.Api?.normalizeProduct ? window.Api.normalizeProduct(raw) : raw;
+        }
       }
     } catch (error) {
-      console.error(`[ProductApi] Error fetching product ${id}:`, error);
+      console.warn(`[ProductApi] Fallback de producto ${id}:`, error);
     }
-    const all = window.CONFIG?.INITIAL_PRODUCTS || [];
+    const all = window.CONFIG?.INITIAL_PRODUCTS || window.PRODUCTS_DATA || [];
     const found = all.find(p => String(p.id) === String(id));
     return found ? (window.Api?.normalizeProduct ? window.Api.normalizeProduct(found) : found) : null;
   },
@@ -54,15 +65,24 @@ const ProductApi = {
    * Fetches product categories list
    */
   async getCategories() {
+    let cats = [];
     try {
-      const response = await window.Api.get('/categories');
-      const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response.results || response.data || response || []);
-      return (Array.isArray(raw) ? raw : []).map(c => window.Api?.normalizeCategory ? window.Api.normalizeCategory(c) : c);
+      if (window.Api && window.CONFIG?.API_BASE_URL) {
+        const response = await window.Api.get('/categories');
+        const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response?.results || response?.data || response || []);
+        if (Array.isArray(raw) && raw.length > 0) {
+          cats = raw;
+        }
+      }
     } catch (error) {
-      console.error('[ProductApi] Error fetching categories:', error);
-      const fallback = window.CONFIG?.CATEGORIES || [];
-      return fallback.map(c => window.Api?.normalizeCategory ? window.Api.normalizeCategory(c) : c);
+      console.warn('[ProductApi] Categorías API offline:', error);
     }
+
+    if (!cats || cats.length === 0) {
+      cats = window.CONFIG?.CATEGORIES || window.CATEGORIES_DATA || [];
+    }
+
+    return cats.map(c => window.Api?.normalizeCategory ? window.Api.normalizeCategory(c) : c);
   },
 
   /**

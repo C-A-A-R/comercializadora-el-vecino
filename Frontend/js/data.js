@@ -12,6 +12,17 @@ const CATEGORIES_DATA = [
   { id: "tv-audio", name: "Smart TV & Audio", icon: "tv", count: "5 Equipos" }
 ];
 
+// Subcategorías disponibles
+const SUBCATEGORIES_DATA = [
+  { id: "french-door", name: "Neveras French Door", categoryId: "refrigeracion" },
+  { id: "side-by-side", name: "Side by Side", categoryId: "refrigeracion" },
+  { id: "carga-frontal", name: "Lavadoras Carga Frontal", categoryId: "lavado" },
+  { id: "secadoras", name: "Secadoras Eléctricas", categoryId: "lavado" },
+  { id: "split-inverter", name: "Aires Split Inverter", categoryId: "climatizacion" },
+  { id: "neo-qled-oled", name: "Pantallas Neo QLED & OLED", categoryId: "tv-audio" },
+  { id: "barras-sonido", name: "Barras de Sonido", categoryId: "tv-audio" }
+];
+
 // Catálogo de Productos (Sin ningún precio)
 const PRODUCTS_DATA = [
   {
@@ -19,10 +30,14 @@ const PRODUCTS_DATA = [
     sku: "REF-LG-INSTA-601",
     name: "Nevera LG InstaView French Door 601L",
     category: "refrigeracion",
+    subcategory: "Neveras French Door",
     brand: "LG Electronics",
     badge: "Alta Gama",
     badgeColor: "neon-cyan",
     featured: true,
+    rating: 4.98,
+    ranking_score: 98,
+    total_views: 1420,
     image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Capacidad", value: "601 Litros" },
@@ -30,17 +45,22 @@ const PRODUCTS_DATA = [
       { label: "Compresor", value: "Linear Inverter (10 años garantía)" },
       { label: "Acabado", value: "Acero Titanio Mate" }
     ],
-    summary: "Panel de cristal tintado Knock-On que se ilumina con 2 toques rápidos. Máxima eficiencia energética y conservación Multi Air Flow."
+    summary: "Panel de cristal tintado Knock-On que se ilumina con 2 toques rápidos. Máxima eficiencia energética y conservación Multi Air Flow.",
+    description: "Panel de cristal tintado Knock-On que se ilumina con 2 toques rápidos. Máxima eficiencia energética y conservación Multi Air Flow con compresor Linear Inverter respaldado con 10 años de garantía."
   },
   {
     id: "prod-02",
     sku: "LAV-SAM-SMART-22",
     name: "Lavadora Inteligente Samsung EcoBubble 22kg",
     category: "lavado",
+    subcategory: "Lavadoras Carga Frontal",
     brand: "Samsung",
     badge: "Eco Inverter",
     badgeColor: "electric-blue",
     featured: true,
+    rating: 4.95,
+    ranking_score: 96,
+    total_views: 1180,
     image: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Capacidad", value: "22 Kilogramos" },
@@ -48,17 +68,22 @@ const PRODUCTS_DATA = [
       { label: "Conectividad", value: "WiFi SmartThings AI" },
       { label: "Ciclo Vapor", value: "Higienizante 99.9%" }
     ],
-    summary: "Tecnología de burbujas activas para lavado profundo a baja temperatura y dispensador automático con calibración inteligente."
+    summary: "Tecnología de burbujas activas para lavado profundo a baja temperatura y dispensador automático con calibración inteligente.",
+    description: "Tecnología de burbujas activas EcoBubble para lavado profundo a baja temperatura, conectividad SmartThings AI y dispensador con calibración inteligente de detergente."
   },
   {
     id: "prod-03",
     sku: "TV-SAM-OLED-65",
     name: "Smart TV Samsung Neo QLED 65\" 4K Ultra HD",
     category: "tv-audio",
+    subcategory: "Pantallas Neo QLED & OLED",
     brand: "Samsung",
     badge: "4K Master",
     badgeColor: "neon-magenta",
     featured: true,
+    rating: 4.97,
+    ranking_score: 99,
+    total_views: 1650,
     image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Pantalla", value: "65 Pulgadas Quantum Matrix" },
@@ -66,35 +91,45 @@ const PRODUCTS_DATA = [
       { label: "Procesador", value: "Neural Quantum 4K AI" },
       { label: "Audio", value: "Dolby Atmos 60W OTS+" }
     ],
-    summary: "Negros absolutos, contraste ilimitado y diseño ultrafino AirSlim sin bordes para cine en casa y gaming de última generación."
+    summary: "Negros absolutos, contraste ilimitado y diseño ultrafino AirSlim sin bordes para cine en casa y gaming de última generación.",
+    description: "Negros profundos, contraste ilimitado Quantum Matrix y diseño ultrafino AirSlim con procesador Neural Quantum 4K y Dolby Atmos envolvente."
   },
   {
     id: "prod-04",
     sku: "AC-MIDEA-INV-18K",
     name: "Aire Acondicionado Split Inverter Midea 18,000 BTU",
     category: "climatizacion",
+    subcategory: "Aires Split Inverter",
     brand: "Midea",
     badge: "Ahorro 70%",
     badgeColor: "neon-cyan",
     featured: true,
-    image: "https://images.unsplash.com/photo-1614633833026-062040b28489?auto=format&fit=crop&w=800&q=80",
+    rating: 4.92,
+    ranking_score: 95,
+    total_views: 1040,
+    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Capacidad", value: "18,000 BTU / 220V" },
       { label: "Tecnología", value: "Quattro Full Inverter" },
       { label: "Refrigerante", value: "Ecológico R410A" },
       { label: "Filtro", value: "Dual Ionizador Anti-bacterial" }
     ],
-    summary: "Enfriamiento ultrasilencioso en menos de 30 segundos con control mediante aplicación móvil y protección anticorrosiva Gold Fin."
+    summary: "Enfriamiento ultrasilencioso en menos de 30 segundos con control mediante aplicación móvil y protección anticorrosiva Gold Fin.",
+    description: "Enfriamiento ultrasilencioso en menos de 30 segundos con compresor Quattro Full Inverter, filtración dual con ionizador y protección Gold Fin anticorrosiva."
   },
   {
     id: "prod-05",
     sku: "REF-WHIRL-SIDE-580",
     name: "Refrigerador Side by Side Whirlpool 580L Acero",
     category: "refrigeracion",
+    subcategory: "Side by Side",
     brand: "Whirlpool",
     badge: "Mayor Capacidad",
     badgeColor: "electric-blue",
     featured: false,
+    rating: 4.88,
+    ranking_score: 92,
+    total_views: 920,
     image: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Capacidad", value: "580 Litros" },
@@ -102,17 +137,22 @@ const PRODUCTS_DATA = [
       { label: "Control", value: "Touch Digital Exterior" },
       { label: "Tecnología", value: "6th Sense Temperature Control" }
     ],
-    summary: "Distribución bilateral con cajones Humidity Controlled para preservar frutas y vegetales frescos hasta por el doble de tiempo."
+    summary: "Distribución bilateral con cajones Humidity Controlled para preservar frutas y vegetales frescos hasta por el doble de tiempo.",
+    description: "Distribución bilateral con dispensador exterior de agua y hielo filtrado, tecnología 6th Sense y cajones Humidity Controlled para máxima frescura."
   },
   {
     id: "prod-06",
     sku: "SEC-LG-HEAT-16",
     name: "Secadora Carga Frontal LG DUAL Inverter Heat Pump 16kg",
     category: "lavado",
+    subcategory: "Secadoras Eléctricas",
     brand: "LG Electronics",
     badge: "Bomba de Calor",
     badgeColor: "neon-magenta",
     featured: false,
+    rating: 4.85,
+    ranking_score: 89,
+    total_views: 810,
     image: "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Capacidad", value: "16 Kilogramos" },
@@ -120,17 +160,22 @@ const PRODUCTS_DATA = [
       { label: "Cuidado", value: "Sensor Dry de humedad" },
       { label: "Auto-Limpieza", value: "Condensador automático" }
     ],
-    summary: "Secado a baja temperatura que protege los tejidos más delicados ahorrando hasta 50% de consumo eléctrico."
+    summary: "Secado a baja temperatura que protege los tejidos más delicados ahorrando hasta 50% de consumo eléctrico.",
+    description: "Secado a baja temperatura con bomba de calor DUAL Inverter, sensor Dry de humedad y condensador de autolimpieza automática."
   },
   {
     id: "prod-07",
     sku: "SND-SONY-BAR-700",
     name: "Barra de Sonido Sony High-Power 700W Dolby Atmos",
     category: "tv-audio",
+    subcategory: "Barras de Sonido",
     brand: "Sony",
     badge: "Audio Cinemático",
     badgeColor: "neon-cyan",
     featured: true,
+    rating: 4.94,
+    ranking_score: 94,
+    total_views: 950,
     image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80",
     specs: [
       { label: "Potencia", value: "700W RMS" },
@@ -138,7 +183,77 @@ const PRODUCTS_DATA = [
       { label: "Conectividad", value: "HDMI eARC, Bluetooth 5.2, Óptico" },
       { label: "Formato", value: "Dolby Atmos / DTS:X" }
     ],
-    summary: "Inmersión acústica tridimensional envolvente para acompañar tu Smart TV con calibración acústica de sala."
+    summary: "Inmersión acústica tridimensional envolvente para acompañar tu Smart TV con calibración acústica de sala.",
+    description: "Inmersión acústica tridimensional de 5.1.2 canales con 700W RMS de potencia, decodificación nativa Dolby Atmos y subwoofer inalámbrico de alta fidelidad."
+  },
+  {
+    id: "prod-08",
+    sku: "TWR-LG-WASHTWR-AI",
+    name: "Torre de Lavado y Secado LG WashTower AI Dual",
+    category: "lavado",
+    subcategory: "Torres de Lavado",
+    brand: "LG Electronics",
+    badge: "Top Ventas",
+    badgeColor: "neon-magenta",
+    featured: true,
+    rating: 4.99,
+    ranking_score: 100,
+    total_views: 1780,
+    image: "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
+    specs: [
+      { label: "Capacidad", value: "22kg Lavado / 16kg Secado" },
+      { label: "Panel", value: "Center Control Unificado" },
+      { label: "Tecnología", value: "AI DD Inteligencia Artificial" },
+      { label: "Ciclo", value: "TurboWash 360 & Steam+" }
+    ],
+    summary: "Diseño monobloque vertical con panel central unificado a la altura perfecta y sincronización inteligente de ciclo.",
+    description: "Diseño monobloque integrado vertical con panel central táctil a la altura perfecta, inteligencia artificial AI DD que detecta textura textil y sincronización automática entre lavado y secado."
+  },
+  {
+    id: "prod-09",
+    sku: "CAM-ROYALE-KING-ORT",
+    name: "Cama King Size Confort Ortopédico Royale",
+    category: "dormitorios",
+    subcategory: "Camas King Size",
+    brand: "Restonic Royale",
+    badge: "Más Valorado",
+    badgeColor: "electric-blue",
+    featured: false,
+    rating: 4.91,
+    ranking_score: 93,
+    total_views: 890,
+    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+    specs: [
+      { label: "Medida", value: "King Size (2.00m x 2.00m)" },
+      { label: "Núcleo", value: "Resortes Pocket Ensacados Independientes" },
+      { label: "Tapiz", value: "Tejido de Punto Hipoalergénico Anti-ácaros" },
+      { label: "Base", value: "Madera de Pino Estacionada Reforzada" }
+    ],
+    summary: "Aislamiento total de movimiento para un descanso reparador con pillow top de espuma viscoelástica de alta densidad.",
+    description: "Aislamiento ergonómico de movimiento para un descanso profundo y reparador, equipado con pillow top viscoelástico y estructura de madera seleccionada reforzada."
+  },
+  {
+    id: "prod-10",
+    sku: "SOF-MODULAR-L-VELVET",
+    name: "Sofá Seccional Modular L-Shape Velvet Graphite",
+    category: "salas",
+    subcategory: "Salas Modulares",
+    brand: "Living Art",
+    badge: "Diseño Top",
+    badgeColor: "neon-cyan",
+    featured: false,
+    rating: 4.87,
+    ranking_score: 91,
+    total_views: 830,
+    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80",
+    specs: [
+      { label: "Configuración", value: "Modular en L Reversible" },
+      { label: "Tapiz", value: "Terciopelo Velvet Repelente a Líquidos" },
+      { label: "Estructura", value: "Madera Maciza con Resortes Zig-Zag" },
+      { label: "Relleno", value: "Espuma de Alta Resiliencia D30" }
+    ],
+    summary: "Confort superior y estética moderna para sala de estar con asientos extra profundos y cojinería desmontable.",
+    description: "Confort envolvente y estética contemporánea para sala de estar con asientos extra profundos, tela aterciopelada de alta resistencia y cojinería lavable."
   }
 ];
 
@@ -325,3 +440,21 @@ const TIKTOK_DATA = [
     description: "¿Qué capacidad necesitas para tu habitación o sala? Te explicamos el cálculo de BTU en 60 segundos."
   }
 ];
+
+if (typeof window !== 'undefined') {
+  window.CATEGORIES_DATA = CATEGORIES_DATA;
+  window.SUBCATEGORIES_DATA = SUBCATEGORIES_DATA;
+  window.PRODUCTS_DATA = PRODUCTS_DATA;
+  window.COMBOS_DATA = COMBOS_DATA;
+  window.TIKTOK_DATA = TIKTOK_DATA;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    CATEGORIES_DATA,
+    SUBCATEGORIES_DATA,
+    PRODUCTS_DATA,
+    COMBOS_DATA,
+    TIKTOK_DATA
+  };
+}

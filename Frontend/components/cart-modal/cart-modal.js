@@ -77,6 +77,14 @@ const CartModal = {
     document.body.style.overflow = '';
   },
 
+  formatCurrency(amount) {
+    if (window.CONFIG?.formatCurrency && typeof window.CONFIG.formatCurrency === 'function') {
+      return window.CONFIG.formatCurrency(amount);
+    }
+    const num = Number(amount) || 0;
+    return `$ ${num.toLocaleString('es-CO')}`;
+  },
+
   render() {
     const cart = window.Storage?.getCart() || [];
     const cartBody = document.getElementById('cartBody');
@@ -87,7 +95,7 @@ const CartModal = {
 
     if (!cartBody) return;
 
-    const totalCount = window.Storage.getCartCount();
+    const totalCount = window.Storage?.getCartCount ? window.Storage.getCartCount() : cart.length;
     if (cartHeaderPill) cartHeaderPill.textContent = totalCount;
 
     if (cart.length === 0) {
@@ -116,8 +124,8 @@ const CartModal = {
     if (cartFooter) cartFooter.style.display = 'flex';
     if (cartTotalItems) cartTotalItems.textContent = `${totalCount} producto${totalCount > 1 ? 's' : ''}`;
     if (cartSubtotal) {
-      const total = window.Storage.getCartTotal();
-      cartSubtotal.textContent = window.CONFIG.formatCurrency(total);
+      const total = window.Storage?.getCartTotal ? window.Storage.getCartTotal() : 0;
+      cartSubtotal.textContent = this.formatCurrency(total);
     }
 
     cartBody.innerHTML = cart.map(item => `
@@ -128,7 +136,7 @@ const CartModal = {
             <div class="cart-item-title">${item.name}</div>
             <div class="cart-item-sku">SKU: ${item.sku || 'N/A'}</div>
           </div>
-          <div class="cart-item-price">${window.CONFIG.formatCurrency(item.price)}</div>
+          <div class="cart-item-price">${this.formatCurrency(item.price)}</div>
           <div class="cart-item-controls">
             <div class="qty-stepper">
               <button class="qty-btn" onclick="CartModal.changeQty('${item.id}', ${(item.quantity || 1) - 1})">

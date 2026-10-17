@@ -464,10 +464,47 @@ window.openComboModal = function(comboId) {
 };
 
 // ==========================================================================
-// SECCIÓN 3: CATÁLOGO TÉCNICO DE PRODUCTOS (USA EL COMPONENTE PRODUCT-CARD)
+// SECCIÓN 3: PRODUCTOS DESTACADOS & MEJOR VALORADOS (MÁXIMO 8 / 2 FILAS)
 // ==========================================================================
-let currentCategoryFilter = "all";
-let catalogSearchQuery = "";
+const MAX_FEATURED_PRODUCTS = 8;
+
+/**
+ * Obtiene hasta 8 productos priorizando los destacados (featured / is_feature_product)
+ * y rellenando los cupos restantes con los productos de mayor valoración / ranking.
+ */
+function getFeaturedAndTopRatedProducts(sourceList = PRODUCTS_DATA, limit = MAX_FEATURED_PRODUCTS) {
+  if (!Array.isArray(sourceList) || sourceList.length === 0) return [];
+
+  // 1. Obtener productos destacados
+  const featured = sourceList.filter(p => p.featured === true || p.is_feature_product === true);
+
+  // Ordenar los destacados por mayor valoración / ranking descendente
+  featured.sort((a, b) => {
+    const scoreA = Number(a.rating || a.ranking_score || a.sentiment_score || 0);
+    const scoreB = Number(b.rating || b.ranking_score || b.sentiment_score || 0);
+    return scoreB - scoreA;
+  });
+
+  // Si ya tenemos suficientes destacados para cubrir el cupo (máximo 8 o 2 filas)
+  if (featured.length >= limit) {
+    return featured.slice(0, limit);
+  }
+
+  // 2. Si no alcanzamos el cupo de 8, rellenar con los productos más valorados restantes
+  const featuredIds = new Set(featured.map(p => p.id));
+  const remaining = sourceList.filter(p => !featuredIds.has(p.id));
+
+  remaining.sort((a, b) => {
+    const scoreA = Number(a.rating || a.ranking_score || a.sentiment_score || 0);
+    const scoreB = Number(b.rating || b.ranking_score || b.sentiment_score || 0);
+    return scoreB - scoreA;
+  });
+
+  const slotsNeeded = limit - featured.length;
+  const fillers = remaining.slice(0, slotsNeeded);
+
+  return [...featured, ...fillers];
+}
 
 function renderCategoryFilters() {
   const container = document.getElementById("categoriesFilterContainer");
@@ -494,30 +531,15 @@ function renderProductsGrid() {
   const container = document.getElementById("allProductsGrid");
   if (!container || typeof PRODUCTS_DATA === "undefined") return;
 
-  let filtered = [...PRODUCTS_DATA];
+  // Obtener la selección de productos destacados y más valorados (máximo 8 / 2 filas en pantallas grandes)
+  const displayProducts = getFeaturedAndTopRatedProducts(PRODUCTS_DATA, MAX_FEATURED_PRODUCTS);
 
-  // Filtro por categoría
-  if (currentCategoryFilter !== "all") {
-    filtered = filtered.filter(p => p.category === currentCategoryFilter);
-  }
-
-  // Filtro por búsqueda
-  if (catalogSearchQuery.trim() !== "") {
-    const q = catalogSearchQuery.toLowerCase().trim();
-    filtered = filtered.filter(p => 
-      p.name.toLowerCase().includes(q) || 
-      (p.sku && p.sku.toLowerCase().includes(q)) || 
-      p.brand.toLowerCase().includes(q) ||
-      (p.description && p.description.toLowerCase().includes(q))
-    );
-  }
-
-  if (filtered.length === 0) {
+  if (displayProducts.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <span class="material-symbols-outlined empty-state-icon">inventory_2</span>
-        <h3 class="empty-state-title">No se encontraron productos</h3>
-        <p class="empty-state-text">Intenta con otro término de búsqueda o selecciona otra categoría.</p>
+        <span class="material-symbols-outlined empty-state-icon">stars</span>
+        <h3 class="empty-state-title">No hay productos destacados disponibles</h3>
+        <p class="empty-state-text">Vuelve a consultar más tarde o visita nuestro catálogo general.</p>
       </div>
     `;
     return;
@@ -525,14 +547,14 @@ function renderProductsGrid() {
 
   // Utilizar el componente modular ProductCard
   if (window.ProductCard && typeof window.ProductCard.renderHTML === "function") {
-    container.innerHTML = filtered.map(product => window.ProductCard.renderHTML(product)).join("");
+    container.innerHTML = displayProducts.map(product => window.ProductCard.renderHTML(product)).join("");
   } else {
     // Renderizado de respaldo en caso de que el componente no haya cargado
-    container.innerHTML = filtered.map(product => {
+    container.innerHTML = displayProducts.map(product => {
       const waMsg = CONFIG.whatsappTemplates.productQuote(product.name, product.sku);
       const waLink = getWhatsAppLink(waMsg);
       return `
-        <article class="product-card">
+        <article class="product-card" data-product-id="${product.id}">
           <div class="product-card-img-box">
             <span class="product-card-badge badge-${product.badgeColor}">${product.badge}</span>
             <img class="product-card-img" src="${product.image}" alt="${product.name}" loading="lazy">
@@ -540,12 +562,14 @@ function renderProductsGrid() {
           <div class="product-card-body">
             <div class="product-card-meta">
               <span class="product-card-category">${product.brand}</span>
-              <span class="product-card-sku">SKU: ${product.sku}</span>
+              ${product.rating ? `<span class="product-card-rating" style="display:inline-flex;align-items:center;gap:2px;font-weight:700;color:#f59e0b;font-size:0.75rem;">★ ${product.rating}</span>` : `<span class="product-card-sku">SKU: ${product.sku}</span>`}
             </div>
             <h3 class="product-card-title">${product.name}</h3>
-            <ul class="product-card-specs">
-              ${(product.specs || []).slice(0, 3).map(s => `<li>${s}</li>`).join("")}
-            </ul>
+            ${product.description ? `
+              <p class="product-card-description" title="${product.description}">
+                ${product.description}
+              </p>
+            ` : ''}
             <div class="product-card-footer-box">
               <div class="product-card-actions">
                 <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-card-quote">
@@ -718,9 +742,227 @@ window.closeProductModal = function() {
 };
 
 // ==========================================================================
+// SECCIÓN: CONTROLADOR DEL CARRUSEL DE CATEGORÍAS (2 FILAS - BUCLE INFINITO Y AUTOPLAY)
+// ==========================================================================
+function initCategoriesCarousel() {
+  const viewport = document.getElementById("catCarouselViewport");
+  const track = document.getElementById("catCarouselTrack");
+  const prevBtns = [document.getElementById("catCarouselPrev"), document.getElementById("catCarouselFloatPrev")].filter(Boolean);
+  const nextBtns = [document.getElementById("catCarouselNext"), document.getElementById("catCarouselFloatNext")].filter(Boolean);
+  const wrapper = document.querySelector(".categories-carousel-wrapper") || viewport;
+
+  if (!viewport || !track) return;
+
+  const originalCards = Array.from(track.children);
+  if (originalCards.length < 2) return;
+
+  // Cada columna está compuesta por 2 tarjetas en vertical (Fila 1 y Fila 2)
+  const numCols = Math.ceil(originalCards.length / 2);
+
+  // Crear clones para garantizar desplazamiento infinito y fluido sin cortes
+  const createCloneSet = (label) => originalCards.map(c => {
+    const clone = c.cloneNode(true);
+    clone.setAttribute("data-clone", label);
+    clone.setAttribute("aria-hidden", "true");
+    return clone;
+  });
+
+  const prefix1 = createCloneSet("prefix-1");
+  const prefix2 = createCloneSet("prefix-2");
+  const suffix1 = createCloneSet("suffix-1");
+  const suffix2 = createCloneSet("suffix-2");
+
+  // Inserción en orden natural al principio y al final
+  track.prepend(...prefix1, ...prefix2);
+  track.append(...suffix1, ...suffix2);
+
+  // Índice base: 2 juegos completos de columnas antes del conjunto original (10 columnas)
+  const baseIndex = numCols * 2;
+  let currentColIndex = baseIndex;
+  let isAnimating = false;
+  let autoplayTimer = null;
+  const AUTOPLAY_INTERVAL = 3800; // Desplazamiento automático cada 3.8 segundos
+
+  function getColWidth() {
+    const first = track.children[0];
+    if (!first) return 330;
+    const w = first.getBoundingClientRect().width;
+    return w > 0 ? w : 330;
+  }
+
+  function updatePosition(withTransition = true) {
+    const colWidth = getColWidth();
+    if (colWidth <= 0) return;
+    if (withTransition) {
+      track.style.transition = "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)";
+    } else {
+      track.style.transition = "none";
+    }
+    track.style.transform = `translateX(-${currentColIndex * colWidth}px)`;
+  }
+
+  // Inicializar posición en el conjunto original de forma transparente
+  requestAnimationFrame(() => {
+    updatePosition(false);
+    startAutoplay();
+  });
+
+  function move(direction) {
+    if (isAnimating) return;
+    isAnimating = true;
+    currentColIndex += direction;
+    updatePosition(true);
+  }
+
+  function safeMove(direction) {
+    move(direction);
+    setTimeout(() => {
+      isAnimating = false;
+    }, 750);
+  }
+
+  // Al llegar al final de la transición CSS, reajustar posición invisiblemente
+  track.addEventListener("transitionend", (e) => {
+    if (e.target !== track) return;
+
+    // Al llegar al final, sigue la primera columna de forma continua y suave
+    if (currentColIndex >= baseIndex + numCols) {
+      currentColIndex -= numCols;
+      updatePosition(false);
+    } else if (currentColIndex < baseIndex) {
+      currentColIndex += numCols;
+      updatePosition(false);
+    }
+
+    isAnimating = false;
+  });
+
+  // Autoplay continuo
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      safeMove(1);
+    }, AUTOPLAY_INTERVAL);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  // Pausar al pasar el ratón para facilitar la lectura y selección
+  if (wrapper) {
+    wrapper.addEventListener("mouseenter", stopAutoplay);
+    wrapper.addEventListener("mouseleave", startAutoplay);
+  }
+
+  // Pausar si la pestaña pierde visibilidad
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopAutoplay();
+    } else {
+      startAutoplay();
+    }
+  });
+
+  // Botones de avance y retroceso (funcionan de manera infinita)
+  prevBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      safeMove(-1);
+      stopAutoplay();
+      startAutoplay();
+    });
+  });
+
+  nextBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      safeMove(1);
+      stopAutoplay();
+      startAutoplay();
+    });
+  });
+
+  // Soporte de arrastre suave con ratón y pantallas táctiles (Drag / Swipe to scroll)
+  let isPointerDown = false;
+  let startX = 0;
+  let dragDeltaX = 0;
+  let didDrag = false;
+
+  function onPointerDown(e) {
+    if (isAnimating) return;
+    isPointerDown = true;
+    didDrag = false;
+    dragDeltaX = 0;
+    startX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    stopAutoplay();
+    track.style.transition = "none";
+  }
+
+  function onPointerMove(e) {
+    if (!isPointerDown) return;
+    const currentX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    dragDeltaX = currentX - startX;
+    if (Math.abs(dragDeltaX) > 8) {
+      didDrag = true;
+    }
+    const colWidth = getColWidth();
+    const currentOffset = currentColIndex * colWidth - dragDeltaX;
+    track.style.transform = `translateX(-${currentOffset}px)`;
+  }
+
+  function onPointerUp() {
+    if (!isPointerDown) return;
+    isPointerDown = false;
+    const colWidth = getColWidth();
+    const threshold = colWidth * 0.22;
+
+    if (dragDeltaX < -threshold) {
+      safeMove(1);
+    } else if (dragDeltaX > threshold) {
+      safeMove(-1);
+    } else {
+      updatePosition(true);
+    }
+
+    dragDeltaX = 0;
+    startAutoplay();
+  }
+
+  viewport.addEventListener("mousedown", onPointerDown);
+  window.addEventListener("mousemove", onPointerMove);
+  window.addEventListener("mouseup", onPointerUp);
+
+  viewport.addEventListener("touchstart", onPointerDown, { passive: true });
+  viewport.addEventListener("touchmove", onPointerMove, { passive: true });
+  viewport.addEventListener("touchend", onPointerUp, { passive: true });
+
+  // Prevenir navegación al hacer click como consecuencia del arrastre
+  track.addEventListener("click", (e) => {
+    if (didDrag) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+
+  // Reajustar tamaño al redimensionar ventana
+  window.addEventListener("resize", () => {
+    updatePosition(false);
+  }, { passive: true });
+}
+
+// ==========================================================================
 // INICIALIZACIÓN PRINCIPAL (DOM READY)
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
+  // Soporte de filtro inicial por URL (?cat=...)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlCat = urlParams.get("cat");
+  if (urlCat) {
+    currentCategoryFilter = urlCat;
+  }
+
   initGlobalComponents();
   renderBenefits();
   renderCombos();
@@ -729,6 +971,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSearchInput();
   renderTikTokGrid();
   renderFloatingDock();
+  initCategoriesCarousel();
 
   // Cerrar modal al pulsar fuera de la tarjeta
   const modal = document.getElementById("productModal");
