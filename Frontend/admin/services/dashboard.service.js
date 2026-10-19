@@ -1,4 +1,4 @@
-import { CONFIG } from '../../js/config.js';
+import { CONFIG } from '../../js/config.module.js';
 import { DASHBOARD_MOCK } from './mocks/dashboard.mock.js';
 
 const CACHE_KEY = 'ev_dashboard_snapshot';

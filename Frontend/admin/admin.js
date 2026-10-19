@@ -6,10 +6,11 @@ import { DashboardView } from './modules/dashboard/dashboard.view.js';
 import { ProductListView } from './modules/products/product-list.view.js';
 import { ProductFormView } from './modules/products/product-form.view.js';
 import { CategoryListView } from './modules/categories/category-list.view.js';
-import { PromotionListView } from './modules/promotions/promotion-list.view.js';
+import { PromotionsHubView } from './modules/promotions/promotions-hub.view.js';
 import { PromotionFormView } from './modules/promotions/promotion-form.view.js';
-import { ComboListView } from './modules/combos/combo-list.view.js';
 import { ComboFormView } from './modules/combos/combo-form.view.js';
+import { BannerListView } from './modules/banners/banner-list.view.js';
+import { ReviewListView } from './modules/reviews/review-list.view.js';
 import { ReportView } from './modules/reports/report.view.js';
 
 /**
@@ -79,12 +80,15 @@ export class AsyncRouter extends Router {
   }
 }
 
-// Configuración de rutas SPA bajo la arquitectura definida en el SPEC
+// Configuración de rutas SPA bajo la arquitectura modular
 const routes = {
   '/dashboard': {
     guard: () => AuthGuard.checkAccess('admin'),
     renderAsync: async () => buildShell(await DashboardView.render()),
-    afterRender: () => bindHeaderEvents()
+    afterRender: () => {
+      bindHeaderEvents();
+      DashboardView.bindEvents();
+    }
   },
   '/products': {
     guard: () => AuthGuard.checkAccess('admin'),
@@ -120,10 +124,10 @@ const routes = {
   },
   '/promotions': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await PromotionListView.render()),
+    renderAsync: async () => buildShell(await PromotionsHubView.render()),
     afterRender: () => {
       bindHeaderEvents();
-      PromotionListView.bindEvents();
+      PromotionsHubView.bindEvents();
     }
   },
   '/promotions/new': {
@@ -136,10 +140,10 @@ const routes = {
   },
   '/combos': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ComboListView.render()),
+    renderAsync: async () => buildShell(await PromotionsHubView.render()),
     afterRender: () => {
       bindHeaderEvents();
-      ComboListView.bindEvents();
+      PromotionsHubView.bindEvents();
     }
   },
   '/combos/new': {
@@ -148,6 +152,22 @@ const routes = {
     afterRender: () => {
       bindHeaderEvents();
       ComboFormView.bindEvents();
+    }
+  },
+  '/banners': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => buildShell(await BannerListView.render()),
+    afterRender: () => {
+      bindHeaderEvents();
+      BannerListView.bindEvents();
+    }
+  },
+  '/reviews': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => buildShell(await ReviewListView.render()),
+    afterRender: () => {
+      bindHeaderEvents();
+      ReviewListView.bindEvents();
     }
   },
   '/reports': {
@@ -173,7 +193,7 @@ const routes = {
       <div class="p-8 text-center space-y-4">
         <span class="material-symbols-outlined text-6xl text-gray-400">find_in_page</span>
         <h1 class="font-display text-3xl font-bold text-deep-obsidian">404 - Ruta no encontrada</h1>
-        <a href="#/dashboard" class="inline-block px-4 py-2 bg-electric-blue text-white rounded-lg text-sm font-medium">Volver al Dashboard</a>
+        <a href="#/dashboard" class="inline-block px-4 py-2 bg-electric-blue text-white rounded-lg text-sm font-medium">Volver a la Página Principal</a>
       </div>
     `),
     afterRender: () => bindHeaderEvents()

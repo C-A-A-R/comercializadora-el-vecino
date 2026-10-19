@@ -1,4 +1,4 @@
-﻿/* Cart Modal / Slide-over Drawer Styles */
+/* Cart Modal / Slide-over Drawer Styles */
 .cart-backdrop {
   position: fixed;
   inset: 0;
@@ -301,11 +301,34 @@
   border-color: #0800FF;
 }
 
+.btn-explore-catalog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  background: #0800FF;
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(8, 0, 255, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-explore-catalog:hover {
+  background: #0000CC;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(8, 0, 255, 0.35);
+}
+
 .btn-whatsapp-quote {
   width: 100%;
   height: 3.25rem;
   border-radius: 0.875rem;
-  background: #00F0FF;
+  background: #25D366;
   color: #FFFFFF;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
@@ -317,7 +340,7 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .btn-whatsapp-quote:hover {
@@ -326,18 +349,197 @@
   box-shadow: 0 10px 28px rgba(37, 211, 102, 0.5);
 }
 
+.btn-whatsapp-quote:active {
+  transform: scale(0.98);
+}
+
 .btn-clear-cart {
   background: transparent;
   border: none;
   color: #757589;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  text-align: center;
-  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 .btn-clear-cart:hover {
-  color: #BA1A1A;
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.08);
+}
+
+/* ==========================================================================
+   MODAL DE CONFIRMACIÓN PARA VACIAR EL CARRITO
+   ========================================================================== */
+.cart-confirm-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.cart-confirm-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-confirm-card {
+  background: #FFFFFF;
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.5rem;
+  max-width: 330px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  transform: scale(0.92);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-confirm-overlay.visible .cart-confirm-card {
+  transform: scale(1);
+}
+
+.cart-confirm-icon-box {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 1.125rem;
+  background: #FEE2E2;
+  color: #DC2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.125rem auto;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+.cart-confirm-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.1875rem;
+  color: #0A0A0A;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.25;
+}
+
+.cart-confirm-desc {
+  font-size: 0.8125rem;
+  color: #757589;
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+}
+
+.cart-confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.btn-confirm-cancel {
+  flex: 1;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: #F4F6FB;
+  border: 1px solid #E2E6EE;
+  color: #454558;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-confirm-cancel:hover {
+  background: #E2E6EE;
+  color: #0A0A0A;
+}
+
+.btn-confirm-accept {
+  flex: 1.15;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: #DC2626;
+  border: none;
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+  transition: all 0.18s ease;
+}
+
+.btn-confirm-accept:hover {
+  background: #B91C1C;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.45);
+}
+
+.btn-confirm-accept:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD Y AJUSTES MÓVILES
+   ========================================================================== */
+@media (max-width: 640px) {
+  .cart-drawer {
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .cart-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .cart-body {
+    padding: 1rem 1.25rem;
+    gap: 0.85rem;
+  }
+
+  .cart-item {
+    padding: 0.85rem;
+    gap: 0.75rem;
+  }
+
+  .cart-item-img {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .cart-item-title {
+    font-size: 0.8125rem;
+  }
+
+  .cart-item-price {
+    font-size: 0.875rem;
+  }
+
+  .cart-footer {
+    padding: 1rem 1.25rem;
+  }
+
+  .cart-confirm-card {
+    max-width: 90vw;
+    padding: 1.5rem 1.25rem;
+  }
 }
 

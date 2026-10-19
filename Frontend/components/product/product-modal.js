@@ -62,12 +62,20 @@ const ProductModal = {
     const formattedOldPrice = product.originalPrice ? formatFn(product.originalPrice) : null;
     const waUrl = window.OrderService?.buildDirectProductQuoteUrl(product) || '#';
 
-    const specsHtml = (product.specs || []).map(spec => `
-      <li class="product-modal-spec-row">
-        <span class="material-symbols-outlined">verified</span>
-        <span>${spec}</span>
-      </li>
-    `).join('');
+    const specsHtml = (product.specs || []).map(spec => {
+      let text = '';
+      if (typeof spec === 'object' && spec !== null) {
+        text = `${spec.label || spec.name || 'Especificación'}: ${spec.value || ''}`;
+      } else {
+        text = String(spec);
+      }
+      return `
+        <li class="product-modal-spec-row">
+          <span class="material-symbols-outlined">verified</span>
+          <span>${text}</span>
+        </li>
+      `;
+    }).join('');
 
     content.innerHTML = `
       <div class="product-modal-grid">

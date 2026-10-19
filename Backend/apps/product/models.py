@@ -72,8 +72,6 @@ class Product(BaseModel):
     height_cm = models.DecimalField('Alto (cm)', max_digits=10, decimal_places=2, default=0)
     depth_cm = models.DecimalField('Profundo (cm)', max_digits=10, decimal_places=2, default=0)
     width_cm = models.DecimalField('Ancho (cm)', max_digits=10, decimal_places=2, default=0)
-    security = models.CharField('Seguridad', max_length=255, default='', blank=True)
-    price = models.DecimalField('Precio', max_digits=12, decimal_places=2, default=0)
     product_image = models.ImageField('Imagen del Producto', upload_to=rename_image_upload_to, null=True, blank=True)
     product_video = models.FileField('Video del Producto', upload_to=rename_video_upload_to, null=True, blank=True)
 

@@ -4,7 +4,7 @@ export const DASHBOARD_MOCK = {
   stock_critico: 6,
   destacados: 12,
   promos_activas: 4,
-  clics_whatsapp: 128,
+  clics_whatsapp: 342,
   valor_catalogo_usd: 35400.00,
   tasa_cambio: 4200.00,
   satisfaction_index: {
@@ -43,18 +43,70 @@ export const DASHBOARD_MOCK = {
     badge: 'Top Customer Choice'
   },
   top_5_featured: [
-    { id: 101, name: 'Nevera Samsung 200L No Frost', brand: 'Samsung', views: 342, price_usd: 650.00, ranking_score: 0.94, is_featured: true },
-    { id: 102, name: 'Lavadora LG Smart Motion 13kg', brand: 'LG', views: 289, price_usd: 520.00, ranking_score: 0.88, is_featured: true },
-    { id: 103, name: 'Cocina Mabe 4 Puestos Inox', brand: 'Mabe', views: 215, price_usd: 310.00, ranking_score: 0.82, is_featured: true },
-    { id: 106, name: 'Smart TV Samsung 55" Crystal UHD', brand: 'Samsung', views: 205, price_usd: 480.00, ranking_score: 0.79, is_featured: true },
-    { id: 105, name: 'Microondas Oster 20L Digital', brand: 'Oster', views: 164, price_usd: 95.00, ranking_score: 0.75, is_featured: false }
+    { id: 101, name: 'Nevera Samsung 200L No Frost', brand: 'Samsung', views: 342, ranking_score: 0.94, is_featured: true },
+    { id: 102, name: 'Lavadora LG Smart Motion 13kg', brand: 'LG', views: 289, ranking_score: 0.88, is_featured: true },
+    { id: 103, name: 'Cocina Mabe 4 Puestos Inox', brand: 'Mabe', views: 215, ranking_score: 0.82, is_featured: true },
+    { id: 106, name: 'Smart TV Samsung 55" Crystal UHD', brand: 'Samsung', views: 205, ranking_score: 0.79, is_featured: true },
+    { id: 105, name: 'Microondas Oster 20L Digital', brand: 'Oster', views: 164, ranking_score: 0.75, is_featured: false }
   ],
   top_viewed: [
-    { id: 101, name: 'Nevera Samsung 200L No Frost', views: 342, price_usd: 650.00, ranking_score: 0.94 },
-    { id: 102, name: 'Lavadora LG Smart Motion 13kg', views: 289, price_usd: 520.00, ranking_score: 0.88 },
-    { id: 103, name: 'Cocina Mabe 4 Puestos Inox', views: 215, price_usd: 310.00, ranking_score: 0.82 },
-    { id: 106, name: 'Smart TV Samsung 55" Crystal UHD', views: 205, price_usd: 480.00, ranking_score: 0.79 },
-    { id: 105, name: 'Microondas Oster 20L Digital', views: 164, price_usd: 95.00, ranking_score: 0.75 }
+    { id: 101, name: 'Nevera Samsung 200L No Frost', views: 342, ranking_score: 0.94 },
+    { id: 102, name: 'Lavadora LG Smart Motion 13kg', views: 289, ranking_score: 0.88 },
+    { id: 103, name: 'Cocina Mabe 4 Puestos Inox', views: 215, ranking_score: 0.82 },
+    { id: 106, name: 'Smart TV Samsung 55" Crystal UHD', views: 205, ranking_score: 0.79 },
+    { id: 105, name: 'Microondas Oster 20L Digital', views: 164, ranking_score: 0.75 }
+  ],
+  whatsapp_top_consulted: [
+    {
+      id: 101,
+      name: 'Nevera Samsung 200L No Frost',
+      brand: 'Samsung',
+      category: 'Refrigeración',
+      consultas_count: 88,
+      porcentaje: 95,
+      tendencia: '🔥 Alta Demanda',
+      badge_color: 'bg-rose-100 text-rose-800 border-rose-200'
+    },
+    {
+      id: 102,
+      name: 'Lavadora LG Smart Motion 13kg',
+      brand: 'LG',
+      category: 'Lavado',
+      consultas_count: 74,
+      porcentaje: 80,
+      tendencia: '⚡ Frecuente',
+      badge_color: 'bg-blue-100 text-electric-blue border-blue-200'
+    },
+    {
+      id: 106,
+      name: 'Smart TV Samsung 55" Crystal UHD',
+      brand: 'Samsung',
+      category: 'Televisores',
+      consultas_count: 61,
+      porcentaje: 66,
+      tendencia: '⚡ Frecuente',
+      badge_color: 'bg-purple-100 text-purple-800 border-purple-200'
+    },
+    {
+      id: 103,
+      name: 'Cocina Mabe 4 Puestos Inox',
+      brand: 'Mabe',
+      category: 'Cocción',
+      consultas_count: 48,
+      porcentaje: 52,
+      tendencia: '💬 Estable',
+      badge_color: 'bg-emerald-100 text-emerald-800 border-emerald-200'
+    },
+    {
+      id: 104,
+      name: 'Aire Acondicionado Split 12000 BTU',
+      brand: 'Mabe',
+      category: 'Climatización',
+      consultas_count: 36,
+      porcentaje: 39,
+      tendencia: '💬 Estable',
+      badge_color: 'bg-amber-100 text-amber-800 border-amber-200'
+    }
   ],
   complaint_alerts: [
     {

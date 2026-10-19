@@ -24,6 +24,8 @@
   <link rel="stylesheet" href="./css/variables.css">
   <link rel="stylesheet" href="./components/navbar/navbar.css">
   <link rel="stylesheet" href="./components/footer/footer.css">
+  <link rel="stylesheet" href="./components/cart-modal/cart-modal.css">
+  <link rel="stylesheet" href="./components/toast/toast.css">
   <link rel="stylesheet" href="./components/product/product-card.css">
   <link rel="stylesheet" href="./components/product/product-modal.css">
   <link rel="stylesheet" href="./index.css">
@@ -120,10 +122,10 @@
             1 Promoción
           </button>
           <button type="button" class="btn-view-pill" data-mode="2" onclick="setCombosPreviewMode(2)">
-            2 Promociones (1 Fila)
+            2 Promociones (Una debajo de otra)
           </button>
           <button type="button" class="btn-view-pill" data-mode="3" onclick="setCombosPreviewMode(3)">
-            3 Promociones (Espacio Disponible)
+            3 Promociones (Carrusel)
           </button>
           <button type="button" class="btn-view-pill" data-mode="4" onclick="setCombosPreviewMode(4)">
             4+ Promociones (Carrusel)
@@ -514,10 +516,14 @@
   <!-- Datos & Configuración de Catálogo -->
   <script src="./js/config.js"></script>
   <script src="./js/data.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/service/order.service.js"></script>
+  <script src="./components/toast/toast.js"></script>
 
   <!-- Componentes Modulares Reutilizables -->
   <script src="./components/navbar/navbar.js"></script>
   <script src="./components/footer/footer.js"></script>
+  <script src="./components/cart-modal/cart-modal.js"></script>
   <script src="./components/product/product-card.js"></script>
   <script src="./components/product/product-modal.js"></script>
 

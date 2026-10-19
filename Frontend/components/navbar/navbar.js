@@ -239,6 +239,12 @@ const Navbar = {
               <span class="material-symbols-outlined">search</span>
             </button>
 
+            <!-- Botón Carrito en Navbar -->
+            <button type="button" id="navbarCartBtn" class="navbar-cart-btn" aria-label="Abrir lista de cotización" title="Ver lista de cotización">
+              <span class="material-symbols-outlined navbar-cart-icon">shopping_cart</span>
+              <span class="navbar-cart-badge" id="navbarCartBadge">0</span>
+            </button>
+
             <!-- Botón Cotizar WhatsApp Directo -->
             <a href="${social.whatsapp}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-sm btn-header-quote" title="Cotizar por WhatsApp">
               <span class="material-symbols-outlined">chat</span>
@@ -307,6 +313,7 @@ const Navbar = {
 
           <ul class="mobile-nav-links">
             <li><a href="${rootPrefix}index.html" class="mobile-nav-link ${activePath === 'inicio' ? 'active' : ''}" onclick="closeMobileOverlays()"><span class="material-symbols-outlined text-neon-cyan">home</span> Inicio</a></li>
+            <li><a href="javascript:void(0)" class="mobile-nav-link" onclick="closeMobileOverlays(); Navbar.openCart();"><span class="material-symbols-outlined text-electric-blue">shopping_cart</span> <span style="flex:1;">Lista de Cotización</span> <span class="cart-count-pill mobile-drawer-cart-pill" id="mobileDrawerCartPill">0</span></a></li>
             <li><a href="${rootPrefix}promociones.html" class="mobile-nav-link ${activePath === 'promociones' ? 'active' : ''}" onclick="closeMobileOverlays()"><span class="material-symbols-outlined text-neon-magenta">local_fire_department</span> Promociones &amp; Combos ⚡</a></li>
             <li><a href="${catalogUrl}" class="mobile-nav-link ${activePath === 'catalogo' ? 'active' : ''}" onclick="closeMobileOverlays()"><span class="material-symbols-outlined">format_list_bulleted</span> Catálogo Técnico</a></li>
             <li><a href="${rootPrefix}categorias.html" class="mobile-nav-link ${activePath === 'categorias' ? 'active' : ''}" onclick="closeMobileOverlays()"><span class="material-symbols-outlined">grid_view</span> Categorías</a></li>
@@ -390,6 +397,7 @@ const Navbar = {
           </div>
         </div>
       </header>
+      <div class="header-spacer" aria-hidden="true"></div>
     `;
 
     if (target.tagName && target.tagName.toLowerCase() === 'header') {
@@ -398,8 +406,10 @@ const Navbar = {
       target.innerHTML = headerHtml;
     }
 
+    this.ensureCartLoaded(rootPrefix);
     this.bindEvents(rootPrefix);
     this.initSearch(rootPrefix);
+    this.updateCartBadge();
   },
 
   bindEvents(rootPrefix) {
@@ -527,6 +537,34 @@ const Navbar = {
         window.closeMobileSearch();
       });
     }
+
+    // Botón Carrito en Navbar
+    const navbarCartBtn = document.getElementById('navbarCartBtn');
+    if (navbarCartBtn && !navbarCartBtn.dataset.bound) {
+      navbarCartBtn.dataset.bound = 'true';
+      navbarCartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        Navbar.openCart();
+      });
+    }
+
+    // Header fijado: detección de scroll para elevación y sombra
+    const handleScroll = () => {
+      const header = document.getElementById('mainHeader');
+      if (!header) return;
+      if (window.scrollY > 8) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    // Sincronización continua de badge de carrito
+    const handleCartUpdate = () => Navbar.updateCartBadge();
+    window.addEventListener('cart:updated', handleCartUpdate);
+    window.addEventListener('storage', handleCartUpdate);
 
     // Interacción Dropdown Contacto en Desktop (Click y Hover)
     if (contactDropdownBtn && !contactDropdownBtn.dataset.bound) {
@@ -931,6 +969,90 @@ const Navbar = {
       window.dispatchEvent(new CustomEvent('catalog:search', { detail: { query } }));
     } else {
       window.location.href = `${rootPrefix}client/modules/product/product.html?q=${encodeURIComponent(query)}`;
+    }
+  },
+
+  /**
+   * Actualiza el badge del contador de productos en el carrito de la barra de navegación
+   */
+  updateCartBadge() {
+    let count = 0;
+    if (window.Storage?.getCartCount) {
+      count = window.Storage.getCartCount();
+    } else if (window.Storage?.getCart) {
+      const cart = window.Storage.getCart() || [];
+      count = cart.reduce((acc, it) => acc + (it.quantity || 1), 0);
+    }
+
+    const badge = document.getElementById('navbarCartBadge');
+    if (badge) {
+      badge.textContent = count;
+      badge.classList.remove('has-items');
+      if (count > 0) {
+        void badge.offsetWidth; // re-flow para reiniciar animación pop
+        badge.classList.add('has-items');
+      }
+    }
+
+    const mobilePill = document.getElementById('mobileDrawerCartPill');
+    if (mobilePill) {
+      mobilePill.textContent = count;
+    }
+  },
+
+  /**
+   * Abre la caja lateral derecha del carrito
+   */
+  openCart() {
+    if (window.CartModal && typeof window.CartModal.open === 'function') {
+      window.CartModal.open();
+    } else {
+      // Reintentar si está cargando dinámicamente
+      setTimeout(() => {
+        if (window.CartModal) window.CartModal.open();
+      }, 100);
+    }
+  },
+
+  /**
+   * Garantiza que los estilos y scripts del carrito estén listos en cualquier página
+   */
+  ensureCartLoaded(rootPrefix) {
+    // 1. Estilos CSS del carrito
+    if (!document.querySelector('link[href*="cart-modal.css"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `${rootPrefix}components/cart-modal/cart-modal.css`;
+      document.head.appendChild(link);
+    }
+
+    // 2. Storage helper
+    if (!window.Storage && !document.querySelector('script[src*="storage.js"]')) {
+      const s = document.createElement('script');
+      s.src = `${rootPrefix}js/storage.js`;
+      s.onload = () => this.updateCartBadge();
+      document.head.appendChild(s);
+    }
+
+    // 3. OrderService helper
+    if (!window.OrderService && !document.querySelector('script[src*="order.service.js"]')) {
+      const s = document.createElement('script');
+      s.src = `${rootPrefix}js/service/order.service.js`;
+      document.head.appendChild(s);
+    }
+
+    // 4. CartModal component
+    if (!window.CartModal && !document.querySelector('script[src*="cart-modal.js"]')) {
+      const s = document.createElement('script');
+      s.src = `${rootPrefix}components/cart-modal/cart-modal.js`;
+      s.onload = () => {
+        if (window.CartModal?.init) {
+          window.CartModal.init();
+        }
+      };
+      document.head.appendChild(s);
+    } else if (window.CartModal?.init) {
+      window.CartModal.init();
     }
   },
 

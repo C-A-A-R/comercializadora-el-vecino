@@ -951,17 +951,20 @@ input, select, textarea {
   right: var(--space-sm);
 }
 
-/* CASO 2: 2 PROMOCIONES (Comparten espacio en una misma fila) */
-.combos-container.layout-duo {
-  display: grid;
-  grid-template-columns: 1fr;
+/* CASO 1 Y 2: 1 O 2 PROMOCIONES (Se muestran en forma de carta de promoción una debajo de otra) */
+.combos-container.layout-stacked {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-xl);
+  width: 100%;
 }
 
-@media (min-width: 900px) {
-  .combos-container.layout-duo {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.combos-container.layout-stacked,
+.combos-container.layout-duo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
 }
 
 .combo-card-duo {
@@ -971,11 +974,15 @@ input, select, textarea {
   overflow: hidden;
   border-radius: var(--radius-2xl);
   height: 100%;
+  background: var(--obsidian-surface);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
 }
 
 .combo-duo-img-box {
   position: relative;
-  height: 220px;
+  height: 160px;
   width: 100%;
   overflow: hidden;
   background: var(--obsidian-card);
@@ -994,16 +1001,29 @@ input, select, textarea {
 
 .combo-duo-badges {
   position: absolute;
-  top: var(--space-sm);
-  left: var(--space-sm);
+  top: 8px;
+  left: 8px;
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
   z-index: 2;
 }
 
+.combo-duo-badges .badge {
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.combo-duo-badges .badge .material-symbols-outlined {
+  font-size: 13px;
+}
+
 .combo-duo-body {
-  padding: var(--space-lg);
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -1011,61 +1031,53 @@ input, select, textarea {
 
 .combo-duo-title {
   font-family: var(--font-display);
-  font-size: var(--font-size-xl);
+  font-size: 1.05rem;
   font-weight: var(--fw-black);
   color: var(--pure-white);
-  line-height: var(--lh-tight);
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .combo-duo-tagline {
-  font-size: var(--font-size-xs);
+  font-size: 0.72rem;
   color: var(--text-muted-light);
-  margin-top: var(--space-3xs);
-  margin-bottom: var(--space-md);
+  margin-top: 2px;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .combo-duo-inclusions-label {
-  font-size: var(--font-size-2xs);
+  font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: var(--fw-bold);
   color: var(--neon-cyan);
-  margin-bottom: var(--space-xs);
+  margin-bottom: 5px;
   display: block;
 }
 
 .combo-duo-inclusions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
-  margin-bottom: var(--space-lg);
+  gap: 5px;
+  margin-bottom: 10px;
   flex: 1;
 }
 
 .combo-duo-inclusion-item {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  background: var(--obsidian-card);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-glass);
-}
-
-.combo-duo-thumb-wrap {
-  width: 46px;
-  height: 46px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 8px;
   border-radius: var(--radius-sm);
-  overflow: hidden;
-  flex-shrink: 0;
-  background: var(--deep-obsidian);
-  border: 1px solid var(--border-glass);
-}
-
-.combo-duo-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 2px solid var(--neon-cyan);
 }
 
 .combo-duo-inclusion-info {
@@ -1073,21 +1085,35 @@ input, select, textarea {
   min-width: 0;
 }
 
+.combo-duo-inclusion-type {
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  color: var(--neon-cyan);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  line-height: 1.1;
+  margin-bottom: 1px;
+}
+
 .combo-duo-inclusion-name {
   font-family: var(--font-display);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   font-weight: var(--fw-bold);
   color: var(--pure-white);
   display: block;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .combo-duo-inclusion-detail {
-  font-size: var(--font-size-2xs);
+  font-size: 0.65rem;
   color: var(--text-muted-light);
   display: block;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1095,25 +1121,24 @@ input, select, textarea {
 
 .combo-duo-footer {
   margin-top: auto;
-  padding-top: var(--space-sm);
+  padding-top: 8px;
   border-top: 1px solid var(--border-glass);
 }
 
-/* CASO 3: EXACTAMENTE 3 PROMOCIONES (Ocupan el espacio disponible, en teléfono se reducen a 2) */
-.combos-container.layout-trio {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-xl);
+.btn-combo-quote {
+  height: 2.35rem;
+  font-size: 0.76rem;
+  font-weight: var(--fw-bold);
+  border-radius: var(--radius-md);
+  padding: 0 8px;
+  gap: 4px;
 }
 
-@media (max-width: 900px) {
-  .combos-container.layout-trio {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-  }
+.btn-combo-quote .material-symbols-outlined {
+  font-size: 16px;
 }
 
-/* CASO 4: MÁS DE 3 PROMOCIONES (Carrusel Automático Infinito sin retroceso) */
+/* CASO 3 Y MÁS PROMOCIONES: Carrusel Automático Infinito sin retroceso */
 .combos-container.layout-carousel {
   display: block;
   position: relative;
@@ -1134,14 +1159,14 @@ input, select, textarea {
 
 .combos-carousel-track {
   display: flex;
-  gap: 24px;
+  gap: 20px;
   will-change: transform;
 }
 
 .combos-carousel-slide {
-  flex: 0 0 calc((100% - 48px) / 3);
-  width: calc((100% - 48px) / 3);
-  min-width: calc((100% - 48px) / 3);
+  flex: 0 0 calc((100% - 40px) / 3);
+  width: calc((100% - 40px) / 3);
+  min-width: calc((100% - 40px) / 3);
   box-sizing: border-box;
   display: flex;
 }
@@ -1150,22 +1175,10 @@ input, select, textarea {
   width: 100%;
 }
 
-@media (max-width: 900px) {
-  .combos-carousel-track {
-    gap: 14px;
-  }
-
-  .combos-carousel-slide {
-    flex: 0 0 calc((100% - 14px) / 2);
-    width: calc((100% - 14px) / 2);
-    min-width: calc((100% - 14px) / 2);
-  }
-}
-
 /* Flechas del carrusel: transparentes y poco notorias */
 .combos-carousel-arrow {
   position: absolute;
-  top: 50%;
+  top: 80px;
   transform: translateY(-50%);
   z-index: 10;
   width: 44px;
@@ -1205,69 +1218,136 @@ input, select, textarea {
   right: -22px;
 }
 
+/* En pantallas medianas y móviles: exactamente dos cartas a la vez con dimensiones adaptadas */
 @media (max-width: 900px) {
-  .combos-carousel-arrow {
-    width: 36px;
-    height: 36px;
+  .combos-carousel-track {
+    gap: 10px;
   }
-  .combos-carousel-arrow-prev {
-    left: 4px;
-  }
-  .combos-carousel-arrow-next {
-    right: 4px;
-  }
-}
 
-/* Ajustes responsivos compactos para cartas de combos cuando hay 2 columnas en móvil */
-@media (max-width: 900px) {
-  .combo-duo-body {
-    padding: var(--space-sm);
+  .combos-carousel-slide {
+    flex: 0 0 calc((100% - 10px) / 2);
+    width: calc((100% - 10px) / 2);
+    min-width: calc((100% - 10px) / 2);
   }
 
   .combo-duo-img-box {
-    height: 160px;
+    height: 120px;
+  }
+
+  .combo-duo-body {
+    padding: 10px 8px;
   }
 
   .combo-duo-title {
-    font-size: var(--font-size-base);
+    font-size: 0.88rem;
+    line-height: 1.2;
   }
 
   .combo-duo-tagline {
-    font-size: var(--font-size-2xs);
-    margin-bottom: var(--space-xs);
-  }
-
-  .combo-duo-inclusions-label {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     margin-bottom: 4px;
   }
 
   .combo-duo-inclusions {
-    gap: 6px;
-    margin-bottom: var(--space-sm);
+    gap: 4px;
+    margin-bottom: 8px;
   }
 
   .combo-duo-inclusion-item {
-    padding: 6px 8px;
-    gap: 8px;
-  }
-
-  .combo-duo-thumb-wrap {
-    width: 36px;
-    height: 36px;
+    padding: 4px 6px;
   }
 
   .combo-duo-inclusion-name {
-    font-size: 0.74rem;
+    font-size: 0.7rem;
   }
 
   .combo-duo-inclusion-detail {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
   }
 
-  .combo-duo-footer .btn {
+  .btn-combo-quote {
+    height: 2.2rem;
+    font-size: 0.72rem;
+  }
+
+  .combos-carousel-arrow {
+    top: 60px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .combos-carousel-arrow-prev {
+    left: 2px;
+  }
+
+  .combos-carousel-arrow-next {
+    right: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .combos-carousel-track {
+    gap: 8px;
+  }
+
+  .combos-carousel-slide {
+    flex: 0 0 calc((100% - 8px) / 2);
+    width: calc((100% - 8px) / 2);
+    min-width: calc((100% - 8px) / 2);
+  }
+
+  .combo-duo-img-box {
+    height: 105px;
+  }
+
+  .combo-duo-badges {
+    top: 5px;
+    left: 5px;
+  }
+
+  .combo-duo-badges .badge {
+    font-size: 0.6rem;
+    padding: 2px 5px;
+  }
+
+  .combo-duo-body {
+    padding: 8px 6px;
+  }
+
+  .combo-duo-title {
     font-size: 0.8rem;
-    padding: 0.6rem 0.8rem;
+  }
+
+  .combo-duo-inclusion-name {
+    font-size: 0.67rem;
+  }
+
+  .combo-duo-inclusion-detail {
+    font-size: 0.6rem;
+  }
+
+  .btn-combo-quote {
+    height: 2.1rem;
+    font-size: 0.68rem;
+    padding: 0 4px;
+  }
+
+  .combos-carousel-arrow {
+    top: 52px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .combos-carousel-arrow .material-symbols-outlined {
+    font-size: 18px;
+  }
+
+  .combos-carousel-arrow-prev {
+    left: 0;
+  }
+
+  .combos-carousel-arrow-next {
+    right: 0;
   }
 }
 

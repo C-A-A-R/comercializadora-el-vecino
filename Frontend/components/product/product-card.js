@@ -14,10 +14,7 @@ const ProductCard = {
     const product = window.Api?.normalizeProduct ? window.Api.normalizeProduct(rawProduct) : rawProduct;
 
     // Calcular rutas relativas según el nivel de anidación
-    const isModule = window.location.pathname.includes('/client/modules/');
-    const detailUrl = isModule
-      ? `detail.html?id=${product.id}`
-      : `./client/modules/product/detail.html?id=${product.id}`;
+    const detailUrl = ProductCard.getDetailUrl(product.id);
 
     // Generar enlace dinámico de WhatsApp para cotización
     let waUrl = '#';
@@ -32,20 +29,47 @@ const ProductCard = {
     // Procesar descripción técnica del equipo
     const descriptionText = product.description || product.summary || '';
 
-    const hasPrice = Number(product?.price) > 0;
-    const hasOldPrice = Number(product?.originalPrice) > 0;
-    const formattedPrice = hasPrice ? (window.CONFIG?.formatCurrency ? window.CONFIG.formatCurrency(product.price) : `$${product.price}`) : null;
-    const formattedOldPrice = hasOldPrice ? (window.CONFIG?.formatCurrency ? window.CONFIG.formatCurrency(product.originalPrice) : `$${product.originalPrice}`) : null;
+    // Resolver categoría para la etiqueta flotante de la imagen
+    let categoryName = product.categoryName;
+    if (!categoryName || categoryName === product.category) {
+      if (window.CATEGORIES_DATA && Array.isArray(window.CATEGORIES_DATA)) {
+        const foundCat = window.CATEGORIES_DATA.find(c =>
+          String(c.id).toLowerCase() === String(product.category).toLowerCase() ||
+          String(c.name).toLowerCase() === String(product.category).toLowerCase()
+        );
+        if (foundCat) categoryName = foundCat.name;
+      }
+    }
+    if (!categoryName && product.categories_detail && Array.isArray(product.categories_detail) && product.categories_detail.length) {
+      categoryName = product.categories_detail[0].category_name;
+    }
+    categoryName = categoryName || product.category || 'General';
 
-    const badgeText = product.badge || '';
-    const badgeColorClass = product.badgeColor ? `badge-${product.badgeColor}` : '';
+    // Resolver subcategoría para la etiqueta interna del cuerpo de la tarjeta
+    let subcategoryName = product.subcategory || product.sub_category || product.subcategoryName || '';
+    if (typeof subcategoryName === 'string' && window.SUBCATEGORIES_DATA && Array.isArray(window.SUBCATEGORIES_DATA)) {
+      const foundSub = window.SUBCATEGORIES_DATA.find(s =>
+        String(s.id).toLowerCase() === String(subcategoryName).toLowerCase() ||
+        String(s.name).toLowerCase() === String(subcategoryName).toLowerCase()
+      );
+      if (foundSub) subcategoryName = foundSub.name;
+    }
+    if (!subcategoryName && Array.isArray(product.sub_categories) && product.sub_categories.length) {
+      const firstSub = product.sub_categories[0];
+      subcategoryName = typeof firstSub === 'object' ? (firstSub.sub_category_name || firstSub.name) : firstSub;
+    }
+    if (!subcategoryName) {
+      subcategoryName = product.brand || categoryName || 'Línea de Equipo';
+    }
+
+    const badgeColorClass = product.badgeColor ? `badge-${product.badgeColor}` : 'badge-neon-cyan';
 
     return `
       <article class="product-card" data-product-id="${product.id}">
-        <div class="product-card-img-box">
-          ${badgeText ? `<span class="product-card-badge ${badgeColorClass}">${badgeText}</span>` : ''}
+        <div class="product-card-img-box" onclick="ProductCard.openDetail('${product.id}', '${detailUrl}')" style="cursor: pointer;" title="Ver ficha técnica de ${product.name}">
+          <span class="product-card-badge ${badgeColorClass}" title="${categoryName}">${categoryName}</span>
           <img class="product-card-img" src="${product.image || 'https://placehold.co/400x300?text=EL+VECINO'}" alt="${product.name}" loading="lazy">
-          <button class="product-card-quick-view" type="button" title="Vista Rápida" onclick="ProductCard.quickView('${product.id}')">
+          <button class="product-card-quick-view" type="button" title="Vista Rápida" onclick="event.stopPropagation(); ProductCard.quickView('${product.id}')">
             <span class="material-symbols-outlined text-[18px]">visibility</span>
           </button>
         </div>
@@ -53,16 +77,12 @@ const ProductCard = {
         <div class="product-card-body">
           <div class="product-card-main-content">
             <div class="product-card-meta">
-              <span class="product-card-category">${product.categoryName || product.category || product.brand || 'Equipo'}</span>
-              ${product.rating ? `
-                <div class="product-card-rating" style="display: inline-flex; align-items: center; gap: 3px; font-weight: 700; color: #f59e0b; font-size: 0.75rem;">
-                  <span class="material-symbols-outlined" style="font-size: 14px; font-variation-settings: 'FILL' 1; color: #f59e0b;">star</span>
-                  <span>${Number(product.rating).toFixed(1)}</span>
-                </div>
-              ` : (product.sku ? `<span class="product-card-sku">SKU: ${product.sku}</span>` : '')}
+              <span class="product-card-category" title="${subcategoryName}">${subcategoryName}</span>
             </div>
-            <h3 class="product-card-title" onclick="ProductCard.openDetail('${product.id}', '${detailUrl}')" title="${product.name}">
-              ${product.name}
+            <h3 class="product-card-title" onclick="ProductCard.openDetail('${product.id}', '${detailUrl}')" title="${product.name}" style="cursor: pointer;">
+              <a href="${detailUrl}" onclick="event.preventDefault(); ProductCard.openDetail('${product.id}', '${detailUrl}');" style="color: inherit; text-decoration: none;">
+                ${product.name}
+              </a>
             </h3>
             ${descriptionText ? `
               <p class="product-card-description" title="${descriptionText}">
@@ -72,20 +92,13 @@ const ProductCard = {
           </div>
 
           <div class="product-card-footer-box">
-            ${(formattedPrice || formattedOldPrice) ? `
-              <div class="product-card-pricing">
-                ${formattedPrice ? `<span class="product-card-price">${formattedPrice}</span>` : ''}
-                ${formattedOldPrice ? `<span class="product-card-old-price">${formattedOldPrice}</span>` : ''}
-              </div>
-            ` : ''}
-
             <div class="product-card-actions">
               <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-quote">
                 <span class="material-symbols-outlined text-[18px]">chat</span>
                 <span>Cotizar WA</span>
               </a>
-              <button class="btn-card-action-icon" type="button" title="Ver Ficha Técnica" onclick="ProductCard.quickView('${product.id}')">
-                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              <button type="button" class="btn-card-action-icon btn-card-cart" title="Añadir a lista de cotización" onclick="event.stopPropagation(); ProductCard.addToQuote('${product.id}');">
+                <span class="material-symbols-outlined text-[19px]">shopping_cart</span>
               </button>
             </div>
           </div>
@@ -95,40 +108,67 @@ const ProductCard = {
   },
 
   /**
-   * Abre la ficha técnica o modal del producto
+   * Resuelve la ruta relativa hacia detail.html según la ubicación actual
+   */
+  getDetailUrl(productId) {
+    const path = (window.location.pathname || '').replace(/\\/g, '/');
+    const safeId = encodeURIComponent(productId);
+    if (path.includes('/client/modules/product/')) {
+      return `detail.html?id=${safeId}`;
+    }
+    if (path.includes('/client/modules/')) {
+      return `../product/detail.html?id=${safeId}`;
+    }
+    return `./client/modules/product/detail.html?id=${safeId}`;
+  },
+
+  /**
+   * Navega a la pantalla de detalle del producto
    */
   openDetail(productId, detailUrl) {
-    if (typeof window.openProductModal === 'function') {
-      window.openProductModal(productId);
-    } else if (window.ProductModal) {
-      window.ProductModal.open(productId);
-    } else if (detailUrl) {
-      window.location.href = detailUrl;
+    const targetUrl = detailUrl || ProductCard.getDetailUrl(productId);
+    if (targetUrl) {
+      window.location.href = targetUrl;
     }
   },
 
   /**
-   * Agrega a lista de cotización o carrito
+   * Agrega a lista de cotización o carrito y despliega la caja derecha
    */
   async addToQuote(productId) {
     let product = null;
-    if (window.ProductService) {
-      product = await window.ProductService.getById(productId);
+    if (window.ProductService?.getById) {
+      try {
+        product = await window.ProductService.getById(productId);
+      } catch (e) {
+        console.warn('[ProductCard] Error obteniendo producto por ID:', e);
+      }
     }
     if (!product) {
-      const all = window.Storage?.getProducts() || window.PRODUCTS_DATA || [];
-      product = all.find(p => p.id === productId);
+      const all = window.Storage?.getProducts ? window.Storage.getProducts() : (window.PRODUCTS_DATA || []);
+      product = all.find(p => String(p.id) === String(productId));
     }
 
     if (product) {
+      const normalized = window.Api?.normalizeProduct ? window.Api.normalizeProduct(product) : product;
       if (window.Storage?.addToCart) {
-        window.Storage.addToCart(product, 1);
+        window.Storage.addToCart(normalized, 1);
       }
       if (window.Toast) {
-        window.Toast.success(`"${product.name}" añadido a la cotización.`);
+        window.Toast.success(`"${normalized.name}" añadido a la cotización.`);
+      }
+      if (window.Navbar?.updateCartBadge) {
+        window.Navbar.updateCartBadge();
       }
     } else {
       console.warn(`[ProductCard] Producto ${productId} no encontrado.`);
+    }
+
+    // Desplegar la caja lateral por el lado derecho mostrando los productos del carrito
+    if (window.CartModal && typeof window.CartModal.open === 'function') {
+      window.CartModal.open();
+    } else if (window.Navbar?.openCart) {
+      window.Navbar.openCart();
     }
   },
 

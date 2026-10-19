@@ -45,9 +45,9 @@
 <body class="bg-[#FCF8F8] font-['Plus_Jakarta_Sans'] text-[#1C1B1B] antialiased">
   <div id="navbar-mount"></div>
 
-  <main class="detail-page pb-24">
+  <main class="detail-page pb-20">
     <!-- Breadcrumb & Indicator -->
-    <section class="bg-white border-b border-slate-border py-3">
+    <section class="bg-white border-b border-slate-border py-2.5">
       <div class="max-w-[80rem] mx-auto px-6 flex items-center justify-between gap-4 flex-wrap text-sm">
         <nav class="flex items-center gap-2 text-gray-500">
           <a href="../../../index.html" class="hover:text-electric-blue">Inicio</a>
@@ -64,82 +64,162 @@
     </section>
 
     <!-- Main Product Stage -->
-    <section class="max-w-[80rem] mx-auto px-6 py-8">
+    <section class="max-w-[80rem] mx-auto px-6 pt-3 pb-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <!-- Left: Image Gallery & Badges (7 cols) -->
         <div class="lg:col-span-7 detail-stage-box">
-          <div class="detail-gallery-main">
-            <span class="product-card-badge" id="detailBadge">LÍNEA PREMIUM</span>
+          <div class="detail-gallery-main relative">
+            <span class="detail-gallery-badge" id="detailBadge">LÍNEA PREMIUM</span>
+            
+            <!-- Floating Fullscreen Action Button -->
+            <div class="absolute top-3 right-3 z-10 flex items-center gap-2">
+              <button
+                id="btnOpenFullscreen"
+                type="button"
+                class="w-10 h-10 rounded-full bg-white/95 hover:bg-white text-deep-obsidian border border-slate-200 shadow-md flex items-center justify-center transition-all hover:scale-110 hover:text-electric-blue cursor-pointer"
+                title="Ver en Pantalla Completa"
+                aria-label="Pantalla completa"
+              >
+                <span class="material-symbols-outlined text-[22px]">fullscreen</span>
+              </button>
+            </div>
+
+            <!-- Product Main Image -->
             <img id="detailMainImg" class="detail-gallery-img" src="https://placehold.co/500" alt="Producto">
+
+            <!-- Lupa: Magnifier Lens Follower -->
+            <div id="detailZoomLens" class="detail-zoom-lens" aria-hidden="true"></div>
           </div>
-          <div class="p-4 bg-slate-surface border-t border-slate-border flex items-center justify-between text-xs text-gray-600">
+
+          <div class="p-3.5 bg-slate-surface border-t border-slate-border flex items-center justify-between text-xs text-gray-600">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-electric-blue text-[18px]">verified</span>
-              <span>Verificado y revision en el local</span>
+              <span>Verificado y revisión en el local</span>
             </div>
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-electric-blue text-[18px]">engineering</span>
-              <span>Asistencia durante toda el proceso de compra</span>
+              <span>Asistencia técnica durante toda la compra</span>
             </div>
           </div>
         </div>
 
         <!-- Right: Specs & WhatsApp Station (5 cols) -->
-        <div class="lg:col-span-5 bg-white border border-slate-border rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-sm">
-          <div>
-            <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
-              <span class="font-bold text-electric-blue uppercase">Garantía Directa</span>
+        <div class="lg:col-span-5 relative bg-white border border-slate-border rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-sm detail-specs-panel">
+          
+          <!-- Product Permanent Header (ALWAYS visible, NEVER covered by the zoom visor!) -->
+          <div class="detail-product-header">
+            <div class="flex items-center justify-between text-xs text-gray-500 mb-1.5">
+              <span id="detailCategory" class="font-bold text-electric-blue uppercase tracking-wider">Garantía Directa</span>
             </div>
+            
             <h1 id="detailTitle" class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-deep-obsidian leading-tight">
               Cargando especificaciones...
             </h1>
-            <p id="detailDesc" class="text-sm text-gray-600 mt-2 leading-relaxed"></p>
-
-            <ul id="detailSpecsList" class="mt-4 space-y-2 border-t border-slate-border pt-4">
-              <!-- Rendered dynamically -->
-            </ul>
           </div>
 
-          <!-- Conversion Actions -->
-          <div class="border-t border-slate-border pt-3">
-            <div class="flex flex-col gap-2">
-              <a
-                id="btnDetailQuoteWhatsapp"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-card-quote h-12 text-base justify-center shadow-lg hover:shadow-xl"
-              >
-                <span class="material-symbols-outlined text-[24px]">chat</span>
-                <span>Cotizar Inmediatamente vía WhatsApp</span>
-              </a>
-
-              <button
-                id="btnDetailAddToCart"
-                type="button"
-                class="h-12 rounded-xl bg-electric-blue hover:bg-blue-700 text-white font-['Outfit'] font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md"
-              >
-                <span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
-                <span>Añadir a Lista de Cotización</span>
-              </button>
+          <!-- Dynamic Container below the title (Zoom Visor appears HERE only, below the title!) -->
+          <div class="relative mt-3.5 flex-1 flex flex-col justify-between" id="detailDynamicArea">
+            
+            <!-- Lupa: High-Definition Zoom Visor (Compact, fits strictly within this area below title) -->
+            <div id="detailZoomResult" class="detail-zoom-portal" aria-hidden="true">
+              <div class="detail-zoom-header">
+                <span class="detail-zoom-badge">
+                  <span class="material-symbols-outlined text-[16px]">zoom_in</span>
+                  <span>Lupa de Inspección HD (2.5x)</span>
+                </span>
+                <span class="text-[11px] text-gray-400 font-medium">Sincronización 1:1</span>
+              </div>
+              <div class="detail-zoom-lens-canvas">
+                <div id="detailZoomImage" class="detail-zoom-img"></div>
+              </div>
             </div>
 
-            <!-- Trust pill -->
-            <div class="mt-3 p-3 rounded-2xl bg-[#F3F6FB] border border-slate-200 text-sm text-gray-800 flex items-center gap-3 shadow-sm">
-              <span class="material-symbols-outlined text-electric-blue text-[22px]">verified_user</span>
-              <span id="detailWarranty">Respaldo Certificado:factura oficial del seniat con garantia oficial</span>
+            <!-- Normal below-title content -->
+            <div>
+              <!-- Description: Limited to 120 chars with "Ver más" / "Ver menos" toggle -->
+              <div class="text-sm text-gray-600 leading-relaxed">
+                <p id="detailDesc" class="inline"></p>
+                <button
+                  id="btnToggleDesc"
+                  type="button"
+                  class="text-xs font-bold text-electric-blue hover:underline ml-1 inline-flex items-center cursor-pointer align-baseline"
+                  style="display: none;"
+                >
+                  <span id="btnToggleDescText">Ver más</span>
+                </button>
+              </div>
+
+              <!-- Características Principales (Sleek specs grid) -->
+              <div class="mt-4 pt-4 border-t border-slate-border">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold text-deep-obsidian uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-electric-blue text-[18px]">tune</span>
+                    <span>Características Principales</span>
+                  </span>
+                  <a href="#sectionSpecsTable" class="text-xs font-semibold text-electric-blue hover:underline flex items-center gap-0.5">
+                    <span>Ficha completa</span>
+                    <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                  </a>
+                </div>
+                <div id="detailMainFeaturesGrid" class="grid grid-cols-2 gap-2.5">
+                  <!-- Injected dynamically by detail.js: Marca, Capacidad, Voltaje, Medidas, etc. -->
+                </div>
+              </div>
             </div>
+
+            <!-- Quantity & Actions -->
+            <div class="mt-4">
+              <!-- Quantity Selector -->
+              <div class="flex items-center gap-3 pt-2 border-t border-slate-border mb-3">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wide">Cantidad:</span>
+                <div class="inline-flex items-center border border-slate-300 rounded-xl bg-slate-50 overflow-hidden shadow-inner">
+                  <button id="btnQtyMinus" type="button" class="w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white hover:text-electric-blue transition-colors font-bold text-base cursor-pointer" aria-label="Disminuir cantidad">-</button>
+                  <span id="detailQtyDisplay" class="w-10 text-center font-bold text-deep-obsidian text-sm select-none">1</span>
+                  <button id="btnQtyPlus" type="button" class="w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white hover:text-electric-blue transition-colors font-bold text-base cursor-pointer" aria-label="Aumentar cantidad">+</button>
+                </div>
+              </div>
+
+              <!-- Conversion Actions -->
+              <div class="flex flex-col gap-2">
+                <a
+                  id="btnDetailQuoteWhatsapp"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-card-quote h-12 text-base justify-center shadow-lg hover:shadow-xl"
+                >
+                  <span class="material-symbols-outlined text-[24px]">chat</span>
+                  <span>Cotizar Inmediatamente vía WhatsApp</span>
+                </a>
+
+                <button
+                  id="btnDetailAddToCart"
+                  type="button"
+                  class="h-12 rounded-xl bg-electric-blue hover:bg-blue-700 text-white font-['Outfit'] font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer"
+                >
+                  <span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+                  <span>Añadir a Lista de Cotización</span>
+                </button>
+
+                <!-- Trust pill -->
+                <div class="mt-1 p-2.5 rounded-2xl bg-[#F3F6FB] border border-slate-200 text-xs text-gray-800 flex items-center gap-2.5 shadow-sm">
+                  <span class="material-symbols-outlined text-electric-blue text-[20px] shrink-0">verified_user</span>
+                  <span id="detailWarranty">Respaldo Certificado: Factura oficial con garantía legal de bodega</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Technical Specs Table Section -->
-    <section class="max-w-[80rem] mx-auto px-6 py-8">
+    <!-- Technical Specs Table Section (Demás Ficha Técnica) -->
+    <section class="max-w-[80rem] mx-auto px-6 py-6" id="sectionSpecsTable">
       <div class="bg-white border border-slate-border rounded-3xl p-6 md:p-8 shadow-sm">
         <h2 class="font-['Outfit'] font-extrabold text-xl text-deep-obsidian mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined text-electric-blue">table_chart</span>
-          <span>Ficha Técnica &amp; Parámetros de Ingeniería</span>
+          <span>Ficha Técnica Completa &amp; Parámetros de Ingeniería</span>
         </h2>
         <div class="overflow-x-auto">
           <table class="detail-specs-table" id="detailSpecsTable">
@@ -206,6 +286,36 @@
   </main>
 
   <div id="footer-mount"></div>
+
+  <!-- Fullscreen Lightbox Modal -->
+  <div id="detailFullscreenModal" class="detail-fullscreen-modal" aria-hidden="true" style="display: none;">
+    <div class="detail-fullscreen-backdrop" id="fullscreenBackdrop"></div>
+    <div class="detail-fullscreen-content">
+      <header class="detail-fullscreen-bar">
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          <span class="detail-modal-badge" id="fullscreenBadge">LÍNEA PREMIUM</span>
+          <h2 id="fullscreenTitle" class="text-white font-['Outfit'] font-bold text-base md:text-lg truncate max-w-md"></h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnFullscreenZoomIn" type="button" class="fullscreen-tool-btn" title="Aumentar Zoom">
+            <span class="material-symbols-outlined text-[20px]">zoom_in</span>
+          </button>
+          <button id="btnFullscreenZoomOut" type="button" class="fullscreen-tool-btn" title="Reducir Zoom">
+            <span class="material-symbols-outlined text-[20px]">zoom_out</span>
+          </button>
+          <button id="btnFullscreenReset" type="button" class="fullscreen-tool-btn" title="Restablecer">
+            <span class="material-symbols-outlined text-[20px]">restart_alt</span>
+          </button>
+          <button id="btnCloseFullscreen" type="button" class="fullscreen-close-btn" title="Cerrar (Esc)">
+            <span class="material-symbols-outlined text-[24px]">close</span>
+          </button>
+        </div>
+      </header>
+      <div class="detail-fullscreen-viewport" id="fullscreenViewport">
+        <img id="fullscreenImg" src="" alt="Vista ampliada" class="detail-fullscreen-img" draggable="false">
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="../../../js/config.js"></script>

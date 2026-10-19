@@ -143,6 +143,16 @@ const Storage = {
     return cart.reduce((total, item) => total + ((item.price || 0) * (item.quantity || 1)), 0);
   },
 
+  // Products
+  getProducts() {
+    const key = window.CONFIG?.STORAGE_KEYS?.PRODUCTS_CACHE || 'el_vecino_products_cache';
+    const cached = this.get(key, null);
+    if (cached && Array.isArray(cached) && cached.length > 0) return cached;
+    if (typeof PRODUCTS_DATA !== 'undefined' && Array.isArray(PRODUCTS_DATA)) return PRODUCTS_DATA;
+    if (window.PRODUCTS_DATA && Array.isArray(window.PRODUCTS_DATA)) return window.PRODUCTS_DATA;
+    return [];
+  },
+
   // Favorites
   getFavorites() {
     const key = window.CONFIG?.STORAGE_KEYS?.FAVORITES || 'el_vecino_favorites';

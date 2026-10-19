@@ -144,18 +144,32 @@ function createProductCardHtml(product) {
   const waMsg = CONFIG.whatsappTemplates.productQuote(product.name, product.sku);
   const waLink = getWhatsAppLink(waMsg);
 
+  let catName = product.categoryName;
+  if (!catName || catName === product.category) {
+    const found = window.CATEGORIES_DATA?.find(c => c.id === product.category || c.name === product.category);
+    if (found) catName = found.name;
+  }
+  catName = catName || product.category || 'Catálogo';
+
+  let subcatName = product.subcategory || product.sub_category || '';
+  if (typeof subcatName === 'string' && window.SUBCATEGORIES_DATA) {
+    const foundSub = window.SUBCATEGORIES_DATA.find(s => s.id === subcatName || s.name.toLowerCase() === subcatName.toLowerCase());
+    if (foundSub) subcatName = foundSub.name;
+  }
+  subcatName = subcatName || product.brand || catName;
+
   return `
     <article class="product-card">
       <div class="product-img-wrapper">
         <img class="product-img" src="${product.image}" alt="${product.name}" loading="lazy">
-        <span class="product-badge-float badge badge-${product.badgeColor}">
-          ${product.badge}
+        <span class="product-badge-float badge badge-neon-cyan" title="${catName}">
+          ${catName}
         </span>
       </div>
       <div class="product-body">
         <div class="product-header-info">
-          <span class="product-sku">SKU: ${product.sku}</span>
-          <span class="product-brand">${product.brand}</span>
+          <span class="product-category text-electric-blue uppercase font-bold text-xs">${subcatName}</span>
+          ${product.sku ? `<span class="product-sku">SKU: ${product.sku}</span>` : ''}
         </div>
         <h3 class="product-name">${product.name}</h3>
         ${(product.description || product.summary) ? `
@@ -166,8 +180,8 @@ function createProductCardHtml(product) {
             <span class="material-symbols-outlined">chat</span>
             <span>Cotizar WA</span>
           </a>
-          <button onclick="openProductModal('${product.id}')" class="btn btn-outline btn-icon" title="Ver Ficha Técnica">
-            <span class="material-symbols-outlined">visibility</span>
+          <button onclick="event.stopPropagation(); if (window.ProductCard) { ProductCard.addToQuote('${product.id}'); } else if (window.CartModal) { CartModal.open(); }" class="btn btn-outline btn-icon btn-card-cart" title="Añadir a lista de cotización">
+            <span class="material-symbols-outlined">shopping_cart</span>
           </button>
         </div>
       </div>
@@ -192,7 +206,8 @@ window.setCombosPreviewMode = function(mode) {
 
 /**
  * Genera la estructura HTML unificada de una carta de combo/promoción (sin SKU)
- * El listado de productos incluidos mantiene el diseño completo de thumbnail + nombre + detalle
+ * Diseñada para el carrusel y cuadrícula: optimizada sin imágenes de productos individuales
+ * para máxima legibilidad y responsividad sin amontonamiento
  */
 function createComboCardHTML(combo) {
   const includedItemsText = combo.items.map(i => i.name).join(", ");
@@ -206,7 +221,7 @@ function createComboCardHTML(combo) {
         <div class="combo-duo-badges">
           <span class="badge badge-${combo.badgeColor}">
             <span class="material-symbols-outlined">auto_awesome</span>
-            ${combo.badge}
+            <span>${combo.badge}</span>
           </span>
         </div>
       </div>
@@ -223,18 +238,75 @@ function createComboCardHTML(combo) {
                 <img class="combo-duo-thumb" src="${item.image || combo.image}" alt="${item.name}" loading="lazy">
               </div>
               <div class="combo-duo-inclusion-info">
+                ${item.type ? `<span class="combo-duo-inclusion-type">${item.type}</span>` : ''}
                 <span class="combo-duo-inclusion-name" title="${item.name}">${item.name}</span>
-                <span class="combo-duo-inclusion-detail" title="${item.detail}">${item.detail}</span>
+                ${item.detail ? `<span class="combo-duo-inclusion-detail" title="${item.detail}">${item.detail}</span>` : ''}
               </div>
             </div>
           `).join("")}
         </div>
 
         <div class="combo-duo-footer">
-          <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-lg w-full justify-center">
+          <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-combo-quote w-full justify-center">
             <span class="material-symbols-outlined">chat</span>
-            <span>Cotizar Combo por WhatsApp</span>
+            <span>Cotizar Combo</span>
           </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+/**
+ * Genera la estructura HTML de la carta de promoción completa (Hero) para cuando hay 1 o 2 combos,
+ * mostrándose una debajo de otra con espacio amplio
+ */
+function createPromotionHeroCardHTML(combo) {
+  const includedItemsText = combo.items.map(i => i.name).join(", ");
+  const waMsg = CONFIG.whatsappTemplates.comboQuote(combo.title, combo.sku, includedItemsText);
+  const waLink = getWhatsAppLink(waMsg);
+
+  return `
+    <article class="combo-card combo-card-hero">
+      <div class="combo-grid">
+        <div class="combo-content-side">
+          <div class="combo-badge-row">
+            <span class="badge badge-${combo.badgeColor}">
+              <span class="material-symbols-outlined">auto_awesome</span>
+              <span>${combo.badge}</span>
+            </span>
+          </div>
+          <h3 class="combo-title">${combo.title}</h3>
+          <p class="combo-tagline">${combo.tagline}</p>
+
+          <div class="combo-inclusions">
+            ${combo.items.map(item => `
+              <div class="combo-inclusion-item">
+                <div class="combo-inclusion-thumb-wrap">
+                  <img class="combo-inclusion-thumb" src="${item.image || combo.image}" alt="${item.name}" loading="lazy">
+                </div>
+                <div class="combo-inclusion-content">
+                  ${item.type ? `<span class="combo-inclusion-type">${item.type}</span>` : ''}
+                  <span class="combo-inclusion-name">${item.name}</span>
+                  ${item.detail ? `<p class="combo-inclusion-detail">${item.detail}</p>` : ''}
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="flex flex-wrap gap-sm">
+            <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-lg">
+              <span class="material-symbols-outlined">chat</span>
+              <span>Cotizar Combo por WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="combo-img-box">
+          <img class="combo-img" src="${combo.image}" alt="${combo.title}" loading="lazy">
+          <div class="combo-img-badge-overlay">
+            <span class="badge badge-neon-magenta">Lote Sellado Mayorista</span>
+          </div>
         </div>
       </div>
     </article>
@@ -455,77 +527,14 @@ function renderCombos() {
     return;
   }
 
-  // CASO 1: SOLO UNA PROMOCIÓN (Hero / Banner sin SKU)
-  if (count === 1) {
-    container.className = "combos-container";
-    const combo = combos[0];
-    const includedItemsText = combo.items.map(i => i.name).join(", ");
-    const waMsg = CONFIG.whatsappTemplates.comboQuote(combo.title, combo.sku, includedItemsText);
-    const waLink = getWhatsAppLink(waMsg);
-
-    container.innerHTML = `
-      <article class="combo-card">
-        <div class="combo-grid">
-          <div>
-            <div class="combo-badge-row">
-              <span class="badge badge-${combo.badgeColor}">
-                <span class="material-symbols-outlined">auto_awesome</span>
-                ${combo.badge}
-              </span>
-            </div>
-            <h3 class="combo-title">${combo.title}</h3>
-            <p class="combo-tagline">${combo.tagline}</p>
-
-            <div class="combo-inclusions">
-              ${combo.items.map(item => `
-                <div class="combo-inclusion-item">
-                  <div class="combo-inclusion-thumb-wrap">
-                    <img class="combo-inclusion-thumb" src="${item.image || combo.image}" alt="${item.name}" loading="lazy">
-                  </div>
-                  <div class="combo-inclusion-content">
-                    <span class="combo-inclusion-type">${item.type}</span>
-                    <span class="combo-inclusion-name">${item.name}</span>
-                    <p class="combo-inclusion-detail">${item.detail}</p>
-                  </div>
-                </div>
-              `).join("")}
-            </div>
-
-            <div class="flex flex-wrap gap-sm">
-              <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-lg">
-                <span class="material-symbols-outlined">chat</span>
-                <span>Cotizar Combo por WhatsApp</span>
-              </a>
-            </div>
-          </div>
-
-          <div class="combo-img-box">
-            <img class="combo-img" src="${combo.image}" alt="${combo.title}" loading="lazy">
-            <div class="combo-img-badge-overlay">
-              <span class="badge badge-neon-magenta">Lote Sellado Mayorista</span>
-            </div>
-          </div>
-        </div>
-      </article>
-    `;
+  // CASO 1 Y 2: 1 O 2 PROMOCIONES (Se muestran en forma de carta de promoción una debajo de otra)
+  if (count === 1 || count === 2) {
+    container.className = "combos-container layout-stacked";
+    container.innerHTML = combos.map(combo => createPromotionHeroCardHTML(combo)).join("");
     return;
   }
 
-  // CASO 2: EXACTAMENTE 2 PROMOCIONES (Comparten espacio en una misma fila, sin SKU)
-  if (count === 2) {
-    container.className = "combos-container layout-duo";
-    container.innerHTML = combos.map(combo => createComboCardHTML(combo)).join("");
-    return;
-  }
-
-  // CASO 3: EXACTAMENTE 3 PROMOCIONES (Ocupan el espacio disponible, en teléfono se reducen a dos)
-  if (count === 3) {
-    container.className = "combos-container layout-trio";
-    container.innerHTML = combos.map(combo => createComboCardHTML(combo)).join("");
-    return;
-  }
-
-  // CASO 4: MÁS DE 3 PROMOCIONES (Carrusel automático infinito sin retroceso y flechas transparentes)
+  // CASO 3 O MÁS: (Carrusel automático infinito mostrando dos cartas a la vez en responsivo)
   renderCombosCarousel(container, combos);
 }
 
