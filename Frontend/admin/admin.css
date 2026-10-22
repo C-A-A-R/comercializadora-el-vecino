@@ -1,78 +1,154 @@
 /**
- * admin.css - Estilos y diseño para la consola de administración
- * Diseñado para operaciones dinámicas de index.html y módulos administrativos
+ * admin.css - Estilos para la consola de administración
+ * Comercializadora El Vecino
  */
 
-/* Admin Dashboard Base Styles */
+/* Variables CSS */
 :root {
-  --admin-sidebar-width: 18rem;
-  --admin-header-height: 4.5rem;
+  --admin-sidebar-width: 16rem;
+  --admin-header-height: 4rem;
+  --admin-bg: #FCF8F8;
+  --admin-sidebar-bg: #0A0A0A;
+  --admin-text: #1C1B1B;
+  --admin-border: #E2E6EE;
+}
+
+/* Base */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .admin-body {
-  background: #FCF8F8;
-  color: #1C1B1B;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* Sidebar Fijo con Scroll Interno */
 .admin-sidebar {
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   width: var(--admin-sidebar-width);
-  background: #0A0A0A;
+  background: var(--admin-sidebar-bg);
   color: #FFFFFF;
   z-index: 50;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
 }
 
+/* Scrollbar del sidebar */
+.admin-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.admin-sidebar::-webkit-scrollbar-track {
+  background: var(--admin-sidebar-bg);
+}
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Contenido Principal - SOLUCIÓN DEL ESPACIO BLANCO */
 .admin-main-wrapper {
   margin-left: var(--admin-sidebar-width);
+  width: calc(100% - var(--admin-sidebar-width));
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
+/* Header */
 .admin-header {
   position: sticky;
   top: 0;
   height: var(--admin-header-height);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid #E2E6EE;
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--admin-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
   z-index: 40;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Contenido */
 .admin-content {
   flex: 1;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Overlay para móvil */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 45;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Botón de menú móvil */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--admin-text);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* KPI Cards */
 .admin-kpi-card {
   background: #FFFFFF;
-  border: 1px solid #E2E6EE;
-  border-radius: 1.25rem;
-  padding: 1.5rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 1rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04);
 }
 
-/* Admin Table */
+/* Tablas */
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -100,7 +176,7 @@
   background: rgba(244, 246, 251, 0.5);
 }
 
-/* Tooltips de analíticas y distintivos */
+/* Tooltips */
 .group\/tooltip {
   position: relative;
 }
@@ -109,3 +185,174 @@
   display: flex !important;
 }
 
+/* ============================================
+   RESPONSIVE - TABLET (768px - 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+  :root {
+    --admin-sidebar-width: 14rem;
+  }
+
+  .admin-content {
+    padding: 1.25rem;
+  }
+
+  .admin-kpi-card {
+    padding: 1rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL (< 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  :root {
+    --admin-sidebar-width: 16rem; /* Mantenemos el ancho para cuando esté abierto */
+  }
+
+  /* Sidebar móvil deslizable */
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--admin-sidebar-width);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 50;
+    /* Permite scroll interno si el menú es muy largo en pantallas pequeñas */
+    overflow-y: auto; 
+  }
+
+  .admin-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* El contenido principal ocupa el 100% en móvil y no se desplaza */
+  .admin-main-wrapper {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Mostrar botón de menú */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* Header ajustado */
+  .admin-header {
+    padding: 0 1rem;
+    height: 3.5rem;
+  }
+
+  /* Contenido ajustado */
+  .admin-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  /* KPI Cards en columna */
+  .admin-kpi-card {
+    padding: 1rem;
+  }
+
+  /* Tablas responsive */
+  .admin-table {
+    font-size: 0.75rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* Ocultar columnas menos importantes en móvil */
+  .admin-table .hide-mobile {
+    display: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL PEQUEÑO (< 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 0.75rem;
+  }
+
+  .admin-header {
+    padding: 0 0.75rem;
+  }
+
+  .admin-kpi-card p {
+    font-size: 0.75rem;
+  }
+
+  .admin-kpi-card .text-2xl {
+    font-size: 1.25rem;
+  }
+}
+
+/* ============================================
+   ORIENTACIÓN HORIZONTAL EN MÓVIL
+   ============================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .admin-sidebar {
+    width: 12rem;
+  }
+
+  .admin-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .admin-main-wrapper {
+    margin-left: 12rem;
+    width: calc(100% - 12rem);
+  }
+}
+
+/* ============================================
+   IMPRESIÓN
+   ============================================ */
+@media print {
+  .admin-sidebar,
+  .mobile-menu-btn,
+  .sidebar-overlay {
+    display: none !important;
+  }
+
+  .admin-main-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   ACCESIBILIDAD - REDUCIR MOVIMIENTO
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar,
+  .admin-main-wrapper,
+  .sidebar-overlay {
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   MODO OSCURO (Opcional)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --admin-bg: #f0f0f0;
+    --admin-text: #f0f0f0;
+    --admin-border: #333;
+  }
+
+  .admin-header {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .admin-kpi-card {
+    background: #fffdfd;
+  }
+}

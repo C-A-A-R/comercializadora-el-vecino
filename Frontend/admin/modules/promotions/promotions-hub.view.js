@@ -10,13 +10,11 @@ export const PromotionsHubView = {
   allCombos: [],
   combos: [],
   comboTab: 'all',
-  selectedComboForWhatsapp: null,
 
   // Datos de Promociones
   allPromotions: [],
   promotions: [],
   promoFilter: '',
-  selectedPromoForWhatsapp: null,
   selectedDaysToRenew: 30,
 
   async render() {
@@ -27,11 +25,9 @@ export const PromotionsHubView = {
       ]);
       this.allCombos = combosData.results || [];
       this.combos = [...this.allCombos];
-      this.selectedComboForWhatsapp = this.allCombos[0] || null;
 
       this.allPromotions = promosData.results || [];
       this.promotions = [...this.allPromotions];
-      this.selectedPromoForWhatsapp = this.allPromotions[0] || null;
     } catch (err) {
       console.error('[PromotionsHubView] Error al cargar datos:', err);
       this.allCombos = [];
@@ -59,7 +55,7 @@ export const PromotionsHubView = {
               <span class="text-xs font-semibold text-gray-500">Ofertas & Paquetes</span>
             </div>
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Promociones & Combos</h1>
-            <p class="text-sm text-gray-500">Gestione los paquetes de productos, campañas promocionales y consultas automatizadas de WhatsApp.</p>
+            <p class="text-sm text-gray-500">Gestione los paquetes de productos y campañas promocionales del sistema.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2.5">
             <a href="#/combos/new" class="inline-flex items-center gap-1.5 bg-electric-blue text-white px-3.5 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition shadow-sm">
@@ -90,7 +86,7 @@ export const PromotionsHubView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Combos Activos</p>
               <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-hub-active-combos">${activeCombos}</p>
-              <p class="text-[11px] text-gray-400">Paquetes para cotización</p>
+              <p class="text-[11px] text-gray-400">Paquetes disponibles</p>
             </div>
             <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">package_2</span>
@@ -178,99 +174,6 @@ export const PromotionsHubView = {
               </table>
             </div>
           </div>
-
-          <!-- Automatización de WhatsApp para Combos -->
-          <div class="bg-white rounded-2xl border border-slate-border p-6 shadow-sm space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-border pb-4">
-              <div>
-                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 text-whatsapp-green border border-green-200 mb-1">
-                  <span class="material-symbols-outlined text-sm">chat</span>
-                  Consulta de Combos por WhatsApp
-                </div>
-                <h2 class="font-display text-xl font-bold text-deep-obsidian">Personalización de Mensaje para Combos</h2>
-                <p class="text-xs text-gray-500">Configure la plantilla del mensaje con el que el cliente solicitará cotización del combo al pulsar el botón de WhatsApp.</p>
-              </div>
-              
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold text-gray-600">Seleccionar Combo:</span>
-                <select id="hub-whatsapp-combo-select" class="px-3 py-2 bg-slate-surface border border-slate-border rounded-lg text-xs font-bold text-deep-obsidian focus:ring-2 focus:ring-electric-blue outline-none cursor-pointer">
-                  ${this.allCombos.map(c => `
-                    <option value="${c.id}" ${this.selectedComboForWhatsapp?.id === c.id ? 'selected' : ''}>
-                      ${c.name} (${c.sku || 'CMB-' + c.id})
-                    </option>
-                  `).join('')}
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              <div class="lg:col-span-7 space-y-4">
-                <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                    Plantilla del Mensaje
-                  </label>
-                  <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                    <span class="text-[11px] text-gray-500 font-medium">Insertar variable:</span>
-                    <button type="button" data-insert-combo="{nombre_combo}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-blue-50 text-electric-blue hover:bg-blue-100 rounded border border-blue-200 transition">
-                      {nombre_combo}
-                    </button>
-                    <button type="button" data-insert-combo="{sku_combo}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded border border-purple-200 transition">
-                      {sku_combo}
-                    </button>
-                    <button type="button" data-insert-combo="{items}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded border border-amber-200 transition">
-                      {items}
-                    </button>
-                  </div>
-
-                  <textarea 
-                    id="hub-whatsapp-template-input" 
-                    rows="4" 
-                    class="w-full p-3 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian leading-relaxed focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                    placeholder="Escribe la plantilla del mensaje de WhatsApp..."
-                  >${this.getEffectiveWhatsappTemplate(this.selectedComboForWhatsapp)}</textarea>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-3 pt-2">
-                  <button id="btn-save-hub-whatsapp" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm">
-                    <span class="material-symbols-outlined text-base">save</span>
-                    Guardar Mensaje Combo
-                  </button>
-                  <button id="btn-test-hub-whatsapp" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 rounded-lg text-xs font-bold transition flex items-center gap-2 border border-slate-border">
-                    <span class="material-symbols-outlined text-base text-whatsapp-green">open_in_new</span>
-                    Probar en WhatsApp Web
-                  </button>
-                </div>
-              </div>
-
-              <!-- Vista Previa WhatsApp -->
-              <div class="lg:col-span-5 bg-[#EFEAE2] p-4 rounded-2xl border border-amber-200/50 shadow-inner space-y-3">
-                <div class="flex items-center justify-between pb-2 border-b border-amber-300/40">
-                  <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-full bg-whatsapp-green text-white flex items-center justify-center text-xs font-bold">
-                      <span class="material-symbols-outlined text-sm">support_agent</span>
-                    </div>
-                    <div>
-                      <p class="text-xs font-bold text-gray-900 leading-none">Comercializadora El Vecino</p>
-                      <p class="text-[10px] text-emerald-700 font-semibold leading-tight">En línea para cotizaciones</p>
-                    </div>
-                  </div>
-                  <span class="text-[10px] text-gray-500 font-medium">Vista Previa</span>
-                </div>
-
-                <div class="flex justify-end">
-                  <div class="max-w-[90%] bg-[#E7FFDB] p-3 rounded-2xl rounded-tr-none shadow-sm text-xs text-gray-800 space-y-1.5 border border-green-200">
-                    <p id="hub-whatsapp-preview-text" class="whitespace-pre-line leading-relaxed text-[11px] text-gray-800">
-                      ${this.buildPreviewMessage(this.selectedComboForWhatsapp)}
-                    </p>
-                    <div class="flex items-center justify-end gap-1 text-[9px] text-gray-500 font-medium pt-1">
-                      <span>12:45 p. m.</span>
-                      <span class="material-symbols-outlined text-xs text-blue-500">done_all</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- CONTENIDO TAB 2: PROMOCIONES DE PRODUCTOS -->
@@ -311,102 +214,6 @@ export const PromotionsHubView = {
                   ${this.renderPromosRows(this.promotions)}
                 </tbody>
               </table>
-            </div>
-          </div>
-
-          <!-- Automatización de WhatsApp para Promociones -->
-          <div class="bg-white rounded-2xl border border-slate-border p-6 shadow-sm space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-border pb-4">
-              <div>
-                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 text-whatsapp-green border border-green-200 mb-1">
-                  <span class="material-symbols-outlined text-sm">chat</span>
-                  Consulta de Promociones por WhatsApp
-                </div>
-                <h2 class="font-display text-xl font-bold text-deep-obsidian">Personalización de Mensaje para Promociones</h2>
-                <p class="text-xs text-gray-500">Configure la plantilla del mensaje con el que el cliente solicitará asesoría y cotización sobre una promoción específica.</p>
-              </div>
-              
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold text-gray-600">Seleccionar Promoción:</span>
-                <select id="hub-whatsapp-promo-select" class="px-3 py-2 bg-slate-surface border border-slate-border rounded-lg text-xs font-bold text-deep-obsidian focus:ring-2 focus:ring-electric-blue outline-none cursor-pointer">
-                  ${this.allPromotions.map(p => `
-                    <option value="${p.id}" ${this.selectedPromoForWhatsapp?.id === p.id ? 'selected' : ''}>
-                      ${p.name} (${p.product?.name || 'Producto'})
-                    </option>
-                  `).join('')}
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              <div class="lg:col-span-7 space-y-4">
-                <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                    Plantilla del Mensaje de la Promoción
-                  </label>
-                  <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                    <span class="text-[11px] text-gray-500 font-medium">Insertar variable:</span>
-                    <button type="button" data-insert-promo="{nombre_promo}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-blue-50 text-electric-blue hover:bg-blue-100 rounded border border-blue-200 transition">
-                      {nombre_promo}
-                    </button>
-                    <button type="button" data-insert-promo="{producto}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded border border-purple-200 transition">
-                      {producto}
-                    </button>
-                    <button type="button" data-insert-promo="{beneficio}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 rounded border border-emerald-200 transition">
-                      {beneficio}
-                    </button>
-                    <button type="button" data-insert-promo="{vigencia}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded border border-amber-200 transition">
-                      {vigencia}
-                    </button>
-                  </div>
-
-                  <textarea 
-                    id="hub-whatsapp-promo-template-input" 
-                    rows="4" 
-                    class="w-full p-3 bg-slate-surface border border-slate-border rounded-xl text-xs text-deep-obsidian leading-relaxed focus:bg-white focus:ring-2 focus:ring-electric-blue outline-none transition"
-                    placeholder="Escriba la plantilla del mensaje de WhatsApp para esta promoción..."
-                  >${this.getEffectivePromoWhatsappTemplate(this.selectedPromoForWhatsapp)}</textarea>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-3 pt-2">
-                  <button id="btn-save-hub-promo-whatsapp" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm">
-                    <span class="material-symbols-outlined text-base">save</span>
-                    Guardar Mensaje Promoción
-                  </button>
-                  <button id="btn-test-hub-promo-whatsapp" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 rounded-lg text-xs font-bold transition flex items-center gap-2 border border-slate-border">
-                    <span class="material-symbols-outlined text-base text-whatsapp-green">open_in_new</span>
-                    Probar en WhatsApp Web
-                  </button>
-                </div>
-              </div>
-
-              <!-- Vista Previa WhatsApp Promoción -->
-              <div class="lg:col-span-5 bg-[#EFEAE2] p-4 rounded-2xl border border-amber-200/50 shadow-inner space-y-3">
-                <div class="flex items-center justify-between pb-2 border-b border-amber-300/40">
-                  <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-full bg-whatsapp-green text-white flex items-center justify-center text-xs font-bold">
-                      <span class="material-symbols-outlined text-sm">support_agent</span>
-                    </div>
-                    <div>
-                      <p class="text-xs font-bold text-gray-900 leading-none">Comercializadora El Vecino</p>
-                      <p class="text-[10px] text-emerald-700 font-semibold leading-tight">En línea para cotizaciones</p>
-                    </div>
-                  </div>
-                  <span class="text-[10px] text-gray-500 font-medium">Vista Previa</span>
-                </div>
-
-                <div class="flex justify-end">
-                  <div class="max-w-[90%] bg-[#E7FFDB] p-3 rounded-2xl rounded-tr-none shadow-sm text-xs text-gray-800 space-y-1.5 border border-green-200">
-                    <p id="hub-whatsapp-promo-preview-text" class="whitespace-pre-line leading-relaxed text-[11px] text-gray-800">
-                      ${this.buildPromoPreviewMessage(this.selectedPromoForWhatsapp)}
-                    </p>
-                    <div class="flex items-center justify-end gap-1 text-[9px] text-gray-500 font-medium pt-1">
-                      <span>12:45 p. m.</span>
-                      <span class="material-symbols-outlined text-xs text-blue-500">done_all</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -539,9 +346,6 @@ export const PromotionsHubView = {
           </td>
           <td class="px-5 py-4 whitespace-nowrap text-right">
             <div class="flex items-center justify-end gap-1.5">
-              <button data-action="select-hub-whatsapp" data-id="${combo.id}" class="p-1.5 text-gray-500 hover:text-whatsapp-green hover:bg-green-50 rounded-lg transition" title="Configurar mensaje WhatsApp">
-                <span class="material-symbols-outlined text-lg">chat</span>
-              </button>
               <button data-action="delete-hub-combo" data-id="${combo.id}" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Eliminar combo">
                 <span class="material-symbols-outlined text-lg">delete</span>
               </button>
@@ -589,20 +393,15 @@ export const PromotionsHubView = {
 
       return `
         <tr class="hover:bg-slate-surface/40 transition">
-          <!-- 1. Promoción -->
           <td class="px-5 py-4">
             <div class="space-y-0.5">
               <p class="font-bold text-deep-obsidian text-sm">${promo.name}</p>
               <p class="text-xs text-gray-500 line-clamp-1">${promo.description || 'Promoción especial'}</p>
             </div>
           </td>
-
-          <!-- 2. Producto Asociado -->
           <td class="px-5 py-4 font-semibold text-gray-800 text-xs">
             ${prodName}
           </td>
-
-          <!-- 3. Vigencia -->
           <td class="px-5 py-4 whitespace-nowrap">
             <div class="space-y-1">
               <div class="flex items-center gap-1.5 text-xs text-gray-700">
@@ -612,8 +411,6 @@ export const PromotionsHubView = {
               <div>${vigenciaBadge}</div>
             </div>
           </td>
-
-          <!-- 4. Estado (Pausar / Activar Switch Toggle) -->
           <td class="px-5 py-4 whitespace-nowrap text-center">
             <div class="flex flex-col items-center gap-1">
               <label class="relative inline-flex items-center cursor-pointer">
@@ -631,21 +428,8 @@ export const PromotionsHubView = {
               </span>
             </div>
           </td>
-
-          <!-- 5. Acciones (WhatsApp / Poner en Vigencia / Eliminar) -->
           <td class="px-5 py-4 whitespace-nowrap text-right">
             <div class="flex items-center justify-end gap-1">
-              <!-- Botón Configurar WhatsApp -->
-              <button 
-                data-action="select-hub-promo-whatsapp" 
-                data-id="${promo.id}" 
-                class="p-1.5 text-gray-500 hover:text-whatsapp-green hover:bg-green-50 rounded-lg transition" 
-                title="Configurar mensaje de WhatsApp para esta promoción"
-              >
-                <span class="material-symbols-outlined text-lg">chat</span>
-              </button>
-
-              <!-- Botón Poner en Vigencia / Renovar -->
               <button 
                 data-action="renew-hub-promo" 
                 data-id="${promo.id}" 
@@ -656,8 +440,6 @@ export const PromotionsHubView = {
                 <span class="material-symbols-outlined text-sm">event_repeat</span>
                 <span>Vigencia</span>
               </button>
-
-              <!-- Botón Eliminar -->
               <button 
                 data-action="delete-hub-promo" 
                 data-id="${promo.id}" 
@@ -671,44 +453,6 @@ export const PromotionsHubView = {
         </tr>
       `;
     }).join('');
-  },
-
-  getEffectiveWhatsappTemplate(combo) {
-    if (combo?.whatsapp_message) return combo.whatsapp_message;
-    return 'Hola equipo de ventas EL VECINO. Me interesa consultar disponibilidad y cotizar el combo *{nombre_combo}* (Ref: {sku_combo}). ¿Me podrían brindar más información?';
-  },
-
-  buildPreviewMessage(combo) {
-    if (!combo) return 'Seleccione un combo para visualizar el mensaje procesado.';
-    const template = this.getEffectiveWhatsappTemplate(combo);
-    const sku = combo.sku || `CMB-${combo.id}`;
-    const itemsSummary = (combo.items || [])
-      .map(i => `${i.quantity}x ${i.product?.name || 'Producto'}`)
-      .join(', ');
-
-    return template
-      .replace(/{nombre_combo}/g, combo.name || '')
-      .replace(/{sku_combo}/g, sku)
-      .replace(/{items}/g, itemsSummary || '');
-  },
-
-  getEffectivePromoWhatsappTemplate(promo) {
-    if (promo?.whatsapp_message) return promo.whatsapp_message;
-    return 'Hola Comercializadora El Vecino. Me gustaría consultar y cotizar la promoción *{nombre_promo}* para el producto *{producto}* ({beneficio}). ¿Tienen unidades disponibles?';
-  },
-
-  buildPromoPreviewMessage(promo) {
-    if (!promo) return 'Seleccione una promoción para visualizar el mensaje procesado.';
-    const template = this.getEffectivePromoWhatsappTemplate(promo);
-    const prodName = promo.product?.name || promo.product_name || 'Producto';
-    const benefit = promo.benefit_type || 'Promoción Especial';
-    const validez = promo.end_date ? `Válido hasta ${new Date(promo.end_date).toLocaleDateString()}` : 'Por tiempo limitado';
-
-    return template
-      .replace(/{nombre_promo}/g, promo.name || '')
-      .replace(/{producto}/g, prodName)
-      .replace(/{beneficio}/g, benefit)
-      .replace(/{vigencia}/g, validez);
   },
 
   filterCombos() {
@@ -768,7 +512,6 @@ export const PromotionsHubView = {
   },
 
   bindEvents() {
-    // 1. Selector de Pestaña Principal (Combos vs Promociones)
     const btnTabCombos = document.getElementById('tab-btn-combos');
     const btnTabPromos = document.getElementById('tab-btn-promos');
     const sectionCombos = document.getElementById('hub-combos-section');
@@ -796,7 +539,6 @@ export const PromotionsHubView = {
       sectionCombos?.classList.add('hidden');
     });
 
-    // 2. Buscador y Subpestañas de Combos
     const comboSearch = document.getElementById('hub-combo-search');
     comboSearch?.addEventListener('input', () => this.filterCombos());
 
@@ -813,11 +555,9 @@ export const PromotionsHubView = {
       });
     });
 
-    // 3. Buscador y Filtro de Promociones
     document.getElementById('hub-promo-search')?.addEventListener('input', () => this.filterPromos());
     document.getElementById('hub-promo-status-filter')?.addEventListener('change', () => this.filterPromos());
 
-    // 4. Toggle Estado Combo (Pausar / Activar)
     document.addEventListener('change', async (e) => {
       const toggleCombo = e.target.closest('[data-action="toggle-hub-combo-status"]');
       if (toggleCombo) {
@@ -837,7 +577,6 @@ export const PromotionsHubView = {
         return;
       }
 
-      // Toggle Estado Promoción (Pausar / Activar)
       const togglePromo = e.target.closest('[data-action="toggle-hub-promo-status"]');
       if (togglePromo) {
         const id = togglePromo.dataset.id;
@@ -861,38 +600,7 @@ export const PromotionsHubView = {
       }
     });
 
-    // 5. Configurar WhatsApp Combo & Eliminar Combo
     document.addEventListener('click', async (e) => {
-      const btnWa = e.target.closest('[data-action="select-hub-whatsapp"]');
-      if (btnWa) {
-        const id = btnWa.dataset.id;
-        const selected = this.allCombos.find(c => c.id == id);
-        if (selected) {
-          this.selectedComboForWhatsapp = selected;
-          const selectDropdown = document.getElementById('hub-whatsapp-combo-select');
-          if (selectDropdown) selectDropdown.value = id;
-          this.updateWhatsappSection();
-          document.getElementById('hub-whatsapp-template-input')?.scrollIntoView({ behavior: 'smooth' });
-          Toast.show(`Configurando mensaje para combo: ${selected.name}`, 'info');
-        }
-        return;
-      }
-
-      const btnPromoWa = e.target.closest('[data-action="select-hub-promo-whatsapp"]');
-      if (btnPromoWa) {
-        const id = btnPromoWa.dataset.id;
-        const selected = this.allPromotions.find(p => p.id == id);
-        if (selected) {
-          this.selectedPromoForWhatsapp = selected;
-          const selectDropdown = document.getElementById('hub-whatsapp-promo-select');
-          if (selectDropdown) selectDropdown.value = id;
-          this.updatePromoWhatsappSection();
-          document.getElementById('hub-whatsapp-promo-template-input')?.scrollIntoView({ behavior: 'smooth' });
-          Toast.show(`Configurando mensaje para promoción: ${selected.name}`, 'info');
-        }
-        return;
-      }
-
       const btnDelCombo = e.target.closest('[data-action="delete-hub-combo"]');
       if (btnDelCombo) {
         const id = btnDelCombo.dataset.id;
@@ -917,7 +625,6 @@ export const PromotionsHubView = {
         return;
       }
 
-      // 6. Eliminar Promoción
       const btnDelPromo = e.target.closest('[data-action="delete-hub-promo"]');
       if (btnDelPromo) {
         const id = btnDelPromo.dataset.id;
@@ -942,7 +649,6 @@ export const PromotionsHubView = {
         return;
       }
 
-      // 7. Abrir Modal de Poner en Vigencia / Renovar
       const btnRenew = e.target.closest('[data-action="renew-hub-promo"]');
       if (btnRenew) {
         const id = btnRenew.dataset.id;
@@ -958,7 +664,6 @@ export const PromotionsHubView = {
       }
     });
 
-    // 8. Manejo del Modal de Renovación / Poner en Vigencia
     const modalRenew = document.getElementById('modal-renew-promo');
     const btnCloseRenew = document.getElementById('btn-close-renew-modal');
     const btnCancelRenew = document.getElementById('btn-cancel-renew');
@@ -984,7 +689,6 @@ export const PromotionsHubView = {
         Toast.show('Promoción reactivada y puesta en vigencia', 'success');
         modalRenew?.close();
 
-        // Actualizar datos
         const refreshed = await PromotionService.list();
         this.allPromotions = refreshed.results || [];
         this.filterPromos();
@@ -992,102 +696,6 @@ export const PromotionsHubView = {
         console.error(err);
         Toast.show('Error al poner en vigencia la promoción', 'error');
       }
-    });
-
-    // 9. Selector de Combo en WhatsApp
-    document.getElementById('hub-whatsapp-combo-select')?.addEventListener('change', (e) => {
-      const id = e.target.value;
-      this.selectedComboForWhatsapp = this.allCombos.find(c => c.id == id) || null;
-      this.updateWhatsappSection();
-    });
-
-    // 10. Insertar Tags en WhatsApp Combo
-    document.querySelectorAll('[data-insert-combo]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const tag = e.currentTarget.dataset.insertCombo;
-        const textarea = document.getElementById('hub-whatsapp-template-input');
-        if (textarea) {
-          const start = textarea.selectionStart;
-          const end = textarea.selectionEnd;
-          const val = textarea.value;
-          textarea.value = val.substring(0, start) + tag + val.substring(end);
-          textarea.focus();
-          textarea.selectionStart = textarea.selectionEnd = start + tag.length;
-          this.updateWhatsappPreview();
-        }
-      });
-    });
-
-    document.getElementById('hub-whatsapp-template-input')?.addEventListener('input', () => {
-      this.updateWhatsappPreview();
-    });
-
-    document.getElementById('btn-save-hub-whatsapp')?.addEventListener('click', async () => {
-      if (!this.selectedComboForWhatsapp) return;
-      const msg = document.getElementById('hub-whatsapp-template-input')?.value.trim();
-      try {
-        await ComboService.updateWhatsappTemplate(this.selectedComboForWhatsapp.id, msg);
-        this.selectedComboForWhatsapp.whatsapp_message = msg;
-        Toast.show('Mensaje de WhatsApp para combo guardado con éxito', 'success');
-      } catch (err) {
-        console.error(err);
-        Toast.show('Error al guardar mensaje', 'error');
-      }
-    });
-
-    document.getElementById('btn-test-hub-whatsapp')?.addEventListener('click', () => {
-      if (!this.selectedComboForWhatsapp) return;
-      const previewText = document.getElementById('hub-whatsapp-preview-text')?.innerText || '';
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(previewText)}`;
-      window.open(url, '_blank');
-    });
-
-    // 11. Selector de Promoción en WhatsApp
-    document.getElementById('hub-whatsapp-promo-select')?.addEventListener('change', (e) => {
-      const id = e.target.value;
-      this.selectedPromoForWhatsapp = this.allPromotions.find(p => p.id == id) || null;
-      this.updatePromoWhatsappSection();
-    });
-
-    // 12. Insertar Tags en WhatsApp Promoción
-    document.querySelectorAll('[data-insert-promo]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const tag = e.currentTarget.dataset.insertPromo;
-        const textarea = document.getElementById('hub-whatsapp-promo-template-input');
-        if (textarea) {
-          const start = textarea.selectionStart;
-          const end = textarea.selectionEnd;
-          const val = textarea.value;
-          textarea.value = val.substring(0, start) + tag + val.substring(end);
-          textarea.focus();
-          textarea.selectionStart = textarea.selectionEnd = start + tag.length;
-          this.updatePromoWhatsappPreview();
-        }
-      });
-    });
-
-    document.getElementById('hub-whatsapp-promo-template-input')?.addEventListener('input', () => {
-      this.updatePromoWhatsappPreview();
-    });
-
-    document.getElementById('btn-save-hub-promo-whatsapp')?.addEventListener('click', async () => {
-      if (!this.selectedPromoForWhatsapp) return;
-      const msg = document.getElementById('hub-whatsapp-promo-template-input')?.value.trim();
-      try {
-        await PromotionService.updateWhatsappTemplate(this.selectedPromoForWhatsapp.id, msg);
-        this.selectedPromoForWhatsapp.whatsapp_message = msg;
-        Toast.show('Mensaje de WhatsApp para promoción guardado con éxito', 'success');
-      } catch (err) {
-        console.error(err);
-        Toast.show('Error al guardar mensaje de promoción', 'error');
-      }
-    });
-
-    document.getElementById('btn-test-hub-promo-whatsapp')?.addEventListener('click', () => {
-      if (!this.selectedPromoForWhatsapp) return;
-      const previewText = document.getElementById('hub-whatsapp-promo-preview-text')?.innerText || '';
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(previewText)}`;
-      window.open(url, '_blank');
     });
   },
 
@@ -1106,57 +714,5 @@ export const PromotionsHubView = {
       const future = new Date(Date.now() + this.selectedDaysToRenew * 86400000);
       customInput.value = future.toISOString().slice(0, 16);
     }
-  },
-
-  updateWhatsappSection() {
-    const input = document.getElementById('hub-whatsapp-template-input');
-    if (input) {
-      input.value = this.getEffectiveWhatsappTemplate(this.selectedComboForWhatsapp);
-    }
-    this.updateWhatsappPreview();
-  },
-
-  updateWhatsappPreview() {
-    const input = document.getElementById('hub-whatsapp-template-input');
-    const previewEl = document.getElementById('hub-whatsapp-preview-text');
-    if (!previewEl || !this.selectedComboForWhatsapp) return;
-
-    const template = input?.value || '';
-    const sku = this.selectedComboForWhatsapp.sku || `CMB-${this.selectedComboForWhatsapp.id}`;
-    const itemsSummary = (this.selectedComboForWhatsapp.items || [])
-      .map(i => `${i.quantity}x ${i.product?.name || 'Producto'}`)
-      .join(', ');
-
-    previewEl.textContent = template
-      .replace(/{nombre_combo}/g, this.selectedComboForWhatsapp.name || '')
-      .replace(/{sku_combo}/g, sku)
-      .replace(/{items}/g, itemsSummary || '');
-  },
-
-  updatePromoWhatsappSection() {
-    const input = document.getElementById('hub-whatsapp-promo-template-input');
-    if (input) {
-      input.value = this.getEffectivePromoWhatsappTemplate(this.selectedPromoForWhatsapp);
-    }
-    this.updatePromoWhatsappPreview();
-  },
-
-  updatePromoWhatsappPreview() {
-    const input = document.getElementById('hub-whatsapp-promo-template-input');
-    const previewEl = document.getElementById('hub-whatsapp-promo-preview-text');
-    if (!previewEl || !this.selectedPromoForWhatsapp) return;
-
-    const template = input?.value || '';
-    const prodName = this.selectedPromoForWhatsapp.product?.name || this.selectedPromoForWhatsapp.product_name || 'Producto';
-    const benefit = this.selectedPromoForWhatsapp.benefit_type || 'Promoción Especial';
-    const validez = this.selectedPromoForWhatsapp.end_date 
-      ? `Válido hasta ${new Date(this.selectedPromoForWhatsapp.end_date).toLocaleDateString()}` 
-      : 'Por tiempo limitado';
-
-    previewEl.textContent = template
-      .replace(/{nombre_promo}/g, this.selectedPromoForWhatsapp.name || '')
-      .replace(/{producto}/g, prodName)
-      .replace(/{beneficio}/g, benefit)
-      .replace(/{vigencia}/g, validez);
   }
 };

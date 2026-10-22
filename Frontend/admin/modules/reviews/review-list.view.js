@@ -6,7 +6,7 @@ import { REVIEWS_MOCK } from '../../services/mocks/reviews.mock.js';
 export const ReviewListView = {
   reviews: [],
   filteredReviews: [],
-  currentTab: 'all', // 'all' | 'featured' | 'complaints' | 'approved'
+  currentTab: 'all', // 'all' | 'visible' | 'hidden' | 'complaints'
 
   async render() {
     try {
@@ -20,10 +20,9 @@ export const ReviewListView = {
     }
 
     const total = this.reviews.length;
-    const featured = this.reviews.filter(r => r.is_featured).length;
+    const visible = this.reviews.filter(r => r.is_visible !== false).length;
+    const hidden = this.reviews.filter(r => r.is_visible === false).length;
     const complaints = this.reviews.filter(r => r.is_complaint || r.rating <= 2).length;
-    const positive = this.reviews.filter(r => r.rating >= 4).length;
-    const satisfactionRate = total > 0 ? Math.round((positive / total) * 100) : 100;
 
     return `
       <div class="space-y-6">
@@ -38,7 +37,7 @@ export const ReviewListView = {
               <span class="text-xs font-semibold text-gray-500">Comentarios</span>
             </div>
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Moderación de Reseñas y Testimonios</h1>
-            <p class="text-sm text-gray-500">Supervise opiniones de clientes, destaque testimonios en la portada y resuelva inconformidades directamente por WhatsApp.</p>
+            <p class="text-sm text-gray-500">Supervise opiniones de clientes, active o desactive su visualización y gestione comentarios.</p>
           </div>
         </div>
 
@@ -46,19 +45,9 @@ export const ReviewListView = {
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Satisfacción</p>
-              <p class="text-2xl font-bold text-emerald-600 mt-0.5">${satisfactionRate}%</p>
-              <p class="text-[11px] text-gray-400">${positive} de ${total} positivas</p>
-            </div>
-            <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
-              <span class="material-symbols-outlined text-xl">sentiment_very_satisfied</span>
-            </div>
-          </div>
-          <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
-            <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Reseñas</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-0.5">${total}</p>
-              <p class="text-[11px] text-gray-400">Clientes verificados</p>
+              <p class="text-[11px] text-gray-400">Comentarios recibidos</p>
             </div>
             <div class="p-2.5 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-xl">rate_review</span>
@@ -66,19 +55,29 @@ export const ReviewListView = {
           </div>
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">En Portada</p>
-              <p class="text-2xl font-bold text-amber-600 mt-0.5" id="kpi-featured-reviews">${featured}</p>
-              <p class="text-[11px] text-gray-400">Testimonios destacados</p>
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Visibles</p>
+              <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-visible-reviews">${visible}</p>
+              <p class="text-[11px] text-gray-400">Publicados en sitio</p>
             </div>
-            <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
-              <span class="material-symbols-outlined text-xl">hotel_class</span>
+            <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+              <span class="material-symbols-outlined text-xl">visibility</span>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ocultos</p>
+              <p class="text-2xl font-bold text-gray-600 mt-0.5" id="kpi-hidden-reviews">${hidden}</p>
+              <p class="text-[11px] text-gray-400">Desactivados</p>
+            </div>
+            <div class="p-2.5 bg-gray-100 text-gray-600 rounded-xl">
+              <span class="material-symbols-outlined text-xl">visibility_off</span>
             </div>
           </div>
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alertas / Reclamos</p>
               <p class="text-2xl font-bold text-rose-600 mt-0.5">${complaints}</p>
-              <p class="text-[11px] text-gray-400">Atención vía WhatsApp</p>
+              <p class="text-[11px] text-gray-400">Atención requerida</p>
             </div>
             <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">notification_important</span>
@@ -89,18 +88,19 @@ export const ReviewListView = {
         <!-- Barra de Filtros y Subpestañas -->
         <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <!-- Pestañas -->
             <div class="flex flex-wrap items-center gap-1.5" id="review-subtabs">
               <button data-tab="all" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-deep-obsidian text-white transition">
                 TODAS (${total})
               </button>
-              <button data-tab="featured" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-gray-600 hover:bg-gray-200 transition">
-                ⭐ EN PORTADA (${featured})
+              <button data-tab="visible" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-gray-600 hover:bg-gray-200 transition">
+                👁️ VISIBLES (${visible})
+              </button>
+              <button data-tab="hidden" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-gray-600 hover:bg-gray-200 transition">
+                🚫 OCULTAS (${hidden})
               </button>
               <button data-tab="complaints" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-rose-600 hover:bg-rose-50 transition">
-                ⚠️ RECLAMOS / ALERTAS (${complaints})
-              </button>
-              <button data-tab="approved" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-emerald-700 hover:bg-emerald-50 transition">
-                APROBADAS (${positive})
+                ⚠️ RECLAMOS (${complaints})
               </button>
             </div>
             <span id="reviews-count-badge" class="text-xs font-bold text-gray-500">
@@ -137,22 +137,24 @@ export const ReviewListView = {
 
     return reviews.map(r => {
       const isComplaint = r.is_complaint || r.rating <= 2;
+      const isVisible = r.is_visible !== false; // Por defecto visible
       const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString() : 'Reciente';
+      const customerName = r.customer_name || 'Anónimo';
       const starsHtml = Array.from({ length: 5 }, (_, i) => {
         const isFilled = i < (r.rating || 5);
         return `<span class="material-symbols-outlined text-base ${isFilled ? 'text-amber-400' : 'text-gray-200'}">star</span>`;
       }).join('');
 
       return `
-        <div class="bg-white rounded-2xl border ${isComplaint ? 'border-rose-200 bg-rose-50/20' : 'border-slate-border'} p-5 shadow-sm space-y-3 hover:border-blue-300 transition">
+        <div class="bg-white rounded-2xl border ${isComplaint ? 'border-rose-200 bg-rose-50/20' : 'border-slate-border'} p-5 shadow-sm space-y-3 hover:border-blue-300 transition ${!isVisible ? 'opacity-60' : ''}">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-border">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full ${isComplaint ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-electric-blue'} font-bold flex items-center justify-center text-sm flex-shrink-0">
-                ${(r.customer_name || 'C').charAt(0)}
+                ${customerName.charAt(0).toUpperCase()}
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <h3 class="font-bold text-sm text-deep-obsidian">${r.customer_name}</h3>
+                  <h3 class="font-bold text-sm text-deep-obsidian">${customerName}</h3>
                   ${r.customer_city ? `<span class="text-[11px] text-gray-400 font-medium">(${r.customer_city})</span>` : ''}
                 </div>
                 <p class="text-xs text-gray-500">Producto: <strong class="text-gray-700">${r.product_name}</strong> · ${dateStr}</p>
@@ -164,44 +166,37 @@ export const ReviewListView = {
                   <span class="material-symbols-outlined text-xs">warning</span>
                   Alerta Reclamo
                 </span>
-              ` : `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Aprobada
-                </span>
-              `}
+              ` : ''}
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isVisible ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-gray-100 text-gray-600 border border-gray-200'}">
+                ${isVisible ? 'Visible' : 'Oculto'}
+              </span>
             </div>
           </div>
 
-          <!-- ✅ COMENTARIO CON SCROLL INTERNO (ALTURA MÁXIMA FIJA) -->
+          <!-- Estrellas -->
+          <div class="flex items-center gap-1">
+            ${starsHtml}
+          </div>
+
+          <!-- Comentario con scroll interno -->
           <div class="bg-slate-surface p-3.5 rounded-xl border border-slate-border text-xs text-gray-700 leading-relaxed italic max-h-32 overflow-y-auto custom-scrollbar">
             "${r.comment}"
           </div>
 
           <!-- Barra de Acciones -->
           <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <!-- Toggle Visibilidad -->
             <button 
-              data-action="toggle-featured-review" 
+              data-action="toggle-visibility-review" 
               data-id="${r.id}" 
-              data-featured="${r.is_featured ? 'true' : 'false'}"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${r.is_featured ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-slate-100 text-gray-600 hover:bg-amber-50 hover:text-amber-800'}"
+              data-visible="${isVisible ? 'true' : 'false'}"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${isVisible ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'}"
             >
-              <span class="material-symbols-outlined text-base ${r.is_featured ? 'text-amber-600' : 'text-gray-400'}">hotel_class</span>
-              <span>${r.is_featured ? 'Destacado en Portada' : 'Destacar en Portada'}</span>
+              <span class="material-symbols-outlined text-base">${isVisible ? 'visibility_off' : 'visibility'}</span>
+              <span>${isVisible ? 'Ocultar Comentario' : 'Mostrar Comentario'}</span>
             </button>
             <div class="flex items-center gap-2">
-              <button 
-                data-action="whatsapp-contact-review" 
-                data-id="${r.id}" 
-                data-phone="${r.customer_phone || ''}" 
-                data-name="${r.customer_name}" 
-                data-product="${r.product_name}" 
-                data-complaint="${isComplaint ? 'true' : 'false'}"
-                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm ${isComplaint ? 'bg-rose-600 hover:bg-rose-700 text-white' : 'bg-whatsapp-green hover:bg-green-700 text-white'}"
-                title="Abrir conversación de WhatsApp con el cliente"
-              >
-                <span class="material-symbols-outlined text-base">chat</span>
-                <span>${isComplaint ? 'Resolver Inconformidad (WhatsApp)' : 'Escribir por WhatsApp'}</span>
-              </button>
+              <!-- Botón Eliminar -->
               <button 
                 data-action="delete-review" 
                 data-id="${r.id}" 
@@ -224,11 +219,11 @@ export const ReviewListView = {
 
     this.filteredReviews = this.reviews.filter(r => {
       let matchTab = true;
-      if (this.currentTab === 'featured') matchTab = Boolean(r.is_featured);
+      if (this.currentTab === 'visible') matchTab = r.is_visible !== false;
+      if (this.currentTab === 'hidden') matchTab = r.is_visible === false;
       if (this.currentTab === 'complaints') matchTab = Boolean(r.is_complaint || r.rating <= 2);
-      if (this.currentTab === 'approved') matchTab = r.rating >= 4;
 
-      const name = (r.customer_name || '').toLowerCase();
+      const name = (r.customer_name || 'Anónimo').toLowerCase();
       const product = (r.product_name || '').toLowerCase();
       const comment = (r.comment || '').toLowerCase();
       const city = (r.customer_city || '').toLowerCase();
@@ -262,45 +257,26 @@ export const ReviewListView = {
 
     // Delegación de eventos
     document.addEventListener('click', async (e) => {
-      // Toggle Destacar en Portada
-      const btnFeatured = e.target.closest('[data-action="toggle-featured-review"]');
-      if (btnFeatured) {
-        const id = btnFeatured.dataset.id;
-        const currentFeatured = btnFeatured.dataset.featured === 'true';
-        const nextState = !currentFeatured;
+      // Toggle Visibilidad
+      const btnVisibility = e.target.closest('[data-action="toggle-visibility-review"]');
+      if (btnVisibility) {
+        const id = btnVisibility.dataset.id;
+        const currentVisible = btnVisibility.dataset.visible === 'true';
+        const nextState = !currentVisible;
         try {
-          await ReviewService.toggleFeatured(id, nextState);
-          Toast.show(`Testimonio ${nextState ? 'destacado en portada' : 'retirado de portada'}`, 'success');
+          await ReviewService.toggleVisibility(id, nextState);
+          Toast.show(`Comentario ${nextState ? 'visible' : 'oculto'} con éxito`, 'success');
         } catch (err) {
           console.warn('Backend indisponible, actualizando interfaz localmente:', err);
-          Toast.show(`Testimonio ${nextState ? 'destacado en portada' : 'retirado de portada'}`, 'success');
+          Toast.show(`Comentario ${nextState ? 'visible' : 'oculto'} con éxito`, 'success');
         }
         const r = this.reviews.find(item => item.id == id);
-        if (r) r.is_featured = nextState;
-        const kpi = document.getElementById('kpi-featured-reviews');
-        if (kpi) kpi.textContent = this.reviews.filter(x => x.is_featured).length;
+        if (r) r.is_visible = nextState;
+        const kpiVisible = document.getElementById('kpi-visible-reviews');
+        const kpiHidden = document.getElementById('kpi-hidden-reviews');
+        if (kpiVisible) kpiVisible.textContent = this.reviews.filter(x => x.is_visible !== false).length;
+        if (kpiHidden) kpiHidden.textContent = this.reviews.filter(x => x.is_visible === false).length;
         this.filter();
-        return;
-      }
-
-      // Contactar por WhatsApp
-      const btnWa = e.target.closest('[data-action="whatsapp-contact-review"]');
-      if (btnWa) {
-        const rawPhone = btnWa.dataset.phone || '';
-        const phone = rawPhone.replace(/[^0-9]/g, '');
-        const name = btnWa.dataset.name;
-        const product = btnWa.dataset.product;
-        const isComplaint = btnWa.dataset.complaint === 'true';
-        let message = '';
-        if (isComplaint) {
-          message = `Hola ${name}, te escribimos de Comercializadora El Vecino respecto a tu experiencia con el producto *${product}*. Queremos ayudarte y darte atención prioritaria para resolver cualquier inconveniente. ¿Podrías comentarnos más detalles?`;
-        } else {
-          message = `Hola ${name}, te saludamos de Comercializadora El Vecino. Muchas gracias por tu reseña sobre *${product}*. ¡Nos alegra mucho haberte atendido! Recuerda que estamos a tu orden para futuras cotizaciones.`;
-        }
-        const url = phone 
-          ? `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`
-          : `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
         return;
       }
 
