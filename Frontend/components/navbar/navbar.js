@@ -53,7 +53,7 @@ const Navbar = {
       instagram: 'https://www.instagram.com/elvecinocom?stkn=ZDNlZDc0MzIxNw==',
       whatsapp: `https://wa.me/${waPhone}?text=${encodeURIComponent('¡Hola Comercializadora EL VECINO! Me gustaría solicitar más información y cotización.')}`,
       tiktok: 'https://www.tiktok.com/@elvecinocom011?is_from_webapp=1&sender_device=pc',
-      gmail: 'mailto:ventas@tuestante.com?subject=Consulta%20Cat%C3%A1logo%20El%20Vecino'
+      gmail: 'mailto:ventas@comercializadoraelvecino.com?subject=Consulta%20Cat%C3%A1logo%20El%20Vecino'
     };
   },
 
@@ -224,7 +224,7 @@ const Navbar = {
                     </div>
                     <div class="social-text">
                       <span class="social-name">Gmail</span>
-                      <span class="social-sub">ventas@tuestante.com</span>
+                      <span class="social-sub">ventas@comercializadoraelvecino.com</span>
                     </div>
                     <span class="material-symbols-outlined social-arrow">mail</span>
                   </a>
@@ -246,7 +246,7 @@ const Navbar = {
             </button>
 
             <!-- Botón Cotizar WhatsApp Directo -->
-            <a href="${social.whatsapp}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-sm btn-header-quote" title="Cotizar por WhatsApp">
+            <a href="${social.whatsapp}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm btn-header-quote" title="Cotizar por WhatsApp">
               <span class="material-symbols-outlined">chat</span>
               <span class="btn-quote-text">Cotizar WA</span>
             </a>
@@ -381,7 +381,7 @@ const Navbar = {
                   </div>
                   <div class="mobile-social-info">
                     <span class="mobile-social-title">Gmail</span>
-                    <span class="mobile-social-handle">ventas@tuestante.com</span>
+                    <span class="mobile-social-handle">ventas@comercializadoraelvecino.com</span>
                   </div>
                   <span class="material-symbols-outlined mobile-social-arrow">mail</span>
                 </a>
@@ -390,7 +390,7 @@ const Navbar = {
           </ul>
 
           <div class="mobile-nav-footer">
-            <a href="${social.whatsapp}" target="_blank" rel="noopener noreferrer" class="btn btn-neon-cyan btn-block" onclick="closeMobileOverlays()">
+            <a href="${social.whatsapp}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block" onclick="closeMobileOverlays()">
               <span class="material-symbols-outlined">chat</span>
               <span>Cotizar por WhatsApp</span>
             </a>

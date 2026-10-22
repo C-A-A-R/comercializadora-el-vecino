@@ -51,7 +51,7 @@ export const BannerListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Banners</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-0.5">${total}</p>
-              <p class="text-[11px] text-gray-400">Diseños registrados</p>
+              <p class="text-xs text-gray-400">Diseños registrados</p>
             </div>
             <div class="p-2.5 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-xl">view_carousel</span>
@@ -62,7 +62,7 @@ export const BannerListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Banners Activos</p>
               <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-active-banners">${active}</p>
-              <p class="text-[11px] text-gray-400">Visibles en la web</p>
+              <p class="text-xs text-gray-400">Visibles en la web</p>
             </div>
             <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">visibility</span>
@@ -73,7 +73,7 @@ export const BannerListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Banners Hero Principales</p>
               <p class="text-2xl font-bold text-purple-600 mt-0.5">${heroCount}</p>
-              <p class="text-[11px] text-gray-400">Slider superior de inicio</p>
+              <p class="text-xs text-gray-400">Slider superior de inicio</p>
             </div>
             <div class="p-2.5 bg-purple-50 text-purple-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">featured_video</span>
@@ -218,11 +218,11 @@ export const BannerListView = {
             <div class="relative h-40 w-full overflow-hidden bg-slate-900">
               <img src="${b.image_url}" alt="${b.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-              <span class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${typeBadgeClass} border">
+              <span class="absolute top-3 left-3 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${typeBadgeClass} border">
                 ${typeLabel}
               </span>
               ${b.tag ? `
-                <span class="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 text-gray-800 backdrop-blur-sm shadow-sm">
+                <span class="absolute top-3 right-3 px-2 py-0.5 rounded text-xs font-bold bg-white/90 text-gray-800 backdrop-blur-sm shadow-sm">
                   ${b.tag}
                 </span>
               ` : ''}
@@ -233,10 +233,10 @@ export const BannerListView = {
           ` : `
             <div class="p-4 bg-gradient-to-r ${b.bg_gradient || 'from-amber-600 to-orange-600'} text-white relative">
               <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/20 border border-white/30">
+                <span class="px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider bg-white/20 border border-white/30">
                   ${typeLabel}
                 </span>
-                ${b.tag ? `<span class="text-[10px] font-bold bg-black/20 px-2 py-0.5 rounded">${b.tag}</span>` : ''}
+                ${b.tag ? `<span class="text-xs font-bold bg-black/20 px-2 py-0.5 rounded">${b.tag}</span>` : ''}
               </div>
               <h3 class="font-display font-bold text-base leading-tight">${b.title}</h3>
             </div>
@@ -257,7 +257,7 @@ export const BannerListView = {
                   />
                   <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
                 </label>
-                <span class="text-[11px] font-bold ${b.is_active ? 'text-emerald-700' : 'text-gray-400'}">
+                <span class="text-xs font-bold ${b.is_active ? 'text-emerald-700' : 'text-gray-400'}">
                   ${b.is_active ? 'Activo' : 'Pausado'}
                 </span>
               </div>

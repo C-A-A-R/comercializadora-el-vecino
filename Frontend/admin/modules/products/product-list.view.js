@@ -25,7 +25,7 @@ export const ProductListView = {
 
           const complaintBadgeHtml = hasComplaints ? `
             <div class="relative group/tooltip inline-block">
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-50 text-red-700 border border-red-300 cursor-help shadow-sm animate-pulse">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-300 cursor-help shadow-sm animate-pulse">
                 <span class="material-symbols-outlined text-[13px] text-red-600">report_problem</span>
                 <span>Reclamos (${row.negative_reviews_count || 1})</span>
               </span>

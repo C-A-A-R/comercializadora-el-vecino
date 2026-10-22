@@ -48,7 +48,7 @@ export const ReviewListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Satisfacción</p>
               <p class="text-2xl font-bold text-emerald-600 mt-0.5">${satisfactionRate}%</p>
-              <p class="text-[11px] text-gray-400">${positive} de ${total} positivas</p>
+              <p class="text-xs text-gray-400">${positive} de ${total} positivas</p>
             </div>
             <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">sentiment_very_satisfied</span>
@@ -58,7 +58,7 @@ export const ReviewListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Reseñas</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-0.5">${total}</p>
-              <p class="text-[11px] text-gray-400">Clientes verificados</p>
+              <p class="text-xs text-gray-400">Clientes verificados</p>
             </div>
             <div class="p-2.5 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-xl">rate_review</span>
@@ -68,7 +68,7 @@ export const ReviewListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">En Portada</p>
               <p class="text-2xl font-bold text-amber-600 mt-0.5" id="kpi-featured-reviews">${featured}</p>
-              <p class="text-[11px] text-gray-400">Testimonios destacados</p>
+              <p class="text-xs text-gray-400">Testimonios destacados</p>
             </div>
             <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">hotel_class</span>
@@ -78,7 +78,7 @@ export const ReviewListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alertas / Reclamos</p>
               <p class="text-2xl font-bold text-rose-600 mt-0.5">${complaints}</p>
-              <p class="text-[11px] text-gray-400">Atención vía WhatsApp</p>
+              <p class="text-xs text-gray-400">Atención vía WhatsApp</p>
             </div>
             <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">notification_important</span>
@@ -153,19 +153,19 @@ export const ReviewListView = {
               <div>
                 <div class="flex items-center gap-2">
                   <h3 class="font-bold text-sm text-deep-obsidian">${r.customer_name}</h3>
-                  ${r.customer_city ? `<span class="text-[11px] text-gray-400 font-medium">(${r.customer_city})</span>` : ''}
+                  ${r.customer_city ? `<span class="text-xs text-gray-400 font-medium">(${r.customer_city})</span>` : ''}
                 </div>
                 <p class="text-xs text-gray-500">Producto: <strong class="text-gray-700">${r.product_name}</strong> · ${dateStr}</p>
               </div>
             </div>
             <div class="flex items-center gap-2">
               ${isComplaint ? `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
                   <span class="material-symbols-outlined text-xs">warning</span>
                   Alerta Reclamo
                 </span>
               ` : `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                   Aprobada
                 </span>
               `}

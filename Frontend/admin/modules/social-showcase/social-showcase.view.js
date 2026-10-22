@@ -166,10 +166,10 @@ export const SocialShowcaseView = {
             <div class="flex items-center gap-2">
               <span class="font-bold text-sm text-gray-900">${c.author}</span>
               <span class="text-xs text-gray-400">• en ${c.platform} (${c.reelTitle})</span>
-              <span class="text-[11px] px-2 py-0.5 rounded ${badgeStyle}">${badgeText}</span>
+              <span class="text-xs px-2 py-0.5 rounded ${badgeStyle}">${badgeText}</span>
             </div>
             <p class="text-sm text-gray-800 leading-snug font-medium">"${c.text}"</p>
-            <div class="flex items-center gap-2 text-[11px] text-gray-500 pt-1">
+            <div class="flex items-center gap-2 text-xs text-gray-500 pt-1">
               <span>Palabras Clave Detectadas:</span>
               ${c.keywords.map(k => `<span class="bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded">${k}</span>`).join('')}
               <span class="ml-2 text-gray-400">${c.date}</span>
@@ -207,7 +207,7 @@ export const SocialShowcaseView = {
       <div class="bg-white border border-slate-border rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
         <div class="relative">
           <img src="${r.thumbnail}" alt="${r.title}" class="w-full h-40 object-cover" />
-          <span class="absolute top-2 right-2 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+          <span class="absolute top-2 right-2 bg-black/70 text-white text-xs font-bold px-2 py-0.5 rounded-full">
             ${r.platform}
           </span>
         </div>

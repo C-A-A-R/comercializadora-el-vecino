@@ -21,7 +21,7 @@ const ProductCard = {
     if (window.OrderService?.buildDirectProductQuoteUrl) {
       waUrl = window.OrderService.buildDirectProductQuoteUrl(product);
     } else {
-      const phone = window.CONFIG?.whatsappNumber || window.CONFIG?.WHATSAPP_PHONE || '573001234567';
+      const phone = ((window.CONFIG?.WHATSAPP_PHONE || window.CONFIG?.whatsappNumber || '584129227264')).replace(/\D/g, '');
       const msg = `¡Hola EL VECINO! Me interesa consultar disponibilidad y cotización técnica del equipo: *${product.name}*.`;
       waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
     }

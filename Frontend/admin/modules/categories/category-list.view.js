@@ -80,7 +80,7 @@ export const CategoryListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Categorías</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-0.5" id="kpi-total-cats">${totalCategories}</p>
-              <p class="text-[11px] text-gray-400">Familias registradas</p>
+              <p class="text-xs text-gray-400">Familias registradas</p>
             </div>
             <div class="p-2.5 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-xl">folder_open</span>
@@ -90,7 +90,7 @@ export const CategoryListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Categorías Activas</p>
               <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-active-cats">${activeCategories}</p>
-              <p class="text-[11px] text-gray-400">Publicadas en catálogo</p>
+              <p class="text-xs text-gray-400">Publicadas en catálogo</p>
             </div>
             <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">check_circle</span>
@@ -100,7 +100,7 @@ export const CategoryListView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Modelos Clasificados</p>
               <p class="text-2xl font-bold text-purple-600 mt-0.5" id="kpi-total-products">${totalClassifiedProducts}</p>
-              <p class="text-[11px] text-gray-400">Productos vinculados</p>
+              <p class="text-xs text-gray-400">Productos vinculados</p>
             </div>
             <div class="p-2.5 bg-purple-50 text-purple-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">grid_view</span>
@@ -161,7 +161,7 @@ export const CategoryListView = {
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="bg-slate-surface border-b border-slate-border text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <tr class="bg-slate-surface border-b border-slate-border text-xs font-bold text-gray-500 uppercase tracking-wider">
                   <th class="px-5 py-4 w-72">Categoría</th>
                   <th class="px-5 py-4 min-w-[260px]">Subcategorías & Tags</th>
                   <th class="px-5 py-4 w-36">Productos</th>
@@ -305,7 +305,7 @@ export const CategoryListView = {
       const prodCount = this.getProductsCountForCategory(cat);
       const tagsHtml = tags.length > 0
         ? tags.map(tag => `
-            <span class="px-2 py-0.5 rounded-md bg-slate-surface border border-slate-border text-gray-700 text-[11px] font-medium">
+            <span class="px-2 py-0.5 rounded-md bg-slate-surface border border-slate-border text-gray-700 text-xs font-medium">
               ${tag}
             </span>
           `).join('')
@@ -315,7 +315,7 @@ export const CategoryListView = {
           <td class="px-5 py-4">
             <div class="space-y-0.5">
               <p class="font-bold text-deep-obsidian text-sm">${cat.name}</p>
-              <code class="text-[11px] font-mono text-gray-500 bg-slate-surface px-1.5 py-0.5 rounded border border-slate-border inline-block">
+              <code class="text-xs font-mono text-gray-500 bg-slate-surface px-1.5 py-0.5 rounded border border-slate-border inline-block">
                 ${cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-')}
               </code>
             </div>
@@ -347,7 +347,7 @@ export const CategoryListView = {
                 />
                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
               </label>
-              <span class="text-[10px] font-bold ${cat.is_active ? 'text-emerald-700' : 'text-gray-400'}">
+              <span class="text-xs font-bold ${cat.is_active ? 'text-emerald-700' : 'text-gray-400'}">
                 ${cat.is_active ? 'Activo' : 'Inactivo'}
               </span>
             </div>

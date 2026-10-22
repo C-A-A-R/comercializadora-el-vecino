@@ -150,14 +150,14 @@ export const WhatsAppCrmView = {
           </td>
           <td class="py-3 px-4 font-medium text-electric-blue">
             ${lead.productInterest}
-            <div class="text-[11px] text-gray-400 font-normal">Valor est.: $${lead.estimatedValue.toFixed(2)}</div>
+            <div class="text-xs text-gray-400 font-normal">Valor est.: $${lead.estimatedValue.toFixed(2)}</div>
           </td>
           <td class="py-3 px-4 text-xs text-gray-500">
             <span class="bg-slate-100 px-2 py-1 rounded-md border border-slate-200">${lead.origin}</span>
           </td>
           <td class="py-3 px-4 text-xs text-gray-700 max-w-xs truncate">
             "${lead.lastMessage}"
-            <div class="text-[10px] text-gray-400">${lead.timeAgo}</div>
+            <div class="text-xs text-gray-400">${lead.timeAgo}</div>
           </td>
           <td class="py-3 px-4">
             <span class="text-xs px-2.5 py-1 rounded-full ${statusBadge}">${statusLabel}</span>

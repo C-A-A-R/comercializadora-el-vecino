@@ -74,7 +74,7 @@ export const DashboardView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Vistas del Catálogo</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-1">${Number(stats.total_views_catalog ?? 0).toLocaleString()}</p>
-              <p class="text-[11px] text-gray-500 mt-0.5">Visualizaciones acumuladas</p>
+              <p class="text-xs text-gray-500 mt-0.5">Visualizaciones acumuladas</p>
             </div>
             <div class="p-3 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-2xl">visibility</span>
@@ -90,7 +90,7 @@ export const DashboardView = {
                   <span class="material-symbols-outlined text-sm">trending_up</span>
                 </span>
               </div>
-              <p class="text-[11px] text-gray-500 mt-0.5">${trend.views_last_7d ?? 0} vistas últimos 7 días</p>
+              <p class="text-xs text-gray-500 mt-0.5">${trend.views_last_7d ?? 0} vistas últimos 7 días</p>
             </div>
             <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-2xl">monitoring</span>
@@ -102,9 +102,9 @@ export const DashboardView = {
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Índice Satisfacción</p>
               <div class="flex items-baseline gap-2 mt-1">
                 <p class="text-2xl font-bold text-emerald-600">${satisfaction.percentage}%</p>
-                <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Positivo</span>
+                <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Positivo</span>
               </div>
-              <p class="text-[11px] text-gray-400 mt-0.5">${satisfaction.positive_reviews ?? 0} reseñas favorables</p>
+              <p class="text-xs text-gray-400 mt-0.5">${satisfaction.positive_reviews ?? 0} reseñas favorables</p>
             </div>
             <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
               <span class="material-symbols-outlined text-2xl">sentiment_very_satisfied</span>
@@ -115,7 +115,7 @@ export const DashboardView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Productos</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-1">${stats.total_productos ?? 0}</p>
-              <p class="text-[11px] text-gray-400 mt-0.5">En catálogo disponible</p>
+              <p class="text-xs text-gray-400 mt-0.5">En catálogo disponible</p>
             </div>
             <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
               <span class="material-symbols-outlined text-2xl">inventory_2</span>
@@ -152,21 +152,21 @@ export const DashboardView = {
                 <div class="p-3.5 bg-slate-surface/60 rounded-xl border border-slate-border hover:bg-slate-surface transition space-y-2">
                   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5">
-                      <span class="w-6 h-6 rounded-full ${rankColor} text-[11px] font-bold font-display flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <span class="w-6 h-6 rounded-full ${rankColor} text-xs font-bold font-display flex items-center justify-center flex-shrink-0 shadow-sm">
                         #${index + 1}
                       </span>
                       <div>
                         <p class="text-xs font-bold text-deep-obsidian leading-tight">${item.name}</p>
-                        <p class="text-[11px] text-gray-500">${item.brand || 'El Vecino'} · <span class="font-medium text-gray-600">${item.category || 'Electrodoméstico'}</span></p>
+                        <p class="text-xs text-gray-500">${item.brand || 'El Vecino'} · <span class="font-medium text-gray-600">${item.category || 'Electrodoméstico'}</span></p>
                       </div>
                     </div>
                     <div class="flex items-center gap-3 self-end sm:self-center">
-                      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${item.badge_color || 'bg-blue-50 text-blue-700 border-blue-200'}">
+                      <span class="px-2 py-0.5 rounded-full text-xs font-bold border ${item.badge_color || 'bg-blue-50 text-blue-700 border-blue-200'}">
                         ${item.tendencia || 'Frecuente'}
                       </span>
                       <div class="text-right">
                         <span class="text-xs font-black text-whatsapp-green font-display">${item.consultas_count} consultas</span>
-                        <span class="text-[10px] text-gray-400 block">WhatsApp</span>
+                        <span class="text-xs text-gray-400 block">WhatsApp</span>
                       </div>
                     </div>
                   </div>
@@ -256,7 +256,7 @@ export const DashboardView = {
                         <span class="material-symbols-outlined text-base text-red-500">warning</span>
                         <p class="text-sm font-bold text-deep-obsidian">${alert.name}</p>
                       </div>
-                      <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-red-100 text-red-800 border border-red-200">
+                      <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-800 border border-red-200">
                         ${alert.negative_reviews_count || 1} reclamo
                       </span>
                     </div>

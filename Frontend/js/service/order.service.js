@@ -4,7 +4,7 @@
 
 const OrderService = {
   get phone() {
-    return window.CONFIG?.WHATSAPP_PHONE || '573001234567';
+    return (window.CONFIG?.WHATSAPP_PHONE || window.CONFIG?.whatsappNumber || '584129227264').replace(/\D/g, '');
   },
 
   formatCurrency(amount) {
@@ -12,7 +12,7 @@ const OrderService = {
       return window.CONFIG.formatCurrency(amount);
     }
     const num = Number(amount) || 0;
-    return `$ ${num.toLocaleString('es-CO')}`;
+    return `$ ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   },
 
   /**

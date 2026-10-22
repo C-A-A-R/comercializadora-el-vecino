@@ -79,7 +79,7 @@ export const PromotionsHubView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Ofertas</p>
               <p class="text-2xl font-bold text-deep-obsidian mt-0.5">${totalOffers}</p>
-              <p class="text-[11px] text-gray-400">${totalCombos} combos · ${totalPromos} promociones</p>
+              <p class="text-xs text-gray-400">${totalCombos} combos · ${totalPromos} promociones</p>
             </div>
             <div class="p-2.5 bg-purple-50 text-purple-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">auto_awesome_motion</span>
@@ -90,7 +90,7 @@ export const PromotionsHubView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Combos Activos</p>
               <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-hub-active-combos">${activeCombos}</p>
-              <p class="text-[11px] text-gray-400">Paquetes para cotización</p>
+              <p class="text-xs text-gray-400">Paquetes para cotización</p>
             </div>
             <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">package_2</span>
@@ -101,7 +101,7 @@ export const PromotionsHubView = {
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Promociones Activas</p>
               <p class="text-2xl font-bold text-blue-600 mt-0.5" id="kpi-hub-active-promos">${activePromos}</p>
-              <p class="text-[11px] text-gray-400">Campañas vigentes</p>
+              <p class="text-xs text-gray-400">Campañas vigentes</p>
             </div>
             <div class="p-2.5 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-xl">sell</span>
@@ -165,7 +165,7 @@ export const PromotionsHubView = {
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
-                  <tr class="bg-slate-surface border-b border-slate-border text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <tr class="bg-slate-surface border-b border-slate-border text-xs font-bold text-gray-500 uppercase tracking-wider">
                     <th class="px-5 py-4 w-80">Combo e Identificador</th>
                     <th class="px-5 py-4">Productos Incluidos</th>
                     <th class="px-5 py-4 text-center w-36">Estado</th>
@@ -210,14 +210,14 @@ export const PromotionsHubView = {
                     Plantilla del Mensaje
                   </label>
                   <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                    <span class="text-[11px] text-gray-500 font-medium">Insertar variable:</span>
-                    <button type="button" data-insert-combo="{nombre_combo}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-blue-50 text-electric-blue hover:bg-blue-100 rounded border border-blue-200 transition">
+                    <span class="text-xs text-gray-500 font-medium">Insertar variable:</span>
+                    <button type="button" data-insert-combo="{nombre_combo}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-blue-50 text-electric-blue hover:bg-blue-100 rounded border border-blue-200 transition">
                       {nombre_combo}
                     </button>
-                    <button type="button" data-insert-combo="{sku_combo}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded border border-purple-200 transition">
+                    <button type="button" data-insert-combo="{sku_combo}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded border border-purple-200 transition">
                       {sku_combo}
                     </button>
-                    <button type="button" data-insert-combo="{items}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded border border-amber-200 transition">
+                    <button type="button" data-insert-combo="{items}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded border border-amber-200 transition">
                       {items}
                     </button>
                   </div>
@@ -251,18 +251,18 @@ export const PromotionsHubView = {
                     </div>
                     <div>
                       <p class="text-xs font-bold text-gray-900 leading-none">Comercializadora El Vecino</p>
-                      <p class="text-[10px] text-emerald-700 font-semibold leading-tight">En línea para cotizaciones</p>
+                      <p class="text-xs text-emerald-700 font-semibold leading-tight">En línea para cotizaciones</p>
                     </div>
                   </div>
-                  <span class="text-[10px] text-gray-500 font-medium">Vista Previa</span>
+                  <span class="text-xs text-gray-500 font-medium">Vista Previa</span>
                 </div>
 
                 <div class="flex justify-end">
                   <div class="max-w-[90%] bg-[#E7FFDB] p-3 rounded-2xl rounded-tr-none shadow-sm text-xs text-gray-800 space-y-1.5 border border-green-200">
-                    <p id="hub-whatsapp-preview-text" class="whitespace-pre-line leading-relaxed text-[11px] text-gray-800">
+                    <p id="hub-whatsapp-preview-text" class="whitespace-pre-line leading-relaxed text-xs text-gray-800">
                       ${this.buildPreviewMessage(this.selectedComboForWhatsapp)}
                     </p>
-                    <div class="flex items-center justify-end gap-1 text-[9px] text-gray-500 font-medium pt-1">
+                    <div class="flex items-center justify-end gap-1 text-xs text-gray-500 font-medium pt-1">
                       <span>12:45 p. m.</span>
                       <span class="material-symbols-outlined text-xs text-blue-500">done_all</span>
                     </div>
@@ -299,7 +299,7 @@ export const PromotionsHubView = {
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
-                  <tr class="bg-slate-surface border-b border-slate-border text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <tr class="bg-slate-surface border-b border-slate-border text-xs font-bold text-gray-500 uppercase tracking-wider">
                     <th class="px-5 py-4 w-72">Promoción</th>
                     <th class="px-5 py-4 min-w-[200px]">Producto Asociado</th>
                     <th class="px-5 py-4 w-52">Vigencia</th>
@@ -345,17 +345,17 @@ export const PromotionsHubView = {
                     Plantilla del Mensaje de la Promoción
                   </label>
                   <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                    <span class="text-[11px] text-gray-500 font-medium">Insertar variable:</span>
-                    <button type="button" data-insert-promo="{nombre_promo}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-blue-50 text-electric-blue hover:bg-blue-100 rounded border border-blue-200 transition">
+                    <span class="text-xs text-gray-500 font-medium">Insertar variable:</span>
+                    <button type="button" data-insert-promo="{nombre_promo}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-blue-50 text-electric-blue hover:bg-blue-100 rounded border border-blue-200 transition">
                       {nombre_promo}
                     </button>
-                    <button type="button" data-insert-promo="{producto}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded border border-purple-200 transition">
+                    <button type="button" data-insert-promo="{producto}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded border border-purple-200 transition">
                       {producto}
                     </button>
-                    <button type="button" data-insert-promo="{beneficio}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 rounded border border-emerald-200 transition">
+                    <button type="button" data-insert-promo="{beneficio}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 rounded border border-emerald-200 transition">
                       {beneficio}
                     </button>
-                    <button type="button" data-insert-promo="{vigencia}" class="tag-btn text-[11px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded border border-amber-200 transition">
+                    <button type="button" data-insert-promo="{vigencia}" class="tag-btn text-xs font-bold px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded border border-amber-200 transition">
                       {vigencia}
                     </button>
                   </div>
@@ -389,18 +389,18 @@ export const PromotionsHubView = {
                     </div>
                     <div>
                       <p class="text-xs font-bold text-gray-900 leading-none">Comercializadora El Vecino</p>
-                      <p class="text-[10px] text-emerald-700 font-semibold leading-tight">En línea para cotizaciones</p>
+                      <p class="text-xs text-emerald-700 font-semibold leading-tight">En línea para cotizaciones</p>
                     </div>
                   </div>
-                  <span class="text-[10px] text-gray-500 font-medium">Vista Previa</span>
+                  <span class="text-xs text-gray-500 font-medium">Vista Previa</span>
                 </div>
 
                 <div class="flex justify-end">
                   <div class="max-w-[90%] bg-[#E7FFDB] p-3 rounded-2xl rounded-tr-none shadow-sm text-xs text-gray-800 space-y-1.5 border border-green-200">
-                    <p id="hub-whatsapp-promo-preview-text" class="whitespace-pre-line leading-relaxed text-[11px] text-gray-800">
+                    <p id="hub-whatsapp-promo-preview-text" class="whitespace-pre-line leading-relaxed text-xs text-gray-800">
                       ${this.buildPromoPreviewMessage(this.selectedPromoForWhatsapp)}
                     </p>
-                    <div class="flex items-center justify-end gap-1 text-[9px] text-gray-500 font-medium pt-1">
+                    <div class="flex items-center justify-end gap-1 text-xs text-gray-500 font-medium pt-1">
                       <span>12:45 p. m.</span>
                       <span class="material-symbols-outlined text-xs text-blue-500">done_all</span>
                     </div>
@@ -428,7 +428,7 @@ export const PromotionsHubView = {
           <input type="hidden" id="renew-promo-id">
 
           <div class="bg-slate-surface p-3 rounded-xl border border-slate-border">
-            <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Promoción</p>
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Promoción</p>
             <p id="renew-promo-name" class="font-bold text-sm text-deep-obsidian mt-0.5">-</p>
           </div>
 
@@ -492,11 +492,11 @@ export const PromotionsHubView = {
 
         return `
           <div class="inline-flex items-center gap-1.5 px-2 py-1 bg-slate-surface border border-slate-border rounded-lg text-xs hover:border-blue-300 transition" title="${pName}">
-            <span class="w-4 h-4 rounded bg-blue-100 text-electric-blue text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+            <span class="w-4 h-4 rounded bg-blue-100 text-electric-blue text-xs font-bold flex items-center justify-center flex-shrink-0">
               ${qty}x
             </span>
-            <span class="font-medium text-deep-obsidian truncate max-w-[150px] text-[11px]">${pName}</span>
-            <span class="text-[10px] text-gray-400 font-mono font-semibold">(${pSku})</span>
+            <span class="font-medium text-deep-obsidian truncate max-w-[150px] text-xs">${pName}</span>
+            <span class="text-xs text-gray-400 font-mono font-semibold">(${pSku})</span>
           </div>
         `;
       }).join('');
@@ -507,7 +507,7 @@ export const PromotionsHubView = {
             <div class="flex items-start gap-3">
               <img src="${imgUrl}" alt="${combo.name}" class="w-14 h-14 object-cover rounded-xl border border-slate-border flex-shrink-0" />
               <div class="space-y-1 min-w-0">
-                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-gray-100 text-gray-700 border border-gray-200">
+                <span class="px-1.5 py-0.5 rounded text-xs font-mono font-bold bg-gray-100 text-gray-700 border border-gray-200">
                   ${sku}
                 </span>
                 <p class="font-bold text-deep-obsidian text-sm leading-tight truncate">${combo.name}</p>
@@ -532,7 +532,7 @@ export const PromotionsHubView = {
                 />
                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
               </label>
-              <span class="text-[10px] font-bold ${combo.is_active ? 'text-emerald-700' : 'text-gray-400'}">
+              <span class="text-xs font-bold ${combo.is_active ? 'text-emerald-700' : 'text-gray-400'}">
                 ${combo.is_active ? 'Activo' : 'Pausado'}
               </span>
             </div>
@@ -626,7 +626,7 @@ export const PromotionsHubView = {
                 />
                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
               </label>
-              <span class="text-[10px] font-bold ${promo.is_active ? 'text-emerald-700' : 'text-gray-400'}">
+              <span class="text-xs font-bold ${promo.is_active ? 'text-emerald-700' : 'text-gray-400'}">
                 ${promo.is_active ? 'Activa' : 'Pausada'}
               </span>
             </div>

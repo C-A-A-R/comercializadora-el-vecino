@@ -9,7 +9,7 @@ export function renderSidebar(currentPath = '') {
           </div>
           <div>
             <h1 class="font-display font-bold text-sm text-white leading-tight">El Vecino Admin</h1>
-            <p class="text-[10px] text-gray-400">Electrodomésticos</p>
+            <p class="text-xs text-gray-400">Electrodomésticos</p>
           </div>
         </div>
         <button id="toggle-sidebar" class="md:hidden text-gray-400 hover:text-white" aria-label="Cerrar menú">
@@ -50,8 +50,8 @@ export function renderSidebar(currentPath = '') {
         <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800 flex items-center gap-2.5">
           <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
           <div>
-            <p class="text-[11px] font-bold text-gray-200 leading-none">WhatsApp Activo</p>
-            <p class="text-[10px] text-gray-400 mt-0.5">Asesoría y Cotizaciones</p>
+            <p class="text-xs font-bold text-gray-200 leading-none">WhatsApp Activo</p>
+            <p class="text-xs text-gray-400 mt-0.5">Asesoría y Cotizaciones</p>
           </div>
         </div>
       </div>

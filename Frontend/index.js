@@ -13,7 +13,7 @@
  * Genera el enlace directo a WhatsApp con codificación segura
  */
 function getWhatsAppLink(message) {
-  const phone = (window.CONFIG && (window.CONFIG.whatsappNumber || window.CONFIG.WHATSAPP_PHONE)) || "573001234567";
+  const phone = ((window.CONFIG && (window.CONFIG.WHATSAPP_PHONE || window.CONFIG.whatsappNumber)) || "584129227264").replace(/\D/g, '');
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
 window.getWhatsAppLink = getWhatsAppLink;

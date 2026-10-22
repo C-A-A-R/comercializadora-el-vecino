@@ -57,7 +57,7 @@ const ProductModal = {
 
     const formatFn = typeof window.CONFIG?.formatCurrency === 'function'
       ? (val) => window.CONFIG.formatCurrency(val)
-      : (val) => `$ ${Number(val || 0).toLocaleString('es-CO')}`;
+      : (val) => `$ ${Number(val || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     const formattedPrice = formatFn(product.price);
     const formattedOldPrice = product.originalPrice ? formatFn(product.originalPrice) : null;
     const waUrl = window.OrderService?.buildDirectProductQuoteUrl(product) || '#';
@@ -107,7 +107,7 @@ const ProductModal = {
 
             <div class="p-3 rounded-xl bg-slate-surface text-xs text-deep-obsidian flex items-center gap-2">
               <span class="material-symbols-outlined text-electric-blue text-[18px]">verified_user</span>
-              <span><strong>Garantía Oficial:</strong> ${product.warranty || 'Garantía directa de fábrica + Factura DIAN'}</span>
+              <span><strong>Garantía Oficial:</strong> ${product.warranty || 'Garantía directa de fábrica + Factura Legal Fiscal'}</span>
             </div>
           </div>
 
