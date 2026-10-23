@@ -47,7 +47,7 @@ class SubCategory(BaseModel):
         return self.sub_category_name
 
     def save(self, *args, **kwargs):
-        if self.category_image:
+        if self.sub_category_image:
             compress_and_save_image(self.category_image)
         super().save(*args, **kwargs)
 

@@ -371,38 +371,75 @@ input, select, textarea {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--nav-items-gap, 0.5rem);
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .nav-link {
-  font-family: var(--font-display);
-  font-weight: var(--fw-semibold);
-  font-size: var(--font-size-sm);
-  color: var(--text-muted);
-  padding: 0.5rem 0.8rem;
-  border-radius: var(--radius-sm);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-weight: var(--fw-semibold, 600);
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--text-muted, #64748B);
+  height: 38px;
+  padding: 0 0.85rem;
+  border-radius: var(--radius-md, 10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap !important;
+  box-sizing: border-box;
+  letter-spacing: -0.01em;
+  text-decoration: none;
   transition: var(--transition-fast);
+  user-select: none;
 }
 
 .nav-link:hover {
   color: var(--electric-blue);
-  background-color: var(--electric-blue-subtle);
+  background-color: var(--electric-blue-subtle, rgba(8, 0, 255, 0.07));
 }
 
 .nav-link.active {
   color: var(--electric-blue);
-  background-color: var(--electric-blue-subtle);
-  font-weight: var(--fw-bold);
+  background-color: var(--electric-blue-subtle, rgba(8, 0, 255, 0.1));
+  font-weight: var(--fw-bold, 700);
+  box-shadow: 0 1px 3px rgba(8, 0, 255, 0.08);
 }
 
 .nav-link-promo {
   color: var(--neon-magenta);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-bold, 700);
 }
+
+.nav-link-promo .promo-bolt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  font-size: 0.95em;
+  line-height: 1;
+}
+
 .nav-link-promo:hover {
-  background-color: var(--neon-magenta-subtle);
-  color: var(--neon-magenta-hover);
+  background-color: var(--neon-magenta-subtle, rgba(255, 0, 168, 0.08));
+  color: var(--neon-magenta-hover, #ff2ebd);
+}
+
+.nav-link-promo.active {
+  background-color: var(--neon-magenta-subtle, rgba(255, 0, 168, 0.12));
+  color: var(--neon-magenta);
 }
 
 .mobile-menu-toggle {

@@ -1,60 +1,79 @@
 import { Modal } from './Modal.js';
 
 export class ConfirmDialog {
-  static show({ title, message, confirmText = 'Confirmar', cancelText = 'Cancelar', type = 'danger' }) {
+  /**
+   * Muestra un diálogo modal de confirmación con promesa.
+   * @param {Object} options
+   * @param {string} options.title - Título del modal
+   * @param {string} options.message - Texto o contenido explicativo
+   * @param {string} [options.confirmText='Confirmar'] - Etiqueta del botón de confirmación
+   * @param {string} [options.cancelText='Cancelar'] - Etiqueta del botón de cancelación
+   * @param {'danger'|'primary'|'warning'} [options.type='danger'] - Tipo de diálogo para estilos
+   * @returns {Promise<boolean>} Resuelve true si el usuario confirma, false si cancela o cierra
+   */
+  static show({ 
+    title = 'Confirmación', 
+    message = '¿Está seguro de realizar esta acción?', 
+    confirmText = 'Confirmar', 
+    cancelText = 'Cancelar', 
+    type = 'danger' 
+  }) {
     return new Promise((resolve) => {
-      const container = document.createElement('div');
-      const confirmBtnClass = type === 'danger'
-        ? 'bg-red-600 hover:bg-red-700 text-white'
-        : 'bg-electric-blue hover:bg-blue-700 text-white';
-
-      // Sanitizar el mensaje
+      // Sanitizar mensaje
       let messageContent = '';
       if (typeof message === 'string') {
         messageContent = message;
       } else if (message instanceof HTMLElement) {
         messageContent = message.textContent || message.innerText || '';
-        console.warn('[ConfirmDialog] Se recibió un elemento DOM. Extrayendo texto:', messageContent);
       } else if (message === null || message === undefined) {
         messageContent = '¿Está seguro de realizar esta acción?';
       } else {
         messageContent = String(message);
       }
 
-      container.innerHTML = `
-        <div class="space-y-4">
-          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${messageContent}</p>
-          <div class="flex justify-end gap-3 pt-4 border-t border-slate-border">
-            <button id="btn-cancel" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-              ${cancelText}
-            </button>
-            <button id="btn-confirm" class="px-4 py-2 text-sm font-semibold ${confirmBtnClass} rounded-lg shadow-sm transition-colors">
-              ${confirmText}
-            </button>
+      const iconName = type === 'danger' ? 'warning' : (type === 'warning' ? 'help' : 'info');
+      const iconColors = type === 'danger' 
+        ? 'bg-rose-100 text-rose-600' 
+        : (type === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-electric-blue');
+      const confirmBtnClass = type === 'danger'
+        ? 'bg-rose-600 hover:bg-rose-700 text-white'
+        : (type === 'warning' ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-electric-blue hover:bg-blue-700 text-white');
+
+      const bodyHtml = `
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center ${iconColors}">
+            <span class="material-symbols-outlined text-2xl">${iconName}</span>
+          </div>
+          <div class="flex-1 pt-1">
+            <p class="text-sm text-gray-700 leading-relaxed font-normal">${messageContent}</p>
           </div>
         </div>
       `;
 
+      let hasResolved = false;
+
       const modal = new Modal({
         title,
-        content: container,
-        onClose: () => resolve(false)
+        content: bodyHtml,
+        confirmText,
+        cancelText,
+        confirmBtnClass,
+        showFooter: true,
+        onConfirm: () => {
+          if (!hasResolved) {
+            hasResolved = true;
+            resolve(true);
+          }
+        },
+        onClose: () => {
+          if (!hasResolved) {
+            hasResolved = true;
+            resolve(false);
+          }
+        }
       });
 
       modal.open();
-
-      const btnCancel = container.querySelector('#btn-cancel');
-      const btnConfirm = container.querySelector('#btn-confirm');
-
-      btnCancel.addEventListener('click', () => {
-        modal.close();
-        resolve(false);
-      });
-
-      btnConfirm.addEventListener('click', () => {
-        modal.close();
-        resolve(true);
-      });
     });
   }
 }

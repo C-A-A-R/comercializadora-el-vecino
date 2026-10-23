@@ -161,7 +161,7 @@ const Navbar = {
           <nav class="desktop-nav">
             <ul class="nav-links">
               <li><a href="${rootPrefix}index.html" class="nav-link ${activePath === 'inicio' ? 'active' : ''}">Inicio</a></li>
-              <li><a href="${rootPrefix}promociones.html" class="nav-link nav-link-promo ${activePath === 'promociones' ? 'active' : ''}">Promociones &amp; Combos ⚡</a></li>
+              <li><a href="${rootPrefix}promociones.html" class="nav-link nav-link-promo ${activePath === 'promociones' ? 'active' : ''}"><span>Promociones &amp; Combos</span> <span class="promo-bolt">⚡</span></a></li>
               <li><a href="${catalogUrl}" class="nav-link ${activePath === 'catalogo' ? 'active' : ''}">Catálogo</a></li>
               <li><a href="${rootPrefix}categorias.html" class="nav-link ${activePath === 'categorias' ? 'active' : ''}">Categorías</a></li>
               <li><a href="${rootPrefix}tiktok.html" class="nav-link ${activePath === 'tiktok' ? 'active' : ''}">Vídeo Catálogo</a></li>

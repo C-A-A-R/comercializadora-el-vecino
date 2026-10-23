@@ -79,12 +79,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const listEl = document.getElementById('commentsList');
     if (!listEl) return;
 
-    let comments = [];
+    let backendComments = [];
     if (currentProduct?.id) {
       try {
         const backendReviews = await window.ProductApi.getReviews(currentProduct.id);
         if (Array.isArray(backendReviews) && backendReviews.length > 0) {
-          comments = backendReviews.map(r => ({
+          backendComments = backendReviews.map(r => ({
             name: 'Cliente Verificado',
             rating: 5,
             text: r.comment,
@@ -96,9 +96,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
 
-    if (!comments.length) {
-      comments = getProductComments();
-    }
+    const localComments = getProductComments();
+    const combined = [...backendComments];
+    localComments.forEach(lc => {
+      if (!combined.some(c => c.text === lc.text)) {
+        combined.push(lc);
+      }
+    });
+
+    const comments = combined.length > 0 ? combined : getDefaultComments();
 
     if (!comments.length) {
       listEl.innerHTML = '<p class="comment-empty">Sé el primero en dejar un comentario sobre este producto.</p>';

@@ -8,8 +8,9 @@ export const REVIEWS_MOCK = [
     product_name: 'Nevera Samsung 200L No Frost',
     rating: 5,
     comment: 'Excelente atención y el producto llegó en perfecto estado. Enfría rapidísimo y es súper silenciosa. Muy recomendados.',
-    is_featured: true,
-    status: 'approved', // 'approved' | 'pending' | 'hidden'
+    is_featured: false,
+    is_visible: true,
+    status: 'approved',
     is_complaint: false,
     created_at: '2026-09-28T14:20:00Z'
   },
@@ -22,7 +23,8 @@ export const REVIEWS_MOCK = [
     product_name: 'Lavadora LG Smart Motion 13kg',
     rating: 5,
     comment: 'Nos asesoraron muy bien por WhatsApp para elegir la capacidad correcta para nuestra familia. El lavado es impecable.',
-    is_featured: true,
+    is_featured: false,
+    is_visible: true,
     status: 'approved',
     is_complaint: false,
     created_at: '2026-09-30T11:15:00Z'
@@ -35,9 +37,10 @@ export const REVIEWS_MOCK = [
     product_id: 104,
     product_name: 'Aire Acondicionado Split 12000 BTU',
     rating: 2,
-    comment: 'El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía. El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía.',
+    comment: 'El equipo enfría bien pero el técnico de instalación que contratamos notó una vibración extraña en el compresor. Necesito soporte de la garantía.',
     is_featured: false,
-    status: 'pending',
+    is_visible: false, // Reclamo: no visualizado por defecto
+    status: 'hidden',
     is_complaint: true,
     created_at: '2026-10-02T16:45:00Z'
   },
@@ -51,6 +54,7 @@ export const REVIEWS_MOCK = [
     rating: 4,
     comment: 'Muy buena cocina, quemadores potentes y acabados de primera calidad. Todo conforme a la asesoría.',
     is_featured: false,
+    is_visible: true,
     status: 'approved',
     is_complaint: false,
     created_at: '2026-10-04T09:30:00Z'
@@ -64,7 +68,8 @@ export const REVIEWS_MOCK = [
     product_name: 'Smart TV Samsung 55" Crystal UHD',
     rating: 5,
     comment: 'La calidad de imagen es brutal. La entrega fue el mismo día acordado por WhatsApp. Excelente servicio de El Vecino.',
-    is_featured: true,
+    is_featured: false,
+    is_visible: true,
     status: 'approved',
     is_complaint: false,
     created_at: '2026-10-05T18:10:00Z'

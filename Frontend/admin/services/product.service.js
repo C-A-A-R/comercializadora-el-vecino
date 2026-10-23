@@ -150,12 +150,34 @@ export const ProductService = {
 
   async deactivate(id) {
     if (CONFIG?.USE_MOCKS) {
-      const prod = PRODUCTS_MOCK.find(p => p.id === id);
+      const prod = PRODUCTS_MOCK.find(p => p.id === id || p.id === parseInt(id, 10));
       if (prod) prod.is_active = false;
-      return { success: true };
+      return { success: true, is_active: false };
     }
 
     // En Django BaseViewSet, DELETE aplica el borrado lógico seguro
     return await api.delete(`/products/${id}/`);
+  },
+
+  async activate(id) {
+    if (CONFIG?.USE_MOCKS) {
+      const prod = PRODUCTS_MOCK.find(p => p.id === id || p.id === parseInt(id, 10));
+      if (prod) prod.is_active = true;
+      return { success: true, is_active: true };
+    }
+    return await api.patch(`/products/${id}/`, { is_active: true, is_deleted: false });
+  },
+
+  async toggleActive(id, isActive) {
+    if (CONFIG?.USE_MOCKS) {
+      const prod = PRODUCTS_MOCK.find(p => p.id === id || p.id === parseInt(id, 10));
+      if (prod) prod.is_active = isActive;
+      return { success: true, is_active: isActive };
+    }
+    if (!isActive) {
+      return await api.delete(`/products/${id}/`);
+    } else {
+      return await api.patch(`/products/${id}/`, { is_active: true, is_deleted: false });
+    }
   }
 };

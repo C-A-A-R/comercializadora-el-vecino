@@ -131,6 +131,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   /**
+   * Helper para verificar correspondencia de categoría entre backend y frontend
+   */
+  function matchCategory(p, targetCat) {
+    if (!targetCat || targetCat === 'all' || targetCat === 'todas') return true;
+    const target = String(typeof targetCat === 'object' ? (targetCat.id || targetCat.slug || targetCat.name) : targetCat).toLowerCase().trim();
+    const pCat = String(p.category || '').toLowerCase().trim();
+    const pCatName = String(p.categoryName || '').toLowerCase().trim();
+    const pCatSlug = String(p.categorySlug || '').toLowerCase().trim();
+    if (pCat === target || pCatName === target || pCatSlug === target) return true;
+    if (Array.isArray(p.categories) && p.categories.some(c => String(c).toLowerCase().trim() === target)) return true;
+    if (Array.isArray(p.categories_detail)) {
+      return p.categories_detail.some(cd =>
+        String(cd.id).toLowerCase().trim() === target ||
+        String(cd.category_name || '').toLowerCase().trim() === target ||
+        String(cd.slug || '').toLowerCase().trim() === target
+      );
+    }
+    return false;
+  }
+
+  /**
    * Category filters
    */
   function renderCategoryFilters() {
@@ -148,12 +169,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       allCategories.forEach(cat => {
         if (cat.id === 'todas') return;
-        const count = allProducts.filter(p =>
-          String(p.category) === String(cat.id) ||
-          p.category === cat.slug ||
-          (Array.isArray(p.categories) && p.categories.map(String).includes(String(cat.id)))
-        ).length;
-        const isMatch = String(currentCategory) === String(cat.id) || currentCategory === cat.slug;
+        const count = allProducts.filter(p => matchCategory(p, cat)).length;
+        const isMatch = matchCategory({ category: currentCategory }, cat) || String(currentCategory) === String(cat.id);
 
         html += `
           <button type="button" class="filter-option-btn ${isMatch ? 'active' : ''}" data-cat="${cat.id}">
@@ -185,12 +202,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       let options = `<option value="all">Todas las Categorías (${allProducts.length})</option>`;
       allCategories.forEach(cat => {
         if (cat.id === 'todas') return;
-        const count = allProducts.filter(p =>
-          String(p.category) === String(cat.id) ||
-          p.category === cat.slug ||
-          (Array.isArray(p.categories) && p.categories.map(String).includes(String(cat.id)))
-        ).length;
-        const isSelected = String(currentCategory) === String(cat.id) || currentCategory === cat.slug;
+        const count = allProducts.filter(p => matchCategory(p, cat)).length;
+        const isSelected = matchCategory({ category: currentCategory }, cat) || String(currentCategory) === String(cat.id);
         options += `<option value="${cat.id}" ${isSelected ? 'selected' : ''}>${cat.name} (${count})</option>`;
       });
       mobileCategorySelect.innerHTML = options;
@@ -352,11 +365,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 1. Categoría
     if (currentCategory && currentCategory !== 'all') {
-      filtered = filtered.filter(p =>
-        String(p.category) === String(currentCategory) ||
-        p.category === currentCategory ||
-        (Array.isArray(p.categories) && p.categories.map(String).includes(String(currentCategory)))
-      );
+      filtered = filtered.filter(p => matchCategory(p, currentCategory));
     }
 
     // 2. Subcategoría

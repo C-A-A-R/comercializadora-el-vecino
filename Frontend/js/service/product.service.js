@@ -4,6 +4,9 @@
 
 const ProductService = {
   async getAll(filters = {}) {
+    if (window.ProductApi && typeof window.ProductApi.getProducts === 'function') {
+      return window.ProductApi.getProducts(filters);
+    }
     try {
       const params = {};
       if (filters.category && filters.category !== 'all') {
@@ -31,6 +34,9 @@ const ProductService = {
   },
 
   async getById(id) {
+    if (window.ProductApi && typeof window.ProductApi.getProductById === 'function') {
+      return window.ProductApi.getProductById(id);
+    }
     try {
       const response = await window.Api.get(`/products/${id}`);
       const raw = response.data || response;
@@ -46,6 +52,9 @@ const ProductService = {
   },
 
   async getFeatured() {
+    if (window.ProductApi && typeof window.ProductApi.getFeatured === 'function') {
+      return window.ProductApi.getFeatured();
+    }
     try {
       const response = await window.Api.get('/products/featured');
       const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response.results || response.data || response || []);
@@ -59,6 +68,9 @@ const ProductService = {
   },
 
   async getCategories() {
+    if (window.ProductApi && typeof window.ProductApi.getCategories === 'function') {
+      return window.ProductApi.getCategories();
+    }
     try {
       const response = await window.Api.get('/categories');
       const raw = window.Api?.extractResults ? window.Api.extractResults(response) : (response.results || response.data || response || []);

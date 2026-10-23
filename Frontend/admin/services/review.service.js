@@ -17,6 +17,65 @@ export const ReviewService = {
     }
   },
 
+  async toggleVisibility(id, isVisible) {
+    const status = isVisible ? 'approved' : 'hidden';
+    if (CONFIG.USE_MOCKS) {
+      const idx = localReviews.findIndex(r => r.id == id);
+      if (idx !== -1) {
+        localReviews[idx].is_visible = isVisible;
+        localReviews[idx].status = status;
+        return localReviews[idx];
+      }
+      return null;
+    }
+    try {
+      return await api.patch(`/reviews/${id}/`, { is_visible: isVisible, status });
+    } catch (e) {
+      const idx = localReviews.findIndex(r => r.id == id);
+      if (idx !== -1) {
+        localReviews[idx].is_visible = isVisible;
+        localReviews[idx].status = status;
+        return localReviews[idx];
+      }
+      return null;
+    }
+  },
+
+  async toggleComplaint(id, isComplaint) {
+    if (CONFIG.USE_MOCKS) {
+      const idx = localReviews.findIndex(r => r.id == id);
+      if (idx !== -1) {
+        localReviews[idx].is_complaint = isComplaint;
+        // Si se marca como reclamo, pasa automáticamente a no ser visualizado
+        if (isComplaint) {
+          localReviews[idx].is_visible = false;
+          localReviews[idx].status = 'hidden';
+        }
+        return localReviews[idx];
+      }
+      return null;
+    }
+    try {
+      const payload = { is_complaint: isComplaint };
+      if (isComplaint) {
+        payload.is_visible = false;
+        payload.status = 'hidden';
+      }
+      return await api.patch(`/reviews/${id}/`, payload);
+    } catch (e) {
+      const idx = localReviews.findIndex(r => r.id == id);
+      if (idx !== -1) {
+        localReviews[idx].is_complaint = isComplaint;
+        if (isComplaint) {
+          localReviews[idx].is_visible = false;
+          localReviews[idx].status = 'hidden';
+        }
+        return localReviews[idx];
+      }
+      return null;
+    }
+  },
+
   async toggleFeatured(id, isFeatured) {
     if (CONFIG.USE_MOCKS) {
       const idx = localReviews.findIndex(r => r.id == id);
@@ -43,6 +102,7 @@ export const ReviewService = {
       const idx = localReviews.findIndex(r => r.id == id);
       if (idx !== -1) {
         localReviews[idx].status = status;
+        localReviews[idx].is_visible = status === 'approved';
         return localReviews[idx];
       }
       return null;
@@ -53,6 +113,7 @@ export const ReviewService = {
       const idx = localReviews.findIndex(r => r.id == id);
       if (idx !== -1) {
         localReviews[idx].status = status;
+        localReviews[idx].is_visible = status === 'approved';
         return localReviews[idx];
       }
       return null;

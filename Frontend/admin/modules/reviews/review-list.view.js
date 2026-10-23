@@ -1,27 +1,41 @@
 import { ReviewService } from '../../services/review.service.js';
+import { ProductService } from '../../services/product.service.js';
 import { Toast } from '../../components/ui/Toast.js';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog.js';
+import { Switch } from '../../components/ui/Switch.js';
 import { REVIEWS_MOCK } from '../../services/mocks/reviews.mock.js';
 
 export const ReviewListView = {
   reviews: [],
   filteredReviews: [],
-  currentTab: 'all', // 'all' | 'featured' | 'complaints' | 'approved'
+  currentTab: 'all', // 'all' | 'complaints' | 'conformity' | 'visible'
 
   async render() {
     try {
       const data = await ReviewService.list();
       this.reviews = (data && data.results && data.results.length > 0) ? data.results : REVIEWS_MOCK;
-      this.filteredReviews = [...this.reviews];
     } catch (e) {
       console.error('Error al cargar reseñas, usando datos mock:', e);
       this.reviews = [...REVIEWS_MOCK];
-      this.filteredReviews = [...REVIEWS_MOCK];
     }
 
+    // Normalizar estados iniciales de reclamo y visibilidad
+    this.reviews.forEach(r => {
+      if (r.is_complaint === undefined) {
+        r.is_complaint = (r.rating <= 2);
+      }
+      if (r.is_visible === undefined) {
+        // Regla: si es reclamo no se visualiza por defecto
+        r.is_visible = !r.is_complaint && r.status !== 'hidden';
+      }
+    });
+
+    this.filteredReviews = [...this.reviews];
+
     const total = this.reviews.length;
-    const featured = this.reviews.filter(r => r.is_featured).length;
-    const complaints = this.reviews.filter(r => r.is_complaint || r.rating <= 2).length;
+    const complaints = this.reviews.filter(r => r.is_complaint).length;
+    const conformity = this.reviews.filter(r => !r.is_complaint).length;
+    const visibleCount = this.reviews.filter(r => r.is_visible).length;
     const positive = this.reviews.filter(r => r.rating >= 4).length;
     const satisfactionRate = total > 0 ? Math.round((positive / total) * 100) : 100;
 
@@ -38,7 +52,7 @@ export const ReviewListView = {
               <span class="text-xs font-semibold text-gray-500">Comentarios</span>
             </div>
             <h1 class="text-2xl font-bold text-deep-obsidian font-display">Moderación de Reseñas y Testimonios</h1>
-            <p class="text-sm text-gray-500">Supervise opiniones de clientes, destaque testimonios en la portada y resuelva inconformidades directamente por WhatsApp.</p>
+            <p class="text-sm text-gray-500">Supervise opiniones de clientes, gestione la visibilidad en el catálogo y atienda reclamos o conformidades.</p>
           </div>
         </div>
 
@@ -47,38 +61,41 @@ export const ReviewListView = {
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Satisfacción</p>
-              <p class="text-2xl font-bold text-emerald-600 mt-0.5">${satisfactionRate}%</p>
+              <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-satisfaction-reviews">${satisfactionRate}%</p>
               <p class="text-[11px] text-gray-400">${positive} de ${total} positivas</p>
             </div>
             <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">sentiment_very_satisfied</span>
             </div>
           </div>
+
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Reseñas</p>
-              <p class="text-2xl font-bold text-deep-obsidian mt-0.5">${total}</p>
+              <p class="text-2xl font-bold text-deep-obsidian mt-0.5" id="kpi-total-reviews">${total}</p>
               <p class="text-[11px] text-gray-400">Clientes verificados</p>
             </div>
             <div class="p-2.5 bg-blue-50 text-electric-blue rounded-xl">
               <span class="material-symbols-outlined text-xl">rate_review</span>
             </div>
           </div>
+
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">En Portada</p>
-              <p class="text-2xl font-bold text-amber-600 mt-0.5" id="kpi-featured-reviews">${featured}</p>
-              <p class="text-[11px] text-gray-400">Testimonios destacados</p>
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Visibles en Catálogo</p>
+              <p class="text-2xl font-bold text-emerald-600 mt-0.5" id="kpi-visible-reviews">${visibleCount}</p>
+              <p class="text-[11px] text-gray-400">Comentarios publicados</p>
             </div>
-            <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
-              <span class="material-symbols-outlined text-xl">hotel_class</span>
+            <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+              <span class="material-symbols-outlined text-xl">visibility</span>
             </div>
           </div>
+
           <div class="bg-white p-4 rounded-xl border border-slate-border shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alertas / Reclamos</p>
-              <p class="text-2xl font-bold text-rose-600 mt-0.5">${complaints}</p>
-              <p class="text-[11px] text-gray-400">Atención vía WhatsApp</p>
+              <p class="text-2xl font-bold text-rose-600 mt-0.5" id="kpi-complaints-reviews">${complaints}</p>
+              <p class="text-[11px] text-gray-400">Ocultos automáticamente</p>
             </div>
             <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl">
               <span class="material-symbols-outlined text-xl">notification_important</span>
@@ -93,14 +110,14 @@ export const ReviewListView = {
               <button data-tab="all" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-deep-obsidian text-white transition">
                 TODAS (${total})
               </button>
-              <button data-tab="featured" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-gray-600 hover:bg-gray-200 transition">
-                ⭐ EN PORTADA (${featured})
-              </button>
               <button data-tab="complaints" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-rose-600 hover:bg-rose-50 transition">
-                ⚠️ RECLAMOS / ALERTAS (${complaints})
+                ⚠️ RECLAMOS (${complaints})
               </button>
-              <button data-tab="approved" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-emerald-700 hover:bg-emerald-50 transition">
-                APROBADAS (${positive})
+              <button data-tab="conformity" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-emerald-700 hover:bg-emerald-50 transition">
+                ✅ CONFORMIDAD (${conformity})
+              </button>
+              <button data-tab="visible" class="review-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-surface text-gray-700 hover:bg-gray-200 transition">
+                👁️ VISIBLES (${visibleCount})
               </button>
             </div>
             <span id="reviews-count-badge" class="text-xs font-bold text-gray-500">
@@ -136,15 +153,12 @@ export const ReviewListView = {
     }
 
     return reviews.map(r => {
-      const isComplaint = r.is_complaint || r.rating <= 2;
+      const isComplaint = Boolean(r.is_complaint);
+      const isVisible = Boolean(r.is_visible);
       const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString() : 'Reciente';
-      const starsHtml = Array.from({ length: 5 }, (_, i) => {
-        const isFilled = i < (r.rating || 5);
-        return `<span class="material-symbols-outlined text-base ${isFilled ? 'text-amber-400' : 'text-gray-200'}">star</span>`;
-      }).join('');
 
       return `
-        <div class="bg-white rounded-2xl border ${isComplaint ? 'border-rose-200 bg-rose-50/20' : 'border-slate-border'} p-5 shadow-sm space-y-3 hover:border-blue-300 transition">
+        <div class="bg-white rounded-2xl border ${isComplaint ? 'border-rose-200 bg-rose-50/20' : 'border-slate-border'} p-5 shadow-sm space-y-3 hover:border-blue-300 transition" id="review-card-${r.id}">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-border">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full ${isComplaint ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-electric-blue'} font-bold flex items-center justify-center text-sm flex-shrink-0">
@@ -155,58 +169,85 @@ export const ReviewListView = {
                   <h3 class="font-bold text-sm text-deep-obsidian">${r.customer_name}</h3>
                   ${r.customer_city ? `<span class="text-[11px] text-gray-400 font-medium">(${r.customer_city})</span>` : ''}
                 </div>
-                <p class="text-xs text-gray-500">Producto: <strong class="text-gray-700">${r.product_name}</strong> · ${dateStr}</p>
+                <div class="flex flex-wrap items-center gap-1.5 text-xs text-gray-500 mt-0.5">
+                  <span>Producto: <strong class="text-gray-700">${r.product_name}</strong></span>
+                  <span>· ${dateStr}</span>
+                  <button 
+                    data-action="toggle-product-visibility-review" 
+                    data-product-id="${r.product_id}" 
+                    data-product-name="${r.product_name}" 
+                    class="inline-flex items-center gap-1 text-[11px] font-semibold text-electric-blue hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded transition ml-1"
+                    title="Gestionar si este producto se muestra o se esconde en el catálogo público"
+                  >
+                    <span class="material-symbols-outlined text-xs">storefront</span>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="flex items-center gap-2">
               ${isComplaint ? `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
-                  <span class="material-symbols-outlined text-xs">warning</span>
+                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">warning</span>
                   Alerta Reclamo
                 </span>
               ` : `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Aprobada
+                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">check_circle</span>
+                  Conformidad
                 </span>
               `}
             </div>
           </div>
 
-          <!-- ✅ COMENTARIO CON SCROLL INTERNO (ALTURA MÁXIMA FIJA) -->
+          <!-- COMENTARIO CON SCROLL INTERNO (ALTURA MÁXIMA FIJA) -->
           <div class="bg-slate-surface p-3.5 rounded-xl border border-slate-border text-xs text-gray-700 leading-relaxed italic max-h-32 overflow-y-auto custom-scrollbar">
             "${r.comment}"
           </div>
 
-          <!-- Barra de Acciones -->
+          <!-- Barra de Acciones y Controles -->
           <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-            <button 
-              data-action="toggle-featured-review" 
-              data-id="${r.id}" 
-              data-featured="${r.is_featured ? 'true' : 'false'}"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${r.is_featured ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-slate-100 text-gray-600 hover:bg-amber-50 hover:text-amber-800'}"
-            >
-              <span class="material-symbols-outlined text-base ${r.is_featured ? 'text-amber-600' : 'text-gray-400'}">hotel_class</span>
-              <span>${r.is_featured ? 'Destacado en Portada' : 'Destacar en Portada'}</span>
-            </button>
+            <!-- Switch para Mostrar/Ocultar Comentario -->
             <div class="flex items-center gap-2">
-              <button 
-                data-action="whatsapp-contact-review" 
-                data-id="${r.id}" 
-                data-phone="${r.customer_phone || ''}" 
-                data-name="${r.customer_name}" 
-                data-product="${r.product_name}" 
-                data-complaint="${isComplaint ? 'true' : 'false'}"
-                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm ${isComplaint ? 'bg-rose-600 hover:bg-rose-700 text-white' : 'bg-whatsapp-green hover:bg-green-700 text-white'}"
-                title="Abrir conversación de WhatsApp con el cliente"
-              >
-                <span class="material-symbols-outlined text-base">chat</span>
-                <span>${isComplaint ? 'Resolver Inconformidad (WhatsApp)' : 'Escribir por WhatsApp'}</span>
-              </button>
+              ${Switch.render({
+        dataAction: 'toggle-review-visibility',
+        dataId: r.id,
+        checked: isVisible,
+        label: isVisible ? 'Visible en catálogo' : 'Oculto del catálogo',
+        labelClass: `text-xs font-bold ${isVisible ? 'text-emerald-700' : 'text-gray-500'}`
+      })}
+            </div>
+
+            <!-- Botones de Acción: Reclamo/Conformidad y Eliminar -->
+            <div class="flex items-center gap-2">
+              ${isComplaint ? `
+                <button 
+                  data-action="toggle-review-complaint" 
+                  data-id="${r.id}" 
+                  data-target="conformity"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition shadow-sm"
+                  title="Cambiar este comentario a estado de Conformidad"
+                >
+                  <span class="material-symbols-outlined text-base text-emerald-600">thumb_up</span>
+                  <span>Marcar como Conformidad</span>
+                </button>
+              ` : `
+                <button 
+                  data-action="toggle-review-complaint" 
+                  data-id="${r.id}" 
+                  data-target="complaint"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition shadow-sm"
+                  title="Marcar este comentario como Reclamo (se ocultará automáticamente del catálogo)"
+                >
+                  <span class="material-symbols-outlined text-base text-rose-600">report_problem</span>
+                  <span>Marcar como Reclamo</span>
+                </button>
+              `}
+
               <button 
                 data-action="delete-review" 
                 data-id="${r.id}" 
                 class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" 
-                title="Eliminar reseña"
+                title="Eliminar reseña permanentemente"
               >
                 <span class="material-symbols-outlined text-lg">delete</span>
               </button>
@@ -217,6 +258,35 @@ export const ReviewListView = {
     }).join('');
   },
 
+  updateKpis() {
+    const total = this.reviews.length;
+    const complaints = this.reviews.filter(r => r.is_complaint).length;
+    const conformity = this.reviews.filter(r => !r.is_complaint).length;
+    const visibleCount = this.reviews.filter(r => r.is_visible).length;
+    const positive = this.reviews.filter(r => r.rating >= 4).length;
+    const satisfactionRate = total > 0 ? Math.round((positive / total) * 100) : 100;
+
+    const kpiSatisfaction = document.getElementById('kpi-satisfaction-reviews');
+    const kpiTotal = document.getElementById('kpi-total-reviews');
+    const kpiVisible = document.getElementById('kpi-visible-reviews');
+    const kpiComplaints = document.getElementById('kpi-complaints-reviews');
+
+    if (kpiSatisfaction) kpiSatisfaction.textContent = `${satisfactionRate}%`;
+    if (kpiTotal) kpiTotal.textContent = total;
+    if (kpiVisible) kpiVisible.textContent = visibleCount;
+    if (kpiComplaints) kpiComplaints.textContent = complaints;
+
+    const btnAll = document.querySelector('[data-tab="all"]');
+    const btnComplaints = document.querySelector('[data-tab="complaints"]');
+    const btnConformity = document.querySelector('[data-tab="conformity"]');
+    const btnVisible = document.querySelector('[data-tab="visible"]');
+
+    if (btnAll) btnAll.textContent = `TODAS (${total})`;
+    if (btnComplaints) btnComplaints.textContent = `⚠️ RECLAMOS (${complaints})`;
+    if (btnConformity) btnConformity.textContent = `✅ CONFORMIDAD (${conformity})`;
+    if (btnVisible) btnVisible.textContent = `👁️ VISIBLES (${visibleCount})`;
+  },
+
   filter() {
     const search = document.getElementById('review-search-input')?.value.toLowerCase().trim() || '';
     const container = document.getElementById('reviews-list-container');
@@ -224,9 +294,9 @@ export const ReviewListView = {
 
     this.filteredReviews = this.reviews.filter(r => {
       let matchTab = true;
-      if (this.currentTab === 'featured') matchTab = Boolean(r.is_featured);
-      if (this.currentTab === 'complaints') matchTab = Boolean(r.is_complaint || r.rating <= 2);
-      if (this.currentTab === 'approved') matchTab = r.rating >= 4;
+      if (this.currentTab === 'complaints') matchTab = Boolean(r.is_complaint);
+      if (this.currentTab === 'conformity') matchTab = !r.is_complaint;
+      if (this.currentTab === 'visible') matchTab = Boolean(r.is_visible);
 
       const name = (r.customer_name || '').toLowerCase();
       const product = (r.product_name || '').toLowerCase();
@@ -260,51 +330,143 @@ export const ReviewListView = {
       });
     });
 
-    // Delegación de eventos
+    if (this.documentEventsBound) return;
+    this.documentEventsBound = true;
+
+    // Delegación de eventos global
     document.addEventListener('click', async (e) => {
-      // Toggle Destacar en Portada
-      const btnFeatured = e.target.closest('[data-action="toggle-featured-review"]');
-      if (btnFeatured) {
-        const id = btnFeatured.dataset.id;
-        const currentFeatured = btnFeatured.dataset.featured === 'true';
-        const nextState = !currentFeatured;
-        try {
-          await ReviewService.toggleFeatured(id, nextState);
-          Toast.show(`Testimonio ${nextState ? 'destacado en portada' : 'retirado de portada'}`, 'success');
-        } catch (err) {
-          console.warn('Backend indisponible, actualizando interfaz localmente:', err);
-          Toast.show(`Testimonio ${nextState ? 'destacado en portada' : 'retirado de portada'}`, 'success');
-        }
+      // 1. Switch para mostrar u ocultar comentario (con confirmación)
+      const switchBtn = e.target.closest('[data-action="toggle-review-visibility"]');
+      if (switchBtn) {
+        e.preventDefault();
+        const id = switchBtn.dataset.id;
         const r = this.reviews.find(item => item.id == id);
-        if (r) r.is_featured = nextState;
-        const kpi = document.getElementById('kpi-featured-reviews');
-        if (kpi) kpi.textContent = this.reviews.filter(x => x.is_featured).length;
+        if (!r) return;
+
+        const currentState = Boolean(r.is_visible);
+        const nextState = !currentState;
+
+        const confirmed = await ConfirmDialog.show({
+          title: nextState ? 'Mostrar Comentario en Catálogo' : 'Ocultar Comentario del Catálogo',
+          message: nextState
+            ? '¿Está seguro de publicar y hacer visible este comentario en el catálogo web para todos los clientes?'
+            : '¿Está seguro de ocultar este comentario? Dejará de mostrarse públicamente en el catálogo web.',
+          confirmText: nextState ? 'Mostrar comentario' : 'Ocultar comentario',
+          cancelText: 'Cancelar',
+          type: nextState ? 'primary' : 'danger'
+        });
+
+        if (confirmed) {
+          try {
+            await ReviewService.toggleVisibility(id, nextState);
+          } catch (err) {
+            console.warn('Backend indisponible, actualizando interfaz localmente:', err);
+          }
+          r.is_visible = nextState;
+          r.status = nextState ? 'approved' : 'hidden';
+          Toast.show(nextState ? 'Comentario visible en el catálogo' : 'Comentario ocultado del catálogo', 'success');
+          this.updateKpis();
+          this.filter();
+        }
+        return;
+      }
+
+      // 2. Marcar como Reclamo o Conformidad
+      // Si se marca como reclamo: automáticamente pasa a no ser visualizado
+      const btnComplaint = e.target.closest('[data-action="toggle-review-complaint"]');
+      if (btnComplaint) {
+        const id = btnComplaint.dataset.id;
+        const targetType = btnComplaint.dataset.target; // 'complaint' | 'conformity'
+        const r = this.reviews.find(item => item.id == id);
+        if (!r) return;
+
+        if (targetType === 'complaint') {
+          const confirmed = await ConfirmDialog.show({
+            title: 'Marcar Comentario como Reclamo',
+            message: '¿Está seguro de marcar este comentario como reclamo? Pasará automáticamente a no ser visualizado en el catálogo público.',
+            confirmText: 'Marcar como Reclamo',
+            cancelText: 'Cancelar',
+            type: 'danger'
+          });
+
+          if (!confirmed) return;
+
+          try {
+            await ReviewService.toggleComplaint(id, true);
+          } catch (err) {
+            console.warn('Backend indisponible, actualizando localmente:', err);
+          }
+          r.is_complaint = true;
+          r.is_visible = false; // AUTOMÁTICAMENTE PASA A NO SER VISUALIZADO
+          r.status = 'hidden';
+          Toast.show('Comentario marcado como Reclamo y ocultado automáticamente del catálogo.', 'warning');
+        } else {
+          const confirmed = await ConfirmDialog.show({
+            title: 'Marcar Comentario como Conformidad',
+            message: '¿Desea cambiar este comentario a estado de Conformidad? El testimonio volverá a estar habilitado para el catálogo público.',
+            confirmText: 'Marcar como Conformidad',
+            cancelText: 'Cancelar',
+            type: 'primary'
+          });
+
+          if (!confirmed) return;
+
+          try {
+            await ReviewService.toggleComplaint(id, false);
+          } catch (err) {
+            console.warn('Backend indisponible, actualizando localmente:', err);
+          }
+          r.is_complaint = false;
+          r.is_visible = true; // Al ser conformidad se habilita para visualización
+          r.status = 'approved';
+          Toast.show('Comentario marcado como Conformidad y habilitado en el catálogo.', 'success');
+        }
+
+        this.updateKpis();
         this.filter();
         return;
       }
 
-      // Contactar por WhatsApp
-      const btnWa = e.target.closest('[data-action="whatsapp-contact-review"]');
-      if (btnWa) {
-        const rawPhone = btnWa.dataset.phone || '';
-        const phone = rawPhone.replace(/[^0-9]/g, '');
-        const name = btnWa.dataset.name;
-        const product = btnWa.dataset.product;
-        const isComplaint = btnWa.dataset.complaint === 'true';
-        let message = '';
-        if (isComplaint) {
-          message = `Hola ${name}, te escribimos de Comercializadora El Vecino respecto a tu experiencia con el producto *${product}*. Queremos ayudarte y darte atención prioritaria para resolver cualquier inconveniente. ¿Podrías comentarnos más detalles?`;
-        } else {
-          message = `Hola ${name}, te saludamos de Comercializadora El Vecino. Muchas gracias por tu reseña sobre *${product}*. ¡Nos alegra mucho haberte atendido! Recuerda que estamos a tu orden para futuras cotizaciones.`;
+      // 3. Confirmación para Mostrar o Esconder un Producto asociado al comentario
+      const btnProdToggle = e.target.closest('[data-action="toggle-product-visibility-review"]');
+      if (btnProdToggle) {
+        const productId = btnProdToggle.dataset.productId;
+        const productName = btnProdToggle.dataset.productName || 'este producto';
+
+        let currentActive = true;
+        try {
+          const prod = await ProductService.getById(productId);
+          if (prod && prod.is_active !== undefined) {
+            currentActive = prod.is_active;
+          }
+        } catch (err) {
+          console.warn('No se pudo verificar estado del producto, asumiendo activo:', err);
         }
-        const url = phone 
-          ? `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`
-          : `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
+
+        const nextActive = !currentActive;
+        const confirmed = await ConfirmDialog.show({
+          title: nextActive ? 'Mostrar Producto en el Catálogo' : 'Esconder Producto del Catálogo',
+          message: nextActive
+            ? `¿Está seguro de mostrar "${productName}" en el catálogo público? Volverá a estar visible para todos los clientes.`
+            : `¿Está seguro de esconder "${productName}" del catálogo público? No se eliminará pero los clientes no podrán verlo en el catálogo.`,
+          confirmText: nextActive ? 'Mostrar producto' : 'Esconder producto',
+          cancelText: 'Cancelar',
+          type: nextActive ? 'primary' : 'danger'
+        });
+
+        if (confirmed) {
+          try {
+            await ProductService.toggleActive(productId, nextActive);
+            Toast.show(`Producto "${productName}" ${nextActive ? 'mostrado' : 'escondido'} con éxito en el catálogo`, 'success');
+          } catch (err) {
+            console.error('Error al actualizar visibilidad de producto:', err);
+            Toast.show('Error al cambiar la visibilidad del producto', 'error');
+          }
+        }
         return;
       }
 
-      // Eliminar Reseña
+      // 4. Eliminar Reseña
       const btnDelete = e.target.closest('[data-action="delete-review"]');
       if (btnDelete) {
         const id = btnDelete.dataset.id;
@@ -323,6 +485,7 @@ export const ReviewListView = {
           }
           Toast.show('Reseña eliminada con éxito', 'success');
           this.reviews = this.reviews.filter(r => r.id != id);
+          this.updateKpis();
           this.filter();
         }
       }

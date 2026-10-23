@@ -462,12 +462,36 @@ window.openComboModal = function(comboId) {
 // SECCIÓN 3: PRODUCTOS DESTACADOS & MEJOR VALORADOS (MÁXIMO 8 / 2 FILAS)
 // ==========================================================================
 const MAX_FEATURED_PRODUCTS = 8;
+let currentProductsList = typeof PRODUCTS_DATA !== "undefined" ? [...PRODUCTS_DATA] : [];
+let currentCategoriesList = typeof CATEGORIES_DATA !== "undefined" ? [...CATEGORIES_DATA] : [];
+let currentCategoryFilter = "todas";
+
+/**
+ * Helper para verificar correspondencia de categoría entre backend y frontend
+ */
+function matchCategory(p, targetCat) {
+  if (!targetCat || targetCat === "all" || targetCat === "todas") return true;
+  const target = String(typeof targetCat === "object" ? (targetCat.id || targetCat.slug || targetCat.name) : targetCat).toLowerCase().trim();
+  const pCat = String(p.category || "").toLowerCase().trim();
+  const pCatName = String(p.categoryName || "").toLowerCase().trim();
+  const pCatSlug = String(p.categorySlug || "").toLowerCase().trim();
+  if (pCat === target || pCatName === target || pCatSlug === target) return true;
+  if (Array.isArray(p.categories) && p.categories.some(c => String(c).toLowerCase().trim() === target)) return true;
+  if (Array.isArray(p.categories_detail)) {
+    return p.categories_detail.some(cd =>
+      String(cd.id).toLowerCase().trim() === target ||
+      String(cd.category_name || "").toLowerCase().trim() === target ||
+      String(cd.slug || "").toLowerCase().trim() === target
+    );
+  }
+  return false;
+}
 
 /**
  * Obtiene hasta 8 productos priorizando los destacados (featured / is_feature_product)
  * y rellenando los cupos restantes con los productos de mayor valoración / ranking.
  */
-function getFeaturedAndTopRatedProducts(sourceList = PRODUCTS_DATA, limit = MAX_FEATURED_PRODUCTS) {
+function getFeaturedAndTopRatedProducts(sourceList = currentProductsList, limit = MAX_FEATURED_PRODUCTS) {
   if (!Array.isArray(sourceList) || sourceList.length === 0) return [];
 
   // 1. Obtener productos destacados
@@ -503,17 +527,22 @@ function getFeaturedAndTopRatedProducts(sourceList = PRODUCTS_DATA, limit = MAX_
 
 function renderCategoryFilters() {
   const container = document.getElementById("categoriesFilterContainer");
-  if (!container || typeof CATEGORIES_DATA === "undefined") return;
+  if (!container) return;
 
-  container.innerHTML = CATEGORIES_DATA.map(cat => `
-    <button 
-      type="button"
-      class="category-filter-btn ${cat.id === currentCategoryFilter ? "active" : ""}"
-      onclick="filterByCategory('${cat.id}')"
-    >
-      ${cat.name}
-    </button>
-  `).join("");
+  container.innerHTML = currentCategoriesList.map(cat => {
+    const isMatch = (currentCategoryFilter === "todas" && cat.id === "todas") ||
+      (currentCategoryFilter !== "todas" && (matchCategory({ category: currentCategoryFilter }, cat) || String(currentCategoryFilter) === String(cat.id)));
+
+    return `
+      <button 
+        type="button"
+        class="category-filter-btn ${isMatch ? "active" : ""}"
+        onclick="filterByCategory('${cat.id}')"
+      >
+        ${cat.name}
+      </button>
+    `;
+  }).join("");
 }
 
 window.filterByCategory = function(catId) {
@@ -524,16 +553,33 @@ window.filterByCategory = function(catId) {
 
 function renderProductsGrid() {
   const container = document.getElementById("allProductsGrid");
-  if (!container || typeof PRODUCTS_DATA === "undefined") return;
+  if (!container) return;
+
+  // Filtrar según categoría seleccionada
+  let filtered = [...currentProductsList];
+  if (currentCategoryFilter && currentCategoryFilter !== "todas" && currentCategoryFilter !== "all") {
+    filtered = filtered.filter(p => matchCategory(p, currentCategoryFilter));
+  }
+
+  // Filtrar por término de búsqueda si existe
+  if (typeof catalogSearchQuery !== "undefined" && catalogSearchQuery) {
+    const q = catalogSearchQuery.toLowerCase().trim();
+    filtered = filtered.filter(p =>
+      (p.name && p.name.toLowerCase().includes(q)) ||
+      (p.brand && p.brand.toLowerCase().includes(q)) ||
+      (p.description && p.description.toLowerCase().includes(q)) ||
+      (p.sku && p.sku.toLowerCase().includes(q))
+    );
+  }
 
   // Obtener la selección de productos destacados y más valorados (máximo 8 / 2 filas en pantallas grandes)
-  const displayProducts = getFeaturedAndTopRatedProducts(PRODUCTS_DATA, MAX_FEATURED_PRODUCTS);
+  const displayProducts = getFeaturedAndTopRatedProducts(filtered, MAX_FEATURED_PRODUCTS);
 
   if (displayProducts.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <span class="material-symbols-outlined empty-state-icon">stars</span>
-        <h3 class="empty-state-title">No hay productos destacados disponibles</h3>
+        <h3 class="empty-state-title">No hay productos disponibles</h3>
         <p class="empty-state-text">Vuelve a consultar más tarde o visita nuestro catálogo general.</p>
       </div>
     `;
@@ -689,7 +735,8 @@ window.openProductModal = function(productId) {
     return;
   }
 
-  const product = (typeof PRODUCTS_DATA !== "undefined" ? PRODUCTS_DATA : []).find(p => p.id === productId);
+  const product = currentProductsList.find(p => String(p.id) === String(productId)) ||
+    (typeof PRODUCTS_DATA !== "undefined" ? PRODUCTS_DATA : []).find(p => String(p.id) === String(productId));
   if (!product) return;
 
   const modal = document.getElementById("productModal");
@@ -965,6 +1012,31 @@ function initCategoriesCarousel() {
   }, { passive: true });
 }
 
+/**
+ * Conexión Híbrida: Obtiene productos y categorías desde el backend Django
+ * y los mezcla dinámicamente con el catálogo estático del frontend
+ */
+async function initHybridCatalog() {
+  try {
+    if (window.ProductApi && typeof window.ProductApi.getProducts === "function") {
+      const [hybridProducts, hybridCategories] = await Promise.all([
+        window.ProductApi.getProducts(),
+        window.ProductApi.getCategories()
+      ]);
+      if (Array.isArray(hybridProducts) && hybridProducts.length > 0) {
+        currentProductsList = hybridProducts;
+      }
+      if (Array.isArray(hybridCategories) && hybridCategories.length > 0) {
+        currentCategoriesList = hybridCategories;
+      }
+      renderCategoryFilters();
+      renderProductsGrid();
+    }
+  } catch (err) {
+    console.warn("[index.js] Catálogo híbrido funcionando en modo local:", err.message);
+  }
+}
+
 // ==========================================================================
 // INICIALIZACIÓN PRINCIPAL (DOM READY)
 // ==========================================================================
@@ -985,6 +1057,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTikTokGrid();
   renderFloatingDock();
   initCategoriesCarousel();
+  initHybridCatalog();
 
   // Cerrar modal al pulsar fuera de la tarjeta
   const modal = document.getElementById("productModal");

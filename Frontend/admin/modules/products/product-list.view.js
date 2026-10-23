@@ -72,16 +72,26 @@ export const ProductListView = {
       },
       { 
         key: 'is_active',
-        label: 'Estado',
-        render: (val) => val 
-          ? `<span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-medium">Activo</span>`
-          : `<span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Inactivo</span>`
+        label: 'Estado en Catálogo',
+        render: (val, row) => `
+          <button 
+            data-action="toggle-product-visibility" 
+            data-id="${row.id}" 
+            data-active="${val ? 'true' : 'false'}"
+            class="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition cursor-pointer border ${val ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100' : 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200'}"
+            title="${val ? 'Clic para esconder este producto del catálogo' : 'Clic para mostrar este producto en el catálogo'}"
+          >
+            <span class="w-2 h-2 rounded-full ${val ? 'bg-emerald-500' : 'bg-gray-400'}"></span>
+            <span>${val ? 'Visible' : 'Oculto'}</span>
+            <span class="material-symbols-outlined text-[13px] text-gray-400 group-hover:text-gray-700">sync</span>
+          </button>
+        `
       }
     ];
 
     this.actions = [
       { name: 'edit', label: 'Editar', icon: 'edit' },
-      { name: 'deactivate', label: 'Desactivar', icon: 'block' }
+      { name: 'toggle-product-visibility', label: 'Mostrar / Esconder en Catálogo', icon: 'visibility' }
     ];
 
     const categories = Array.from(
@@ -220,6 +230,9 @@ export const ProductListView = {
     });
 
     // Acciones de tabla
+    if (this.documentEventsBound) return;
+    this.documentEventsBound = true;
+
     document.addEventListener('click', async (e) => {
       const btnEdit = e.target.closest('[data-action="edit"]');
       if (btnEdit) {
@@ -230,29 +243,38 @@ export const ProductListView = {
         return;
       }
 
-      const btnDeactivate = e.target.closest('[data-action="deactivate"]');
-      if (btnDeactivate) {
-        const id = btnDeactivate.dataset.id || (this.products && this.products[btnDeactivate.dataset.index]?.id);
+      const btnToggle = e.target.closest('[data-action="toggle-product-visibility"]') || e.target.closest('[data-action="deactivate"]');
+      if (btnToggle) {
+        const id = btnToggle.dataset.id || (this.products && this.products[btnToggle.dataset.index]?.id);
+        const prod = this.allProducts.find(p => p.id == id);
+        if (!prod) return;
+
+        const isCurrentlyActive = prod.is_active !== false;
+        const actionVerb = isCurrentlyActive ? 'esconder' : 'mostrar';
+        const actionTitle = isCurrentlyActive ? 'Esconder Producto del Catálogo' : 'Mostrar Producto en el Catálogo';
+        const actionMessage = isCurrentlyActive 
+          ? `¿Está seguro de esconder "${prod.name || 'este producto'}"? El producto no se eliminará físicamente, pero dejará de ser visible para los clientes en el catálogo público.`
+          : `¿Está seguro de mostrar "${prod.name || 'este producto'}"? El producto volverá a estar visible públicamente en el catálogo web para todos los clientes.`;
+        const confirmBtnText = isCurrentlyActive ? 'Esconder Producto' : 'Mostrar Producto';
+        const confirmBtnType = isCurrentlyActive ? 'danger' : 'primary';
+
         const confirmed = await ConfirmDialog.show({
-          title: 'Deshabilitar Producto',
-          message: 'El producto no se eliminará físicamente, pero no se mostrará en el catálogo público.',
-          confirmText: 'Deshabilitar',
+          title: actionTitle,
+          message: actionMessage,
+          confirmText: confirmBtnText,
           cancelText: 'Cancelar',
-          type: 'danger'
+          type: confirmBtnType
         });
 
         if (confirmed && id) {
           try {
-            await ProductService.deactivate(id);
-            Toast.show('Producto deshabilitado con éxito', 'success');
-            const prod = this.allProducts.find(p => p.id === id);
-            if (prod) {
-              prod.is_active = false;
-            }
+            await ProductService.toggleActive(id, !isCurrentlyActive);
+            prod.is_active = !isCurrentlyActive;
+            Toast.show(`Producto ${isCurrentlyActive ? 'ocultado' : 'mostrado'} con éxito en el catálogo`, 'success');
             this.filterProducts();
           } catch (err) {
             console.error(err);
-            Toast.show('Error al deshabilitar el producto', 'error');
+            Toast.show(`Error al ${actionVerb} el producto`, 'error');
           }
         }
       }
