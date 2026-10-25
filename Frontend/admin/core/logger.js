@@ -2,7 +2,7 @@
  * Ubicación: core/logger.js
  * Descripción: Wrapper para manejo seguro e independiente de logs del cliente.
  */
-import { CONFIG } from '../../js/config.module.js';
+import { CONFIG } from '../js/config.js';
 
 export const logger = {
   info(message, data = null) {

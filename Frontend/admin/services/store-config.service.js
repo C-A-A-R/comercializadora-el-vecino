@@ -1,5 +1,5 @@
 import { api } from '../../js/api.js';
-import { CONFIG } from '../../js/config.module.js';
+import { CONFIG } from '../../js/config.js';
 
 const STORAGE_KEY = 'el_vecino_store_settings';
 

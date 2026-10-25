@@ -1,5 +1,5 @@
 import { api } from '../../js/api.js';
-import { CONFIG } from '../../js/config.module.js';
+import { CONFIG } from '../../js/config.js';
 import { COMBOS_MOCK } from './mocks/combos.mock.js';
 
 function normalizeCombo(c) {

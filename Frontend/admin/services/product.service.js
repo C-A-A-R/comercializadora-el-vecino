@@ -1,5 +1,5 @@
 import { api } from '../../js/api.js';
-import { CONFIG } from '../../js/config.module.js';
+import { CONFIG } from '../../js/config.js';
 import { PRODUCTS_MOCK } from './mocks/products.mock.js';
 
 function normalizeProduct(p) {

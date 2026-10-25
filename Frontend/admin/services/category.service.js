@@ -1,5 +1,5 @@
 import { api } from '../../js/api.js';
-import { CONFIG } from '../../js/config.module.js';
+import { CONFIG } from '../../js/config.js';
 import { CATEGORIES_MOCK } from './mocks/categories.mock.js';
 
 function normalizeCategory(c) {

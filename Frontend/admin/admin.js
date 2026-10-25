@@ -1,6 +1,6 @@
 import { Router } from './core/router.js';
 import { AuthGuard } from './core/guards.js';
-import { renderSidebar } from './components/layout/Sidebar.js';
+import { renderSidebar, initSidebarEvents } from './components/layout/Sidebar.js';
 import { renderHeader, bindHeaderEvents } from './components/layout/Header.js';
 import { DashboardView } from './modules/dashboard/dashboard.view.js';
 import { ProductListView } from './modules/products/product-list.view.js';
@@ -8,14 +8,12 @@ import { ProductFormView } from './modules/products/product-form.view.js';
 import { CategoryListView } from './modules/categories/category-list.view.js';
 import { PromotionsHubView } from './modules/promotions/promotions-hub.view.js';
 import { PromotionFormView } from './modules/promotions/promotion-form.view.js';
+import { ComboListView } from './modules/combos/combo-list.view.js'; // ✅ Importación correcta del listado de combos limpio
 import { ComboFormView } from './modules/combos/combo-form.view.js';
 import { BannerListView } from './modules/banners/banner-list.view.js';
 import { ReviewListView } from './modules/reviews/review-list.view.js';
 import { ReportView } from './modules/reports/report.view.js';
 
-/**
- * Objeto de operaciones globales adaptado a la arquitectura modular
- */
 export const AdminOps = {
   init() {
     console.log('[AdminOps] Inicializando operaciones del panel...');
@@ -32,12 +30,12 @@ const appTarget = document.getElementById('app');
 /**
  * Construye la estructura base (Layout + Shell) alrededor del contenido dinámico
  */
-function buildShell(contentHtml) {
+function buildShell(contentHtml, currentPath = '') {
   return `
-    ${renderSidebar()}
-    <div class="flex-1 flex flex-col min-w-0">
+    ${renderSidebar(currentPath)}
+    <div class="admin-main-wrapper">
       ${renderHeader()}
-      <main id="main-content" class="p-6 flex-1 overflow-y-auto">
+      <main id="main-content" class="admin-content">
         ${contentHtml}
       </main>
     </div>
@@ -64,16 +62,21 @@ export class AsyncRouter extends Router {
     if (route) {
       if (route.guard && !route.guard()) {
         if (this.routes['403']) {
-          this.target.innerHTML = typeof this.routes['403'].render === 'function' 
+          const content403 = typeof this.routes['403'].render === 'function' 
             ? this.routes['403'].render() 
             : await this.routes['403'].renderAsync();
+          this.target.innerHTML = buildShell(content403, '403');
         }
+        initSidebarEvents();
         return;
       }
 
-      this.target.innerHTML = route.renderAsync 
+      const contentHtml = route.renderAsync 
         ? await route.renderAsync(paramId) 
         : route.render(paramId);
+
+      this.target.innerHTML = buildShell(contentHtml, routeKey);
+      initSidebarEvents();
 
       if (route.afterRender) route.afterRender(paramId);
     }
@@ -84,7 +87,7 @@ export class AsyncRouter extends Router {
 const routes = {
   '/dashboard': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await DashboardView.render()),
+    renderAsync: async () => await DashboardView.render(),
     afterRender: () => {
       bindHeaderEvents();
       DashboardView.bindEvents();
@@ -92,7 +95,7 @@ const routes = {
   },
   '/products': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ProductListView.render()),
+    renderAsync: async () => await ProductListView.render(),
     afterRender: () => {
       bindHeaderEvents();
       ProductListView.bindEvents();
@@ -100,7 +103,7 @@ const routes = {
   },
   '/products/new': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ProductFormView.render()),
+    renderAsync: async () => await ProductFormView.render(),
     afterRender: () => {
       bindHeaderEvents();
       ProductFormView.bindEvents();
@@ -108,7 +111,7 @@ const routes = {
   },
   '/products/edit': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async (id) => buildShell(await ProductFormView.render(id)),
+    renderAsync: async (id) => await ProductFormView.render(id),
     afterRender: () => {
       bindHeaderEvents();
       ProductFormView.bindEvents();
@@ -116,7 +119,7 @@ const routes = {
   },
   '/categories': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await CategoryListView.render()),
+    renderAsync: async () => await CategoryListView.render(),
     afterRender: () => {
       bindHeaderEvents();
       CategoryListView.bindEvents();
@@ -124,7 +127,7 @@ const routes = {
   },
   '/promotions': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await PromotionsHubView.render()),
+    renderAsync: async () => await PromotionsHubView.render(),
     afterRender: () => {
       bindHeaderEvents();
       PromotionsHubView.bindEvents();
@@ -132,7 +135,7 @@ const routes = {
   },
   '/promotions/new': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await PromotionFormView.render()),
+    renderAsync: async () => await PromotionFormView.render(),
     afterRender: () => {
       bindHeaderEvents();
       PromotionFormView.bindEvents();
@@ -140,15 +143,15 @@ const routes = {
   },
   '/combos': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await PromotionsHubView.render()),
+    renderAsync: async () => await ComboListView.render(), // ✅ Apunta al listado de combos limpio sin WhatsApp
     afterRender: () => {
       bindHeaderEvents();
-      PromotionsHubView.bindEvents();
+      ComboListView.bindEvents();
     }
   },
   '/combos/new': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ComboFormView.render()),
+    renderAsync: async () => await ComboFormView.render(),
     afterRender: () => {
       bindHeaderEvents();
       ComboFormView.bindEvents();
@@ -156,7 +159,7 @@ const routes = {
   },
   '/banners': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await BannerListView.render()),
+    renderAsync: async () => await BannerListView.render(),
     afterRender: () => {
       bindHeaderEvents();
       BannerListView.bindEvents();
@@ -164,7 +167,7 @@ const routes = {
   },
   '/reviews': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ReviewListView.render()),
+    renderAsync: async () => await ReviewListView.render(),
     afterRender: () => {
       bindHeaderEvents();
       ReviewListView.bindEvents();
@@ -172,30 +175,30 @@ const routes = {
   },
   '/reports': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await ReportView.render()),
+    renderAsync: async () => await ReportView.render(),
     afterRender: () => {
       bindHeaderEvents();
       ReportView.bindEvents();
     }
   },
   '403': {
-    render: () => buildShell(`
+    render: () => `
       <div class="p-8 text-center space-y-4">
         <span class="material-symbols-outlined text-6xl text-red-500">gpp_maybe</span>
         <h1 class="font-display text-3xl font-bold text-deep-obsidian">403 - Acceso Denegado</h1>
         <p class="text-gray-600 max-w-md mx-auto">No posees los permisos necesarios con tu rol actual para acceder a este módulo.</p>
       </div>
-    `),
+    `,
     afterRender: () => bindHeaderEvents()
   },
   '404': {
-    render: () => buildShell(`
+    render: () => `
       <div class="p-8 text-center space-y-4">
         <span class="material-symbols-outlined text-6xl text-gray-400">find_in_page</span>
         <h1 class="font-display text-3xl font-bold text-deep-obsidian">404 - Ruta no encontrada</h1>
         <a href="#/dashboard" class="inline-block px-4 py-2 bg-electric-blue text-white rounded-lg text-sm font-medium">Volver a la Página Principal</a>
       </div>
-    `),
+    `,
     afterRender: () => bindHeaderEvents()
   }
 };
