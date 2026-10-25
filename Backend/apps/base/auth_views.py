@@ -1,16 +1,18 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 
+User = get_user_model()
+
 
 class LoginView(APIView):
     """
-    Endpoint de autenticación JWT.
-    Permite iniciar sesión con nombre de usuario o correo electrónico registrado en Django.
-    Asigna automáticamente el rol 'admin' a usuarios staff o superusuarios.
+    Endpoint de autenticación JWT para Catálogo El Vecino.
+    Permite iniciar sesión con nombre de usuario o correo electrónico registrado.
+    Gestiona los dos roles del sistema: super_admin (acceso a Django admin) y admin (gestión de catálogo).
     """
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
@@ -28,7 +30,8 @@ class LoginView(APIView):
 
         # Búsqueda por username o correo (insensible a mayúsculas/minúsculas)
         user = User.objects.filter(
-            Q(username__iexact=identifier) | Q(email__iexact=identifier)
+            Q(username__iexact=identifier) | Q(email__iexact=identifier),
+            is_deleted=False
         ).first()
 
         if user is None or not user.check_password(password):
@@ -45,15 +48,18 @@ class LoginView(APIView):
 
         # Generar tokens JWT SimpleJWT
         refresh = RefreshToken.for_user(user)
-        role = 'admin' if (user.is_staff or user.is_superuser) else 'cliente'
-        name = user.get_full_name() or user.username
+        role = getattr(user, 'role', None) or ('super_admin' if user.is_superuser else 'admin')
+        name = getattr(user, 'full_name', None) or user.get_full_name() or user.username
+        can_access_admin = bool(getattr(user, 'can_access_django_admin', lambda: user.is_staff or user.is_superuser)())
 
         # Claims personalizados en el token
         refresh['role'] = role
         refresh['name'] = name
         refresh['email'] = user.email
+        refresh['username'] = user.username
         refresh['is_staff'] = user.is_staff
         refresh['is_superuser'] = user.is_superuser
+        refresh['can_access_django_admin'] = can_access_admin
 
         access_token = str(refresh.access_token)
 
@@ -64,7 +70,8 @@ class LoginView(APIView):
             'email': user.email,
             'role': role,
             'is_staff': user.is_staff,
-            'is_superuser': user.is_superuser
+            'is_superuser': user.is_superuser,
+            'can_access_django_admin': can_access_admin,
         }
 
         return Response({
@@ -85,13 +92,17 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         user = request.user
-        role = 'admin' if (user.is_staff or user.is_superuser) else 'cliente'
+        role = getattr(user, 'role', None) or ('super_admin' if user.is_superuser else 'admin')
+        name = getattr(user, 'full_name', None) or user.get_full_name() or user.username
+        can_access_admin = bool(getattr(user, 'can_access_django_admin', lambda: user.is_staff or user.is_superuser)())
+
         return Response({
             'id': user.id,
             'username': user.username,
-            'name': user.get_full_name() or user.username,
+            'name': name,
             'email': user.email,
             'role': role,
             'is_staff': user.is_staff,
-            'is_superuser': user.is_superuser
+            'is_superuser': user.is_superuser,
+            'can_access_django_admin': can_access_admin,
         })

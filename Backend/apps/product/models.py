@@ -48,13 +48,19 @@ class SubCategory(BaseModel):
 
     def save(self, *args, **kwargs):
         if self.sub_category_image:
-            compress_and_save_image(self.category_image)
+            compress_and_save_image(self.sub_category_image)
         super().save(*args, **kwargs)
 
 
 class Product(BaseModel):
     """Modelo para representar los Productos."""
 
+    categories = models.ManyToManyField(
+        Category,
+        related_name='products',
+        verbose_name='Categorías',
+        blank=True
+    )
     sub_categories = models.ManyToManyField(
         SubCategory,
         related_name='products',
@@ -72,6 +78,8 @@ class Product(BaseModel):
     height_cm = models.DecimalField('Alto (cm)', max_digits=10, decimal_places=2, default=0)
     depth_cm = models.DecimalField('Profundo (cm)', max_digits=10, decimal_places=2, default=0)
     width_cm = models.DecimalField('Ancho (cm)', max_digits=10, decimal_places=2, default=0)
+    security = models.CharField('Seguridad', max_length=255, default='', blank=True)
+    price = models.DecimalField('Precio', max_digits=12, decimal_places=2, default=0)
     product_image = models.ImageField('Imagen del Producto', upload_to=rename_image_upload_to, null=True, blank=True)
     product_video = models.FileField('Video del Producto', upload_to=rename_video_upload_to, null=True, blank=True)
 

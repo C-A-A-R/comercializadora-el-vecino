@@ -32,6 +32,7 @@ LOCAL_APPS = [
     'apps.product',
     'apps.promotions',
     'apps.notifications',
+    'apps.user',
 ]
 
 THIRD_APPS = [
@@ -137,7 +138,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# AUTH_USER_MODEL = 'usuarios.Usuario'
+AUTH_USER_MODEL = 'user.User'
 
 DATE_INPUT_FORMATS = [
     '%d-%m-%Y', 
@@ -210,3 +211,5 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+WHITENOISE_MANIFEST_STRICT = False

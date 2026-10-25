@@ -128,6 +128,7 @@ class NotificationDispatcherAndReminderTests(TestCase):
 
     def test_check_and_send_commercial_reminders(self):
         """Verifica el motor de recordatorios con una fecha próxima."""
+        SpecialCommercialDate.objects.all().delete()
         SpecialCommercialDate.objects.create(
             name="Temporada Simulación",
             slug="temporada-simulacion",

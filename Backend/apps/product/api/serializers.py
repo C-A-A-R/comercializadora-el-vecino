@@ -13,12 +13,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'category_name', 'description', 'category_image', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
-class  SubCategorySerializer(serializers.ModelSerializer):
-    """Serializador para el modelo Category."""
+class SubCategorySerializer(serializers.ModelSerializer):
+    """Serializador para el modelo SubCategory."""
 
     class Meta:
         model = SubCategory
-        fields = ['id', 'category', 'sub_category_name', 'description', 'sub_category_image', 'created_at', 'updated_at']
+        fields = ['id', 'categories', 'sub_category_name', 'description', 'sub_category_image', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 
