@@ -154,6 +154,10 @@ const Api = {
     let img = p.product_image || p.image || '';
     if (img && img.startsWith('/media/')) {
       img = `${baseMedia}${img}`;
+    } else if (img && !img.startsWith('http://') && !img.startsWith('https://') && !img.startsWith('data:')) {
+      if (window.CONFIG?.resolveAsset) {
+        img = window.CONFIG.resolveAsset(img);
+      }
     }
     if (!img) img = 'https://placehold.co/400';
 

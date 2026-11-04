@@ -7,14 +7,14 @@ const CONFIG = {
   storeName: 'EL VECINO',
   APP_NAME: 'EL VECINO',
   APP_TAGLINE: 'Electro & Hogar',
-  whatsappNumber: '573001234567',
-  WHATSAPP_PHONE: '573001234567',
+  whatsappNumber: '584129227264',
+  WHATSAPP_PHONE: '584129227264',
   DEFAULT_ADVISOR: 'Terminal Bodega Central',
   API_BASE_URL: 'http://localhost:8000/api', // Base API del backend Django
   USE_MOCKS: false,                          // Desactiva mocks para conectar con backend real Django
   DEBUG: true,
-  CURRENCY_LOCALE: 'es-CO',
-  CURRENCY_CODE: 'COP',
+  CURRENCY_LOCALE: 'es-VE',
+  CURRENCY_CODE: 'USD',
 
   // Plantillas de mensajes WhatsApp dinámicos
   whatsappTemplates: {
@@ -45,11 +45,27 @@ const CONFIG = {
     CLIENT: 'cliente'
   },
 
+    resolveAsset(assetPath) {
+    if (!assetPath) return '';
+    if (assetPath.startsWith('http://') || assetPath.startsWith('https://') || assetPath.startsWith('data:')) {
+      return assetPath;
+    }
+    const clean = assetPath.replace(/^\.?\//, '');
+    const pathname = (typeof window !== 'undefined' ? (window.location.pathname || '') : '').replace(/\\/g, '/');
+    if (pathname.includes('/client/modules/')) {
+      return `../../../${clean}`;
+    }
+    if (pathname.includes('/admin/')) {
+      return `../../${clean}`;
+    }
+    return `./${clean}`;
+  },
+
   formatCurrency(value) {
     if (typeof value !== 'number') value = Number(value) || 0;
-    return new Intl.NumberFormat('es-CO', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'COP',
+      currency: 'USD',
       maximumFractionDigits: 0
     }).format(value);
   },
@@ -62,7 +78,7 @@ const CONFIG = {
       icon: 'kitchen',
       count: 38,
       description: 'Neveras Neofrost, Side by Side, French Door y congeladores industriales.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4BzSlYuos4wRZUD1h0A976CFR0pmPQ5rrTlpc40DhyI8HEsUcM02wOT1wyAxMVqLhQn8sZtskycGG9tCx1R083jQ_56nPalMk7SfLy6FLboAplkbMHseOamUo0Rj-ib1mxX1xB_pIEz8GCtYAkqFVTcwHOXxBjF8rjZOlIleqYOyJizVshIN3cX6MtIRvWD4aHkr0AZugiYhx2jRc7ZO7wWQvJrDr_6RKbRobyacg8KSlpNva16VWAA'
+      image: 'assets/images/products/prod_ai_2.webp'
     },
     {
       id: 'smart-tvs-audio',
@@ -71,7 +87,7 @@ const CONFIG = {
       icon: 'tv',
       count: 42,
       description: 'Pantallas OLED, QLED 4K/8K, barras de sonido Dolby Atmos y audio profesional.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeBL4fPXDkLGZzWfh6YUrdanBDk7Ch9ssyVTtPMMZclrImzdpEliJIHtorDnnaCtxZSpUzitLKx9601fsRkEI-xGpHfAaDPRZwHp-XEu5-2O2vdPcuPYq3BvW8PKlWd_npd5uULz3bdSDlNeQCozIj7G_NfWkv0deXAbCksn6bBO4ZpQ4xXvLwkWtFtdKnh7UVV_ZfYinIVsnOhcx5S60iVHHMmEWVj3YMtQIkaw13-I0aTSbDtu1Iqg'
+      image: 'assets/images/products/prod_ai_7.webp'
     },
     {
       id: 'lavado-secado',
@@ -80,7 +96,7 @@ const CONFIG = {
       icon: 'local_laundry_service',
       count: 26,
       description: 'Torres de lavado inteligentes, lavadoras carga frontal/superior y secadoras a gas.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDx1q9S6Av-tDBuLVrI8_pSH4KN-w0zblvJgtZOz0ObFvrcVayRClJgQk1Eo5h3x5juq-taLxaK8vDgrvUiJi6wWmGgGxobjWTebpGaznzr8EiuasBbbfoPGXzOI37SX4dQfsxGBV-fv6zHRv96_zy2zB7JR9nrQzLey0cgwiFTHl7Dg7HESrvrygYEkPjMPCN6k_rV-bBeq8Dje9H_1rDzNrrG13ofgMxLa3wbdNagCWpcQzjLcA6bWQ'
+      image: 'assets/images/products/prod_ai_8.webp'
     },
     {
       id: 'gaming-tech',
@@ -89,7 +105,7 @@ const CONFIG = {
       icon: 'sports_esports',
       count: 31,
       description: 'Consolas de última generación, periféricos pro, monitores gamers y portátiles.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLJntVL6Pq_cbVBEVCJWEVZzXRt6A47GkBPZ5jlPyC3O3HnhjO0I0l0i3AwwERE6lHELrK5asiRjtQNR5z74b3JCF5NG2qUxx3Mt4K5tyl6-zG8Q6KcT0rsA1eGVTXlbxZ3jTGHaXC9UsPQOQJlcXn6yIzst7I8wU7m6nAXqejg_RwB1sN0bclt9MnsjGr9uRcsMT8Du8eCnlaQkOD82_53uArbvdBGG8EKsu7x_Szafv2iRnyMAXSPQ'
+      image: 'assets/images/products/prod_ai_3.webp'
     },
     {
       id: 'pequenos-electro',
@@ -98,7 +114,7 @@ const CONFIG = {
       icon: 'blender',
       count: 24,
       description: 'Airfryers, cafeteras espresso, microondas Inverter y robots aspiradores.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAhpbyTv8mEuDuQyUBieR0mEKwf0N5zfQlg4C4ijPPm4k26xY1caDe6mK9L7BFw9LTEvxNy7kyzLr7SkoKlJ_1YZ6LRn1m6GL3roHjkoRfiDf0AIGuNzMdP9AzZtOLuJZ2m0m7gkIuRE-W5F7djkur90h6L0O-jTeTfePXdu3zwOoLsnCZRCiRo3RwqZY3CpPSUg2XqV-TdQGTt7N_ms8JRrOGO5bamEDKpWrSMh1ieMDiqFGVZEBiH1g'
+      image: 'assets/images/products/prod_ai_1.webp'
     }
   ],
 
@@ -123,8 +139,8 @@ const CONFIG = {
         'Acabado Glass Obsidian resistente a huellas'
       ],
       description: 'Tecnología Twin Cooling Plus™ con compresor Digital Inverter y acabado en cristal satinado de alta reflectividad arquitectónica.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4BzSlYuos4wRZUD1h0A976CFR0pmPQ5rrTlpc40DhyI8HEsUcM02wOT1wyAxMVqLhQn8sZtskycGG9tCx1R083jQ_56nPalMk7SfLy6FLboAplkbMHseOamUo0Rj-ib1mxX1xB_pIEz8GCtYAkqFVTcwHOXxBjF8rjZOlIleqYOyJizVshIN3cX6MtIRvWD4aHkr0AZugiYhx2jRc7ZO7wWQvJrDr_6RKbRobyacg8KSlpNva16VWAA',
-      warranty: 'Respaldo Certificado: factura oficial con garantía directa de fábrica'
+      image: 'assets/images/products/prod_ai_2.webp',
+      warranty: 'Respaldo Certificado: Factura Legal y Garantía Oficial Directa'
     },
     {
       id: 'prod-002',
@@ -146,7 +162,7 @@ const CONFIG = {
         '4 puertos HDMI 2.1 compatibles con G-Sync & FreeSync'
       ],
       description: 'El referente mundial en imagen cinematográfica y gaming ultra responsivo. Negros absolutos y brillo repotenciado con Light Boosting Algorithm.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeBL4fPXDkLGZzWfh6YUrdanBDk7Ch9ssyVTtPMMZclrImzdpEliJIHtorDnnaCtxZSpUzitLKx9601fsRkEI-xGpHfAaDPRZwHp-XEu5-2O2vdPcuPYq3BvW8PKlWd_npd5uULz3bdSDlNeQCozIj7G_NfWkv0deXAbCksn6bBO4ZpQ4xXvLwkWtFtdKnh7UVV_ZfYinIVsnOhcx5S60iVHHMmEWVj3YMtQIkaw13-I0aTSbDtu1Iqg',
+      image: 'assets/images/products/prod_ai_7.webp',
       warranty: '2 Años Directo con Marca LG'
     },
     {
@@ -169,7 +185,7 @@ const CONFIG = {
         'Conectividad Wi-Fi vía LG ThinQ para monitoreo remoto'
       ],
       description: 'Lavado rápido y eficiente que reduce el desgaste de prendas hasta un 18% mediante inteligencia artificial de censado de carga.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDx1q9S6Av-tDBuLVrI8_pSH4KN-w0zblvJgtZOz0ObFvrcVayRClJgQk1Eo5h3x5juq-taLxaK8vDgrvUiJi6wWmGgGxobjWTebpGaznzr8EiuasBbbfoPGXzOI37SX4dQfsxGBV-fv6zHRv96_zy2zB7JR9nrQzLey0cgwiFTHl7Dg7HESrvrygYEkPjMPCN6k_rV-bBeq8Dje9H_1rDzNrrG13ofgMxLa3wbdNagCWpcQzjLcA6bWQ',
+      image: 'assets/images/products/prod_ai_8.webp',
       warranty: '10 Años en Motor Smart Inverter'
     },
     {
@@ -192,8 +208,8 @@ const CONFIG = {
         'Diseño un 30% más compacto y ligero'
       ],
       description: 'Edición oficial sellada con lector de disco Blu-ray Ultra HD. Compatible con todo el ecosistema de juegos PlayStation 5 y PlayStation 4.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLJntVL6Pq_cbVBEVCJWEVZzXRt6A47GkBPZ5jlPyC3O3HnhjO0I0l0i3AwwERE6lHELrK5asiRjtQNR5z74b3JCF5NG2qUxx3Mt4K5tyl6-zG8Q6KcT0rsA1eGVTXlbxZ3jTGHaXC9UsPQOQJlcXn6yIzst7I8wU7m6nAXqejg_RwB1sN0bclt9MnsjGr9uRcsMT8Du8eCnlaQkOD82_53uArbvdBGG8EKsu7x_Szafv2iRnyMAXSPQ',
-      warranty: '1 Año Oficial Directo Sony Colombia'
+      image: 'assets/images/products/prod_ai_3.webp',
+      warranty: '1 Año Oficial Directo de Fábrica'
     },
     {
       id: 'prod-005',
@@ -215,7 +231,7 @@ const CONFIG = {
         'Diseño minimalista frontal con panel touch'
       ],
       description: 'Cocción y descongelado uniforme sin resecar los alimentos gracias al flujo continuo de microondas Inverter de precisión.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAhpbyTv8mEuDuQyUBieR0mEKwf0N5zfQlg4C4ijPPm4k26xY1caDe6mK9L7BFw9LTEvxNy7kyzLr7SkoKlJ_1YZ6LRn1m6GL3roHjkoRfiDf0AIGuNzMdP9AzZtOLuJZ2m0m7gkIuRE-W5F7djkur90h6L0O-jTeTfePXdu3zwOoLsnCZRCiRo3RwqZY3CpPSUg2XqV-TdQGTt7N_ms8JRrOGO5bamEDKpWrSMh1ieMDiqFGVZEBiH1g',
+      image: 'assets/images/products/prod_ai_1.webp',
       warranty: '1 Año Garantía de Fábrica'
     },
     {
@@ -238,8 +254,8 @@ const CONFIG = {
         'Resistencia al agua y polvo IP68'
       ],
       description: 'Fotografía profesional de nivel insignia y rendimiento Snapdragon fluido para multitasking y captura de video en 4K.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJhUDV6weDKxxuqy-9W-sqkfg6uGb6vtSk-O0FFqnx8eJ2unkozm60gZ3bmO3qCvv11WPqO1SqdJHfI1fiY9RmJH9SjbGzMJSGusZ1I4nPgxIu9wV9tEaE0TTVbJ4xAI1kLIzZTmLgwJMqTjF19PXjryuE0ebTcHi8BUmPxeSh4bddK4D_SPoqHCzzPo-v7GCHKwi7qQGtrClu1hTnEpLeADcJSO6hdjpsbVLkGC7RAEwBaohAjhVCPQ',
-      warranty: '2 Años con Factura y Homologación CRC'
+      image: 'assets/images/products/prod_ai_6.webp',
+      warranty: '2 Años de Garantía con Factura Legal'
     }
   ],
 
@@ -256,7 +272,7 @@ const CONFIG = {
       saving: 1308000,
       active: true,
       whatsappMessage: '¡Hola EL VECINO! Me interesa adquirir el Combo Dúo Cocina Chef (Nevera Samsung SpaceMax + Microondas Inverter). ¿Tienen disponibilidad y despacho inmediato?',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4BzSlYuos4wRZUD1h0A976CFR0pmPQ5rrTlpc40DhyI8HEsUcM02wOT1wyAxMVqLhQn8sZtskycGG9tCx1R083jQ_56nPalMk7SfLy6FLboAplkbMHseOamUo0Rj-ib1mxX1xB_pIEz8GCtYAkqFVTcwHOXxBjF8rjZOlIleqYOyJizVshIN3cX6MtIRvWD4aHkr0AZugiYhx2jRc7ZO7wWQvJrDr_6RKbRobyacg8KSlpNva16VWAA'
+      image: 'assets/images/products/prod_ai_2.webp'
     },
     {
       id: 'promo-002',
@@ -270,7 +286,7 @@ const CONFIG = {
       saving: 1400000,
       active: true,
       whatsappMessage: '¡Hola! Deseo cotizar disponibilidad del Especial Pantallas 4K con la LG OLED 65" evo C3 y confirmar cobertura de envío.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeBL4fPXDkLGZzWfh6YUrdanBDk7Ch9ssyVTtPMMZclrImzdpEliJIHtorDnnaCtxZSpUzitLKx9601fsRkEI-xGpHfAaDPRZwHp-XEu5-2O2vdPcuPYq3BvW8PKlWd_npd5uULz3bdSDlNeQCozIj7G_NfWkv0deXAbCksn6bBO4ZpQ4xXvLwkWtFtdKnh7UVV_ZfYinIVsnOhcx5S60iVHHMmEWVj3YMtQIkaw13-I0aTSbDtu1Iqg'
+      image: 'assets/images/products/prod_ai_7.webp'
     },
     {
       id: 'promo-003',
@@ -284,7 +300,7 @@ const CONFIG = {
       saving: 500000,
       active: true,
       whatsappMessage: '¡Hola EL VECINO! Quisiera apartar el Pack Temporada Gamer Pro con la consola PS5 Slim 1TB. ¿Qué medios de pago reciben?',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLJntVL6Pq_cbVBEVCJWEVZzXRt6A47GkBPZ5jlPyC3O3HnhjO0I0l0i3AwwERE6lHELrK5asiRjtQNR5z74b3JCF5NG2qUxx3Mt4K5tyl6-zG8Q6KcT0rsA1eGVTXlbxZ3jTGHaXC9UsPQOQJlcXn6yIzst7I8wU7m6nAXqejg_RwB1sN0bclt9MnsjGr9uRcsMT8Du8eCnlaQkOD82_53uArbvdBGG8EKsu7x_Szafv2iRnyMAXSPQ'
+      image: 'assets/images/products/prod_ai_3.webp'
     }
   ],
 
@@ -296,7 +312,7 @@ const CONFIG = {
       author: '@elvecinocolombia',
       likes: '3.8K',
       productId: 'prod-001',
-      thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJhUDV6weDKxxuqy-9W-sqkfg6uGb6vtSk-O0FFqnx8eJ2unkozm60gZ3bmO3qCvv11WPqO1SqdJHfI1fiY9RmJH9SjbGzMJSGusZ1I4nPgxIu9wV9tEaE0TTVbJ4xAI1kLIzZTmLgwJMqTjF19PXjryuE0ebTcHi8BUmPxeSh4bddK4D_SPoqHCzzPo-v7GCHKwi7qQGtrClu1hTnEpLeADcJSO6hdjpsbVLkGC7RAEwBaohAjhVCPQ'
+      thumbnail: 'assets/images/products/prod_ai_6.webp'
     },
     {
       id: 'reel-02',
@@ -305,7 +321,7 @@ const CONFIG = {
       author: '@elvecinocolombia',
       likes: '8.4K',
       productId: 'prod-002',
-      thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTkDgQ3H7ngH4us6kFfgvC35UGTI08qCmt9r6-MH1EprjcXblrHq-mdj3s2ttDjsLY1e7QxC96GBCFP3WLEHDseF-XpKuxuOhlPGYwAZKhciBB5vDz_JiOOFnYqRQX2CkAc4SIzzZOnAkymVzkGIVxj67ZVR8uyPyVitwl3zPNme1kYUim7gaJmwC2fKgyJf-Aljj22xsghoiziH_HpECXfO-Z9L4KFhN0GGQTRxGLWwo_M3WEzgJjOg'
+      thumbnail: 'assets/images/products/prod_ai_4.webp'
     },
     {
       id: 'reel-03',
@@ -314,7 +330,7 @@ const CONFIG = {
       author: '@elvecinocolombia',
       likes: '12.3K',
       productId: 'prod-004',
-      thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDDrVTzGN2YkqXvj04Ub-YL1AWVu_1m6eQqi3Zd71XHqfX_gOiLIFTA0b7srm2V5luoDtj5sPK0Vpi-EwUhoDQHubnRJS5Dnbh12yyInDv7aiHvmVK4pY0mJ44Dc3rtRGh3EIKSP0qh9hVuZtp3CLo_qPRVUv2ckseHN_7A8wMLEuEWW333WWtx3blz5VqtcwHSxNlIKJ_K5PX4Z4iaCresU3qtotZfpbyv8ld-5wZrOY26ofqOE52SOA'
+      thumbnail: 'assets/images/products/prod_ai_5.webp'
     }
   ]
 };
@@ -325,7 +341,7 @@ const formatUSD = (amount) => {
 };
 
 const formatCOP = (amount) => {
-  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount || 0);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount || 0);
 };
 
 // Vinculación global para scripts estándar del navegador

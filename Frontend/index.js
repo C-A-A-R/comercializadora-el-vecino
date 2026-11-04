@@ -13,7 +13,7 @@
  * Genera el enlace directo a WhatsApp con codificación segura
  */
 function getWhatsAppLink(message) {
-  const phone = (window.CONFIG && (window.CONFIG.whatsappNumber || window.CONFIG.WHATSAPP_PHONE)) || "573001234567";
+  const phone = ((window.CONFIG && (window.CONFIG.WHATSAPP_PHONE || window.CONFIG.whatsappNumber)) || "584129227264").replace(/\D/g, '');
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
 window.getWhatsAppLink = getWhatsAppLink;
@@ -55,6 +55,75 @@ function renderBenefits() {
 let currentCombosPreviewMode = "auto"; // "auto", 1, 2, 3, or 4
 let combosCarouselAutoplay = null;
 let combosCarouselResizeHandler = null;
+let liveCombosData = null; // Almacén de promociones/combos sincronizados en vivo con el backend
+
+/**
+ * Normaliza cualquier combo (venga de Django REST Framework o datos locales)
+ * para asegurar compatibilidad total con la UI de la portada
+ */
+function normalizeComboForIndex(combo) {
+  if (!combo) return null;
+  let items = [];
+  if (Array.isArray(combo.items) && combo.items.length > 0) {
+    items = combo.items;
+  } else if (Array.isArray(combo.combo_products) && combo.combo_products.length > 0) {
+    items = combo.combo_products.map(cp => {
+      const p = cp.product || {};
+      const pName = cp.product_name || p.product_name || p.name || 'Equipo Mayorista';
+      const pImg = p.product_image || p.image || combo.image || '';
+      return {
+        name: pName,
+        type: `${cp.quantity || 1}x Unidad`,
+        detail: cp.subtotal ? `$ ${Number(cp.subtotal).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : (p.price ? `$ ${Number(p.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : ''),
+        image: pImg || combo.image
+      };
+    });
+  }
+
+  const promoPrice = typeof combo.price === 'string' ? parseFloat(combo.price) : (Number(combo.price || combo.promoPrice) || 0);
+  const origPrice = combo.original_total_price ? parseFloat(combo.original_total_price) : (combo.originalPrice ? parseFloat(combo.originalPrice) : Math.round(promoPrice * 1.25));
+
+  let resolvedImage = combo.image || '';
+  if (resolvedImage && resolvedImage.startsWith('/media/')) {
+    const baseMedia = (window.CONFIG?.API_BASE_URL || 'http://localhost:8000/api').replace('/api', '');
+    resolvedImage = `${baseMedia}${resolvedImage}`;
+  }
+  if (!resolvedImage) {
+    resolvedImage = 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80';
+  }
+
+  return {
+    ...combo,
+    id: combo.id,
+    sku: combo.sku || `CMB-${String(combo.id).padStart(3, '0')}`,
+    title: combo.title || combo.name || 'Combo Especial de Bodega',
+    tagline: combo.tagline || combo.description || 'Lote mayorista sellado con entrega técnica y garantía directa.',
+    price: promoPrice,
+    originalPrice: origPrice,
+    savings: combo.savings ? parseFloat(combo.savings) : Math.max(0, origPrice - promoPrice),
+    badge: combo.badge || (combo.savings_percentage ? `${combo.savings_percentage}% AHORRO` : 'COMBO ESTRELLA'),
+    badgeColor: combo.badgeColor || 'neon-magenta',
+    image: resolvedImage,
+    items: items
+  };
+}
+
+/**
+ * Consulta las promociones y combos activos directamente del backend Django
+ */
+async function loadCombosFromBackend() {
+  if (window.PromocionesApi && typeof window.PromocionesApi.getPromociones === 'function') {
+    try {
+      const backendCombos = await window.PromocionesApi.getPromociones();
+      if (Array.isArray(backendCombos) && backendCombos.length > 0) {
+        liveCombosData = backendCombos.map(normalizeComboForIndex).filter(Boolean);
+        renderCombos();
+      }
+    } catch (err) {
+      console.warn('[Combos Backend] Sin conexión al backend, utilizando catálogo estático:', err);
+    }
+  }
+}
 
 /**
  * Permite alternar la cantidad de combos para probar la respuesta adaptativa
@@ -73,7 +142,8 @@ window.setCombosPreviewMode = function(mode) {
  * para máxima legibilidad y responsividad sin amontonamiento
  */
 function createComboCardHTML(combo) {
-  const includedItemsText = combo.items.map(i => i.name).join(", ");
+  const items = combo.items || [];
+  const includedItemsText = items.map(i => i.name).join(", ");
   const waMsg = CONFIG.whatsappTemplates.comboQuote(combo.title, combo.sku, includedItemsText);
   const waLink = getWhatsAppLink(waMsg);
 
@@ -125,7 +195,8 @@ function createComboCardHTML(combo) {
  * mostrándose una debajo de otra con espacio amplio
  */
 function createPromotionHeroCardHTML(combo) {
-  const includedItemsText = combo.items.map(i => i.name).join(", ");
+  const items = combo.items || [];
+  const includedItemsText = items.map(i => i.name).join(", ");
   const waMsg = CONFIG.whatsappTemplates.comboQuote(combo.title, combo.sku, includedItemsText);
   const waLink = getWhatsAppLink(waMsg);
 
@@ -352,15 +423,19 @@ function renderCombos() {
     combosCarouselResizeHandler = null;
   }
 
-  let combos = [...COMBOS_DATA];
+  const rawSource = (liveCombosData && liveCombosData.length > 0)
+    ? liveCombosData
+    : (typeof COMBOS_DATA !== "undefined" ? COMBOS_DATA : []);
+
+  let combos = rawSource.map(normalizeComboForIndex).filter(Boolean);
   if (currentCombosPreviewMode === 1 || currentCombosPreviewMode === "1") {
-    combos = [COMBOS_DATA[0]];
+    combos = [combos[0]].filter(Boolean);
   } else if (currentCombosPreviewMode === 2 || currentCombosPreviewMode === "2") {
-    combos = COMBOS_DATA.slice(0, 2);
+    combos = combos.slice(0, 2);
   } else if (currentCombosPreviewMode === 3 || currentCombosPreviewMode === "3") {
-    combos = COMBOS_DATA.slice(0, 3);
+    combos = combos.slice(0, 3);
   } else if (currentCombosPreviewMode === 4 || currentCombosPreviewMode === "4") {
-    combos = COMBOS_DATA.length >= 4 ? COMBOS_DATA : [...COMBOS_DATA, ...COMBOS_DATA].slice(0, 4);
+    combos = combos.length >= 4 ? combos : [...combos, ...combos].slice(0, 4);
   }
 
   const count = combos.length;
@@ -501,17 +576,97 @@ function getFeaturedAndTopRatedProducts(sourceList = PRODUCTS_DATA, limit = MAX_
   return [...featured, ...fillers];
 }
 
-function renderCategoryFilters() {
-  const container = document.getElementById("categoriesFilterContainer");
-  if (!container || typeof CATEGORIES_DATA === "undefined") return;
+let liveProductsData = null; // Almacén de productos sincronizados en vivo con el backend
+let liveCategoriesData = null; // Almacén de categorías sincronizadas con el backend
 
-  container.innerHTML = CATEGORIES_DATA.map(cat => `
+/**
+ * Consulta los productos destacados y de mayor ranking directamente del backend Django
+ */
+async function loadFeaturedProductsFromBackend() {
+  try {
+    let prods = [];
+    if (window.DestacadosApi && typeof window.DestacadosApi.getFeaturedProducts === 'function') {
+      prods = await window.DestacadosApi.getFeaturedProducts();
+    }
+    if ((!prods || prods.length === 0) && window.ProductApi && typeof window.ProductApi.getProducts === 'function') {
+      prods = await window.ProductApi.getProducts({ featuredOnly: true });
+    }
+    if ((!prods || prods.length === 0) && window.ProductApi) {
+      prods = await window.ProductApi.getProducts();
+    }
+
+    if (Array.isArray(prods) && prods.length > 0) {
+      liveProductsData = prods.map(p => window.Api?.normalizeProduct ? window.Api.normalizeProduct(p) : p);
+
+      // Guardar en Storage para que el carrito y modal reconozcan los productos del backend
+      if (window.Storage && typeof window.Storage.saveProducts === 'function') {
+        window.Storage.saveProducts(liveProductsData);
+      }
+      renderProductsGrid();
+    }
+  } catch (err) {
+    console.warn('[Productos Backend] Error conectando con API, usando fallback:', err);
+  }
+}
+
+/**
+ * Consulta las categorías del backend y actualiza dinámicamente el carrusel de categorías
+ */
+async function loadCategoriesFromBackend() {
+  if (!window.ProductApi || typeof window.ProductApi.getCategories !== 'function') return;
+  try {
+    const cats = await window.ProductApi.getCategories();
+    if (Array.isArray(cats) && cats.length > 0) {
+      liveCategoriesData = cats.map(c => window.Api?.normalizeCategory ? window.Api.normalizeCategory(c) : c);
+      renderDynamicCategoriesShowcase(liveCategoriesData);
+      renderCategoryFilters(liveCategoriesData);
+    }
+  } catch (err) {
+    console.warn('[Categorías Backend] Error obteniendo categorías:', err);
+  }
+}
+
+function renderDynamicCategoriesShowcase(categories) {
+  const track = document.getElementById("catCarouselTrack");
+  if (!track || !Array.isArray(categories) || categories.length === 0) return;
+
+  track.innerHTML = categories.map(cat => {
+    const catUrl = `./client/modules/product/product.html?cat=${encodeURIComponent(cat.slug || cat.id || cat.name)}`;
+    const imgUrl = cat.image || 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=700&q=80';
+    const catDesc = cat.description || `Línea completa de ${cat.name} con garantía directa de fábrica.`;
+
+    return `
+      <a href="${catUrl}" class="category-showcase-card" aria-label="Ver categoría ${cat.name}">
+        <img src="${imgUrl}" alt="${cat.name}" class="category-showcase-img" loading="lazy">
+        <div class="category-showcase-overlay"></div>
+        <div class="category-showcase-content">
+          <h3 class="category-showcase-title">${cat.name}</h3>
+          <p class="category-showcase-desc">${catDesc}</p>
+          <span class="category-showcase-btn">
+            <span>Ver categoría</span>
+          </span>
+        </div>
+      </a>
+    `;
+  }).join("");
+
+  if (typeof initCategoriesCarousel === 'function') {
+    initCategoriesCarousel();
+  }
+}
+
+function renderCategoryFilters(catsSource) {
+  const container = document.getElementById("categoriesFilterContainer");
+  const cats = catsSource || liveCategoriesData || (typeof CATEGORIES_DATA !== "undefined" ? CATEGORIES_DATA : []);
+  if (!container || !cats.length) return;
+
+  container.innerHTML = cats.map(cat => `
     <button 
       type="button"
-      class="category-filter-btn ${cat.id === currentCategoryFilter ? "active" : ""}"
-      onclick="filterByCategory('${cat.id}')"
+      class="category-filter-btn ${String(cat.id || cat.slug) === String(currentCategoryFilter) ? "active" : ""}"
+      onclick="filterByCategory('${cat.id || cat.slug}')"
     >
-      ${cat.name}
+      ${cat.name || cat.category_name}
     </button>
   `).join("");
 }
@@ -524,10 +679,37 @@ window.filterByCategory = function(catId) {
 
 function renderProductsGrid() {
   const container = document.getElementById("allProductsGrid");
-  if (!container || typeof PRODUCTS_DATA === "undefined") return;
+  if (!container) return;
+
+  const sourceData = (liveProductsData && liveProductsData.length > 0)
+    ? liveProductsData
+    : (typeof PRODUCTS_DATA !== "undefined" ? PRODUCTS_DATA : []);
+
+  if (!sourceData || sourceData.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <span class="material-symbols-outlined empty-state-icon">stars</span>
+        <h3 class="empty-state-title">No hay productos destacados disponibles</h3>
+        <p class="empty-state-text">Vuelve a consultar más tarde o visita nuestro catálogo general.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Filtrado de categoría si aplica
+  let candidateProducts = sourceData;
+  if (currentCategoryFilter && currentCategoryFilter !== 'all') {
+    candidateProducts = sourceData.filter(p => {
+      const pCat = String(p.category || p.categoryName || '').toLowerCase();
+      const pSub = String(p.subcategory || p.sub_category || '').toLowerCase();
+      const target = String(currentCategoryFilter).toLowerCase();
+      const inDetails = Array.isArray(p.categories_detail) && p.categories_detail.some(c => String(c.id).toLowerCase() === target || (c.category_name && c.category_name.toLowerCase() === target));
+      return pCat === target || pSub === target || inDetails;
+    });
+  }
 
   // Obtener la selección de productos destacados y más valorados (máximo 8 / 2 filas en pantallas grandes)
-  const displayProducts = getFeaturedAndTopRatedProducts(PRODUCTS_DATA, MAX_FEATURED_PRODUCTS);
+  const displayProducts = getFeaturedAndTopRatedProducts(candidateProducts, MAX_FEATURED_PRODUCTS);
 
   if (displayProducts.length === 0) {
     container.innerHTML = `
@@ -985,6 +1167,11 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTikTokGrid();
   renderFloatingDock();
   initCategoriesCarousel();
+
+  // Sincronización asíncrona en vivo con el Backend Django
+  loadCombosFromBackend();
+  loadFeaturedProductsFromBackend();
+  loadCategoriesFromBackend();
 
   // Cerrar modal al pulsar fuera de la tarjeta
   const modal = document.getElementById("productModal");

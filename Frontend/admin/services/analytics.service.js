@@ -1,5 +1,5 @@
 import { api } from '../../js/api.js';
-import { CONFIG } from '../../js/config.js';
+import { CONFIG } from '../../js/config.module.js';
 
 const MOCK_ANALYTICS = {
   top_products: [

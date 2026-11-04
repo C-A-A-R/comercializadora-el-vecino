@@ -105,6 +105,14 @@
   transform: scale(1);
 }
 
+/* En dispositivos táctiles y pantallas pequeñas, mantener el botón siempre visible */
+@media (hover: none), (max-width: 768px) {
+  .product-card-quick-view {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .product-card-quick-view:hover {
   background: var(--electric-blue);
   color: var(--pure-white);
@@ -220,8 +228,8 @@
 .btn-card-quote {
   height: 2.625rem;
   border-radius: var(--radius-md);
-  background: var(--neon-cyan);
-  color: var(--neon-cyan-text, var(--deep-obsidian));
+  background: #25D366;
+  color: #FFFFFF;
   font-family: var(--font-display);
   font-weight: var(--fw-bold);
   font-size: var(--font-size-sm);
@@ -230,15 +238,16 @@
   justify-content: center;
   gap: var(--space-2xs);
   text-decoration: none;
-  border: none;
+  border: 1px solid #1EBE5D;
   cursor: pointer;
-  box-shadow: var(--shadow-glow-cyan);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
   transition: var(--transition-fast);
 }
 
 .btn-card-quote:hover {
-  background: var(--neon-cyan-hover);
-  box-shadow: var(--shadow-glow-cyan-hover);
+  background: #1EBE5D;
+  border-color: #169c4b;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
   transform: translateY(-1px);
 }
 

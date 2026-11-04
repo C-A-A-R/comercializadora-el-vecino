@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               <span class="material-symbols-outlined text-[18px]">${f.icon}</span>
             </div>
             <div class="min-w-0 flex-1">
-              <span class="text-[10px] uppercase font-bold text-gray-500 tracking-wider block truncate">${f.label}</span>
+              <span class="text-xs uppercase font-bold text-gray-500 tracking-wider block truncate">${f.label}</span>
               <span class="text-xs font-bold text-deep-obsidian truncate block" title="${f.value}">${f.value}</span>
             </div>
           </div>
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (window.OrderService?.buildDirectProductQuoteUrl) {
         btnQuote.href = window.OrderService.buildDirectProductQuoteUrl(currentProduct, quantity);
       } else {
-        const phone = window.CONFIG?.WHATSAPP_PHONE || window.CONFIG?.whatsappNumber || '573001234567';
+        const phone = ((window.CONFIG?.WHATSAPP_PHONE || window.CONFIG?.whatsappNumber || '584129227264')).replace(/\D/g, '');
         const msg = `¡Hola Comercializadora EL VECINO! Me interesa solicitar cotización del equipo: *${currentProduct.name}*. Cantidad: ${quantity} unidad(es).`;
         btnQuote.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
       }

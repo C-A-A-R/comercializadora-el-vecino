@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    EL VECINO — SECCIÓN DE CONTACTO
    ========================================================= */
 
@@ -7,17 +7,18 @@
 --------------------------------------------------------- */
 
 :root {
-    --contact-primary: #0800FF;
-    --contact-secondary: #FF00A8;
+    --contact-primary: var(--electric-blue, #0800FF);
+    --contact-secondary: var(--neon-magenta, #FF00A8);
     --contact-tertiary: #9D0700;
-    --contact-quaternary: #00F0FF;
-    --contact-neutral: #0A0A0A;
+    --contact-quaternary: var(--neon-cyan, #00F0FF);
+    --contact-whatsapp: #25D366;
+    --contact-neutral: var(--deep-obsidian, #0A0A0A);
 
-    --contact-background: #F5F5F8;
-    --contact-white: #FFFFFF;
-    --contact-text: #1F1F1F;
-    --contact-text-light: #5F636D;
-    --contact-border: #E5E7EB;
+    --contact-background: var(--slate-surface, #F5F5F8);
+    --contact-white: var(--pure-white, #FFFFFF);
+    --contact-text: var(--text-main, #1F1F1F);
+    --contact-text-light: var(--text-muted, #5F636D);
+    --contact-border: var(--slate-border, #E5E7EB);
     --contact-shadow: rgba(10, 10, 10, 0.08);
 }
 
@@ -26,7 +27,7 @@
 --------------------------------------------------------- */
 
 .contact-hero {
-    background: #F5F5F8;
+    background: var(--contact-background);
     padding: 30px 0 16px;
 }
 
@@ -223,43 +224,50 @@
     transform: scale(1.07);
 }
 
+.contact-icon svg {
+    width: 38px;
+    height: 38px;
+    fill: currentColor;
+    display: block;
+}
+
 
 /* ---------------------------------------------------------
    WHATSAPP
 --------------------------------------------------------- */
 
 .whatsapp-card::before {
-    background: var(--contact-quaternary);
+    background: var(--contact-whatsapp);
 }
 
 .whatsapp-card {
-    border-top: 1px solid var(--contact-quaternary);
+    border-top: 1px solid var(--contact-whatsapp);
 }
 
 .whatsapp-card .contact-icon {
-    color: var(--contact-quaternary);
-    background: #EEEEFF;
+    color: var(--contact-whatsapp);
+    background: #E8F8EE;
 }
 
 .whatsapp-card h3 {
-    color: var(--contact-quaternary);
+    color: #1EBE5D;
 }
 
 .whatsapp-card .contact-link {
-    color: var(--contact-quaternary);
-    border-bottom-color: var(--contact-quaternary);
+    color: #1EBE5D;
+    border-bottom-color: var(--contact-whatsapp);
 }
 
 .whatsapp-card:hover {
-    border-color: var(--contact-quaternary);
+    border-color: var(--contact-whatsapp);
 }
 
 .whatsapp-card:hover .contact-icon {
     color: #FFFFFF;
-    background: var(--contact-quaternary);
+    background: var(--contact-whatsapp);
 
     box-shadow:
-        0 7px 18px rgba(8, 0, 255, 0.30);
+        0 7px 18px rgba(37, 211, 102, 0.35);
 }
 
 

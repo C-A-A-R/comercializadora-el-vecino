@@ -1,4 +1,4 @@
-import { formatUSD, formatCOP } from '../../../js/config.js';
+import { formatUSD, formatCOP } from '../../../js/config.module.js';
 
 export const ComboBuilder = {
   calculateTotals(selectedItems, comboPriceUsd, exchangeRate = 4200) {

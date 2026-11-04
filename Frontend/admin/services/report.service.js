@@ -1,4 +1,4 @@
-import { CONFIG } from '../../js/config.js';
+import { CONFIG } from '../../js/config.module.js';
 
 export const ReportService = {
   async downloadReport(endpoint, defaultFilename) {

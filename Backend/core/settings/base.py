@@ -29,6 +29,7 @@ BASE_APPS = [
 
 LOCAL_APPS = [
     'apps.base',
+    'apps.user',
     'apps.product',
     'apps.promotions',
     'apps.notifications',
@@ -137,7 +138,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# AUTH_USER_MODEL = 'usuarios.Usuario'
+AUTH_USER_MODEL = 'user.User'
 
 DATE_INPUT_FORMATS = [
     '%d-%m-%Y', 

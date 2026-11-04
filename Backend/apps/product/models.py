@@ -67,6 +67,8 @@ class Product(BaseModel):
     voltage = models.CharField('Voltaje', max_length=50, null=True, blank=True, help_text='Ej. 110V, 220V, 110V/220V')
     weight = models.DecimalField('Peso (kg)', max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     weight_type = models.CharField('Tipo de Peso / Clasificación', max_length=100, null=True, blank=True, help_text='Ej. Neto, Bruto, Embalado')
+    price = models.DecimalField('Precio', max_digits=12, decimal_places=2, default=0)
+    security = models.CharField('Seguridad', max_length=255, blank=True, default='')
     description = models.TextField('Descripción', null=True, blank=True)
     is_feature_product = models.BooleanField('Producto Destacado', default=False)
     height_cm = models.DecimalField('Alto (cm)', max_digits=10, decimal_places=2, default=0)

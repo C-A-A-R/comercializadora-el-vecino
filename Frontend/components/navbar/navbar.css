@@ -405,13 +405,30 @@
   line-height: 1;
 }
 
-.btn-header-quote {
+.btn-header-quote,
+.btn-whatsapp {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   padding: 0.45rem 0.85rem;
   white-space: nowrap;
   flex-shrink: 0;
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #1EBE5D !important;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35) !important;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-header-quote:hover,
+.btn-whatsapp:hover {
+  background: #1EBE5D !important;
+  border-color: #169c4b !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5) !important;
 }
 
 /* Botón Carrito en Navbar */

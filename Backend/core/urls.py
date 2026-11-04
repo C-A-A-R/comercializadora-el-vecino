@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/token/', LoginView.as_view(), name='token-obtain-pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 
+    path('api/user/', include('apps.user.api.routers')),
     path('api/', include('apps.product.api.routers')),
     path('api/promotions/', include('apps.promotions.api.routers')),
     path('api/notifications/', include('apps.notifications.api.routers')),
