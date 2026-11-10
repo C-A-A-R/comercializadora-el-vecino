@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   // Mount Global Navbar & Footer
   if (window.Navbar) window.Navbar.mount('#navbar-mount', 'catalogo');
-  if (window.Footer) window.Footer.mount('#footer-mount');
+  if (window.Footer) window.Footer.mount('#footer-mount', 'catalogo');
 
   // DOM Elements
   const productsContainer = document.getElementById('productsContainer');

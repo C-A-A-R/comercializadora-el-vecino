@@ -156,17 +156,18 @@ export const ReviewListView = {
       const isComplaint = Boolean(r.is_complaint);
       const isVisible = Boolean(r.is_visible);
       const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString() : 'Reciente';
+      const customerName = (r.customer_name && r.customer_name.trim()) ? r.customer_name.trim() : 'Cliente Verificado';
 
       return `
         <div class="bg-white rounded-2xl border ${isComplaint ? 'border-rose-200 bg-rose-50/20' : 'border-slate-border'} p-5 shadow-sm space-y-3 hover:border-blue-300 transition" id="review-card-${r.id}">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-border">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full ${isComplaint ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-electric-blue'} font-bold flex items-center justify-center text-sm flex-shrink-0">
-                ${(r.customer_name || 'C').charAt(0)}
+                ${customerName.charAt(0)}
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <h3 class="font-bold text-sm text-deep-obsidian">${r.customer_name}</h3>
+                  <h3 class="font-bold text-sm text-deep-obsidian">${customerName}</h3>
                   ${r.customer_city ? `<span class="text-[11px] text-gray-400 font-medium">(${r.customer_city})</span>` : ''}
                 </div>
                 <div class="flex flex-wrap items-center gap-1.5 text-xs text-gray-500 mt-0.5">
@@ -206,15 +207,30 @@ export const ReviewListView = {
 
           <!-- Barra de Acciones y Controles -->
           <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-            <!-- Switch para Mostrar/Ocultar Comentario -->
-            <div class="flex items-center gap-2">
-              ${Switch.render({
-        dataAction: 'toggle-review-visibility',
-        dataId: r.id,
-        checked: isVisible,
-        label: isVisible ? 'Visible en catálogo' : 'Oculto del catálogo',
-        labelClass: `text-xs font-bold ${isVisible ? 'text-emerald-700' : 'text-gray-500'}`
-      })}
+            <!-- Botón para Activar / Desactivar Visualización de Comentario -->
+            <div class="flex items-center gap-2.5">
+              <button 
+                type="button"
+                data-action="toggle-review-visibility" 
+                data-id="${r.id}" 
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm ${isVisible ? 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-300'}"
+                title="${isVisible ? 'Clic para ocultar del catálogo público' : 'Clic para activar y mostrar en el catálogo público'}"
+              >
+                <span class="material-symbols-outlined text-base">${isVisible ? 'visibility_off' : 'visibility'}</span>
+                <span>${isVisible ? 'Desactivar visualización' : 'Activar visualización'}</span>
+              </button>
+
+              ${isVisible ? `
+                <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Visible en catálogo
+                </span>
+              ` : `
+                <span class="inline-flex items-center gap-1 text-[11px] font-bold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full border border-gray-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                  Oculto del catálogo
+                </span>
+              `}
             </div>
 
             <!-- Botones de Acción: Reclamo/Conformidad y Eliminar -->

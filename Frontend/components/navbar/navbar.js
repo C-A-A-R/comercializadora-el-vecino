@@ -101,12 +101,58 @@ const Navbar = {
   },
 
   /**
+   * Detecta automáticamente la ruta activa analizando la URL actual o la sugerencia provista
+   * @param {string} [suggestedPath] - Ruta sugerida
+   * @returns {string} Ruta activa resuelta
+   */
+  determineActivePath(suggestedPath) {
+    let path = '';
+    let href = '';
+    try {
+      path = decodeURIComponent(window.location.pathname || '').toLowerCase().replace(/\\/g, '/');
+      href = decodeURIComponent(window.location.href || '').toLowerCase();
+    } catch (e) {
+      path = (window.location.pathname || '').toLowerCase().replace(/\\/g, '/');
+      href = (window.location.href || '').toLowerCase();
+    }
+
+    // 1. Auto-detección prioritaria mediante análisis de la URL/archivo actual
+    if (path.includes('categoria') || href.includes('categoria')) {
+      return 'categorias';
+    }
+    if (path.includes('promocion') || href.includes('promocion')) {
+      return 'promociones';
+    }
+    if (path.includes('catalogo') || path.includes('/product/') || path.includes('product.html') || path.includes('detail.html') || href.includes('catalogo')) {
+      return 'catalogo';
+    }
+    if (path.includes('destacado') || href.includes('destacado')) {
+      return 'destacados';
+    }
+    if (path.includes('tiktok') || path.includes('video') || href.includes('tiktok')) {
+      return 'tiktok';
+    }
+    if (path.includes('contacto') || href.includes('contacto')) {
+      return 'contacto';
+    }
+
+    // 2. Si la sugerencia explícita es distinta a 'inicio' y 'auto', respetarla
+    if (suggestedPath && suggestedPath !== 'inicio' && suggestedPath !== 'auto') {
+      return suggestedPath;
+    }
+
+    return 'inicio';
+  },
+
+  /**
    * Mounts the navbar into target selector or prepends to body
    * @param {string} selector - Selector of mounting element (default: '#navbar-mount')
-   * @param {string} activePath - Active route key: 'inicio' | 'promociones' | 'catalogo' | 'categorias' | 'destacados' | 'tiktok' | 'contacto'
+   * @param {string} activePath - Active route key: 'inicio' | 'promociones' | 'catalogo' | 'categorias' | 'destacados' | 'tiktok' | 'contacto' | 'auto'
    */
-  mount(selector = '#navbar-mount', activePath = 'inicio') {
-    this.activePath = activePath;
+  mount(selector = '#navbar-mount', activePath = 'auto') {
+    const resolvedPath = this.determineActivePath(activePath);
+    this.activePath = resolvedPath;
+    activePath = resolvedPath;
 
     // Calcular rutas relativas según el nivel de anidación de la pantalla actual
     const rootPrefix = this.getRootPrefix();

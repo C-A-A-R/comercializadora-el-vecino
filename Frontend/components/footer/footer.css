@@ -84,8 +84,10 @@
 }
 
 .footer-nav-links a:hover,
-.footer-nav-links a.text-neon-cyan {
-  color: var(--neon-cyan);
+.footer-nav-links a.text-neon-cyan,
+.footer-nav-links a.active {
+  color: var(--neon-cyan) !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.45);
 }
 
 .footer-bottom {

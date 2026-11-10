@@ -8,12 +8,26 @@ document.addEventListener("DOMContentLoaded", () => {
   initApp();
 });
 
+function getActiveSection() {
+  const path = (window.location.pathname || '').toLowerCase().replace(/\\/g, '/');
+  const href = (window.location.href || '').toLowerCase();
+
+  if (path.includes('categoria') || href.includes('categorias')) return 'categorias';
+  if (path.includes('promocion') || href.includes('promociones')) return 'promociones';
+  if (path.includes('catalogo') || path.includes('/product/') || path.includes('product.html') || path.includes('detail.html') || href.includes('catalogo')) return 'catalogo';
+  if (path.includes('destacado') || href.includes('destacados')) return 'destacados';
+  if (path.includes('tiktok') || path.includes('video') || href.includes('tiktok')) return 'tiktok';
+  if (path.includes('contacto') || href.includes('contacto')) return 'contacto';
+  return 'inicio';
+}
+
 function initApp() {
+  const activeSection = getActiveSection();
   if (window.Navbar && document.getElementById("navbar-mount")) {
-    window.Navbar.mount("#navbar-mount", "inicio");
+    window.Navbar.mount("#navbar-mount", activeSection);
   }
   if (window.Footer && document.getElementById("footer-mount")) {
-    window.Footer.mount("#footer-mount", "inicio");
+    window.Footer.mount("#footer-mount", activeSection);
   }
   renderBenefits();
   renderFeaturedProducts();

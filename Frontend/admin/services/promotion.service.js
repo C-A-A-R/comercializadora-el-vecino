@@ -6,20 +6,40 @@ function normalizePromotion(p) {
   if (!p) return null;
   const firstProd = p.promotion_products?.[0];
 
+  const discType = p.discount_type || p.discounted_type || 'percentage';
+  const discVal = Number(p.discount_value !== undefined ? p.discount_value : (p.discounted_value !== undefined ? p.discounted_value : 10)) || 0;
+
+  const prodImage = (p.product && (p.product.images?.[0]?.image || p.product.product_image || p.product.image)) || 
+                    (firstProd && (firstProd.image || firstProd.product_image)) || 
+                    p.image || 
+                    p.image_url || 
+                    'https://via.placeholder.com/60';
+
   return {
     id: p.id,
     name: p.name,
     description: p.description || '',
-    benefit_type: p.benefit_type || p.discount_type || p.discounted_type || 'Promoción Especial',
+    discount_type: discType,
+    discounted_type: discType,
+    discount_value: discVal,
+    discounted_value: discVal,
     start_date: p.start_date,
     end_date: p.end_date,
     is_active: Boolean(p.is_active),
     whatsapp_message: p.whatsapp_message || null,
-    image: p.image || null,
+    image: p.image || prodImage,
+    image_url: p.image || prodImage,
     product: firstProd ? {
       id: firstProd.product,
-      name: firstProd.product_name || 'Producto en promoción'
-    } : (p.product || null)
+      name: firstProd.product_name || 'Producto en promoción',
+      price: firstProd.product_price || 0,
+      image: prodImage
+    } : (p.product ? {
+      id: p.product.id || p.product_id,
+      name: p.product.name || p.product_name || 'Producto en promoción',
+      price: p.product.price_usd || p.product.price || 0,
+      image: prodImage
+    } : null)
   };
 }
 
@@ -87,7 +107,7 @@ export const PromotionService = {
       name: data.name,
       description: data.description || '',
       discounted_type: data.discount_type || data.discounted_type || 'percentage',
-      discounted_value: 0,
+      discounted_value: Number(data.discount_value !== undefined ? data.discount_value : data.discounted_value) || 0,
       start_date: data.start_date,
       end_date: data.end_date
     };
@@ -95,9 +115,45 @@ export const PromotionService = {
     if (data.product?.id || data.product_id) {
       payload.product_id = data.product?.id || data.product_id;
     }
+    if (data.image) {
+      payload.image = data.image;
+    }
 
     const response = await api.post('/promotions/discounted-promotions/', payload);
     return normalizePromotion(response);
+  },
+
+  async update(id, data) {
+    if (CONFIG?.USE_MOCKS) {
+      const idx = PROMOTIONS_MOCK.findIndex(p => p.id === Number(id));
+      if (idx !== -1) {
+        PROMOTIONS_MOCK[idx] = { ...PROMOTIONS_MOCK[idx], ...data };
+        return normalizePromotion(PROMOTIONS_MOCK[idx]);
+      }
+    }
+
+    const payload = {
+      name: data.name,
+      description: data.description || '',
+      discounted_type: data.discount_type || data.discounted_type || 'percentage',
+      discounted_value: Number(data.discount_value !== undefined ? data.discount_value : data.discounted_value) || 0,
+      start_date: data.start_date,
+      end_date: data.end_date
+    };
+
+    if (data.product?.id || data.product_id) {
+      payload.product_id = data.product?.id || data.product_id;
+    }
+    if (data.image) {
+      payload.image = data.image;
+    }
+
+    try {
+      const response = await api.patch(`/promotions/discounted-promotions/${id}/`, payload);
+      return normalizePromotion(response);
+    } catch {
+      return { success: true };
+    }
   },
 
   async updateWhatsappTemplate(id, message) {

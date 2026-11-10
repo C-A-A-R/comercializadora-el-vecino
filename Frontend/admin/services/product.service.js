@@ -33,6 +33,7 @@ function normalizeProduct(p) {
     is_active: p.is_deleted !== undefined ? !p.is_deleted : (p.is_active !== undefined ? p.is_active : true),
     category: primaryCategory,
     category_id: (p.categories && p.categories[0]) || primaryCategory?.id || '',
+    subcategory: p.subcategory || p.sub_category || '',
     description: p.description || '',
     product_image: mainImage,
     images: [{ image: mainImage }],
@@ -116,6 +117,7 @@ export const ProductService = {
       brand: data.brand || '',
       capacity: data.capacity || data.model || '',
       voltage: data.voltage || '110V',
+      subcategory: data.subcategory || '',
       price: data.price !== undefined 
         ? Number(data.price) 
         : (data.price_usd ? Number(data.price_usd) * 4200 : 0),
@@ -166,6 +168,15 @@ export const ProductService = {
       return { success: true, is_active: true };
     }
     return await api.patch(`/products/${id}/`, { is_active: true, is_deleted: false });
+  },
+
+  async delete(id) {
+    if (CONFIG?.USE_MOCKS) {
+      const idx = PRODUCTS_MOCK.findIndex(p => p.id === id || p.id === parseInt(id, 10));
+      if (idx !== -1) PRODUCTS_MOCK.splice(idx, 1);
+      return { success: true };
+    }
+    return await api.delete(`/products/${id}/`);
   },
 
   async toggleActive(id, isActive) {

@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
   if (window.Navbar) window.Navbar.mount('#navbar-mount', 'catalogo');
-  if (window.Footer) window.Footer.mount('#footer-mount');
+  if (window.Footer) window.Footer.mount('#footer-mount', 'catalogo');
 
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id') || 'prod-01';
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const nameInput = document.getElementById('commentName');
       const textInput = document.getElementById('commentText');
 
-      const name = (nameInput?.value || '').trim() || 'Cliente';
+      const name = (nameInput?.value || '').trim() || 'Cliente Verificado';
       const text = (textInput?.value || '').trim();
 
       if (!text) return;

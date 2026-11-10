@@ -43,8 +43,8 @@ export const ProductListView = {
           return `
             <div class="flex items-center gap-3">
               <img src="${imgUrl}" class="w-11 h-11 object-cover rounded-lg border border-slate-border flex-shrink-0" alt="${productName}" />
-              <div class="space-y-1">
-                <p class="font-semibold text-deep-obsidian text-sm leading-tight">${productName}</p>
+              <div class="space-y-0.5 min-w-0">
+                <p class="font-semibold text-deep-obsidian text-sm leading-tight truncate">${productName}</p>
                 <p class="text-xs text-gray-500">${row.brand || 'El Vecino'} ${row.model ? `| Mod: ${row.model}` : ''}</p>
                 ${complaintBadgeHtml ? `<div class="pt-0.5">${complaintBadgeHtml}</div>` : ''}
               </div>
@@ -54,10 +54,16 @@ export const ProductListView = {
       },
       { 
         key: 'category', 
-        label: 'Categoría', 
+        label: 'Categoría & Subcategoría', 
         render: (val, row) => {
           const catName = val?.name || row.category_name || (row.categories_detail && row.categories_detail[0]?.category_name) || '-';
-          return `<span class="px-2.5 py-1 bg-slate-surface border border-slate-border rounded-md text-xs font-medium text-gray-700">${catName}</span>`;
+          const subcat = row.subcategory || '';
+          return `
+            <div class="space-y-1">
+              <span class="px-2.5 py-1 bg-slate-surface border border-slate-border rounded-md text-xs font-semibold text-gray-700 block w-max">${catName}</span>
+              ${subcat ? `<span class="px-2 py-0.5 bg-blue-50/70 border border-blue-200/60 rounded text-[11px] font-medium text-electric-blue block w-max">${subcat}</span>` : ''}
+            </div>
+          `;
         }
       },
       { 
@@ -90,8 +96,9 @@ export const ProductListView = {
     ];
 
     this.actions = [
+      { name: 'view', label: 'Ver Detalles', icon: 'visibility' },
       { name: 'edit', label: 'Editar', icon: 'edit' },
-      { name: 'toggle-product-visibility', label: 'Mostrar / Esconder en Catálogo', icon: 'visibility' }
+      { name: 'delete', label: 'Borrar', icon: 'delete' }
     ];
 
     const categories = Array.from(
@@ -140,21 +147,37 @@ export const ProductListView = {
             </button>
           </div>
 
-          <div class="flex items-center gap-2.5">
-            <select id="product-category-filter" class="px-3 py-2.5 bg-slate-surface border border-slate-border rounded-lg text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:bg-white cursor-pointer transition">
+          <div class="flex items-center gap-2">
+            <select 
+              id="product-category-filter" 
+              class="px-3.5 py-2.5 bg-slate-surface border border-slate-border rounded-lg text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:bg-white transition cursor-pointer"
+            >
               <option value="">Todas las categorías</option>
               ${categoryOptionsHtml}
             </select>
-            
-            <span id="product-count-badge" class="px-3 py-2 bg-slate-surface border border-slate-border rounded-lg text-xs font-bold text-gray-600 whitespace-nowrap">
-              ${this.products.length} productos
-            </span>
           </div>
         </div>
 
-        <!-- Contenedor dinámico de Tabla -->
-        <div id="products-table-container">
+        <div id="product-table-container">
           ${tableComponent.render()}
+        </div>
+
+        <!-- MODAL PARA VER DETALLES DEL PRODUCTO -->
+        <div id="modal-product-detail" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+          <div class="bg-white rounded-2xl shadow-2xl border border-slate-border w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
+            <div class="p-5 border-b border-slate-border flex items-center justify-between bg-slate-50 sticky top-0 bg-white z-10">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-electric-blue text-xl">visibility</span>
+                <h3 class="font-display font-bold text-base text-deep-obsidian">Ficha Técnica del Producto</h3>
+              </div>
+              <button type="button" id="btn-close-product-detail" class="text-gray-400 hover:text-gray-700 p-1 rounded-lg">
+                <span class="material-symbols-outlined text-xl">close</span>
+              </button>
+            </div>
+            <div id="product-detail-modal-body" class="p-6">
+              <!-- Se inyecta dinámicamente -->
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -164,39 +187,47 @@ export const ProductListView = {
     const searchInput = document.getElementById('product-search-input');
     const categorySelect = document.getElementById('product-category-filter');
     const clearBtn = document.getElementById('product-search-clear');
-    const countBadge = document.getElementById('product-count-badge');
-    const container = document.getElementById('products-table-container');
 
     const query = (searchInput?.value || '').toLowerCase().trim();
-    const selectedCategory = categorySelect?.value || '';
+    const category = categorySelect?.value || '';
 
     if (clearBtn) {
-      clearBtn.classList.toggle('hidden', query.length === 0);
+      if (query.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
     }
 
-    this.products = this.allProducts.filter(item => {
-      const name = (item.name || item.product_name || '').toLowerCase();
-      const brand = (item.brand || '').toLowerCase();
-      const model = (item.model || '').toLowerCase();
-      const cat = (item.category?.name || item.category_name || '').toLowerCase();
+    this.products = this.allProducts.filter(product => {
+      const name = (product.name || product.product_name || '').toLowerCase();
+      const brand = (product.brand || '').toLowerCase();
+      const model = (product.model || product.capacity || '').toLowerCase();
+      const cat = (product.category?.name || product.category_name || '').toLowerCase();
+      const subcat = (product.subcategory || '').toLowerCase();
 
-      const matchesText = !query || name.includes(query) || brand.includes(query) || model.includes(query) || cat.includes(query);
-      const matchesCategory = !selectedCategory || (item.category?.name || item.category_name) === selectedCategory;
+      const matchesQuery = !query || 
+        name.includes(query) || 
+        brand.includes(query) || 
+        model.includes(query) || 
+        cat.includes(query) ||
+        subcat.includes(query);
 
-      return matchesText && matchesCategory;
+      const matchesCategory = !category || 
+        (product.category?.name === category) || 
+        (product.category_name === category);
+
+      return matchesQuery && matchesCategory;
     });
 
-    if (countBadge) {
-      countBadge.textContent = `${this.products.length} ${this.products.length === 1 ? 'producto' : 'productos'}`;
-    }
-
+    const container = document.getElementById('product-table-container');
     if (container) {
       if (this.products.length === 0) {
         container.innerHTML = `
-          <div class="bg-white rounded-xl border border-slate-border p-12 text-center shadow-sm">
-            <span class="material-symbols-outlined text-4xl text-gray-300 mb-2">search_off</span>
-            <p class="font-bold text-gray-700 text-sm">No se encontraron productos</p>
-            <p class="text-xs text-gray-500 mt-1">No hay productos que coincidan con "${query}". Intente con otro término o categoría.</p>
+          <div class="bg-white rounded-xl border border-slate-border p-12 text-center">
+            <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">search_off</span>
+            <p class="font-display font-bold text-gray-700 text-base">No se encontraron productos coincidentes</p>
+            <p class="text-xs text-gray-400 mt-1">Pruebe ajustando el término de búsqueda o seleccionando otra categoría.</p>
             <button id="btn-reset-filter" class="mt-4 px-3 py-1.5 text-xs font-semibold text-electric-blue bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition">
               Restablecer filtros
             </button>
@@ -214,6 +245,84 @@ export const ProductListView = {
     }
   },
 
+  showProductDetailModal(prod) {
+    const modal = document.getElementById('modal-product-detail');
+    const modalBody = document.getElementById('product-detail-modal-body');
+    if (!modal || !modalBody || !prod) return;
+
+    const imgUrl = (prod.images && prod.images[0]?.image) || prod.product_image || 'https://via.placeholder.com/200';
+    const catName = prod.category?.name || prod.category_name || '-';
+    const subcat = prod.subcategory || 'General';
+    const priceUsd = prod.price_usd ? `$${Number(prod.price_usd).toFixed(2)} USD` : 'A consultar';
+    const priceCop = prod.price ? `$${Number(prod.price).toLocaleString('es-CO')} COP` : '';
+
+    modalBody.innerHTML = `
+      <div class="space-y-6">
+        <div class="flex flex-col sm:flex-row gap-5 items-start">
+          <img src="${imgUrl}" alt="${prod.name}" class="w-full sm:w-44 h-44 object-cover rounded-xl border border-slate-border flex-shrink-0 shadow-sm" />
+          <div class="space-y-2 flex-1">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-electric-blue border border-blue-200">${catName}</span>
+              ${subcat ? `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">${subcat}</span>` : ''}
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${prod.is_active !== false ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'}">
+                ${prod.is_active !== false ? 'Visible en catálogo' : 'Oculto'}
+              </span>
+            </div>
+            <h2 class="text-xl font-bold text-deep-obsidian leading-tight">${prod.name}</h2>
+            <p class="text-xs text-gray-500 font-medium">Marca: <strong class="text-gray-800">${prod.brand || 'El Vecino'}</strong> ${prod.model ? `| Modelo: <strong class="text-gray-800">${prod.model}</strong>` : ''}</p>
+            <div class="pt-2">
+              <span class="text-xs text-gray-400 uppercase font-semibold tracking-wider block">Precio Referencial</span>
+              <span class="text-2xl font-black text-electric-blue">${priceUsd}</span>
+              ${priceCop ? `<span class="text-xs text-gray-500 ml-2">(${priceCop})</span>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-border text-xs">
+          <div>
+            <span class="text-gray-400 block font-semibold">Voltaje:</span>
+            <span class="font-bold text-gray-800">${prod.voltage || '110V'}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 block font-semibold">Capacidad:</span>
+            <span class="font-bold text-gray-800">${prod.capacity || prod.model || 'N/A'}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 block font-semibold">Stock:</span>
+            <span class="font-bold text-gray-800">${prod.stock ?? 10} unds</span>
+          </div>
+          <div>
+            <span class="text-gray-400 block font-semibold">Total Vistas:</span>
+            <span class="font-bold text-electric-blue">${Number(prod.total_views || 0).toLocaleString()}</span>
+          </div>
+        </div>
+
+        ${prod.description ? `
+          <div class="space-y-1">
+            <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider">Descripción Comercial</h4>
+            <p class="text-xs text-gray-600 bg-white p-3 rounded-lg border border-slate-border leading-relaxed">
+              ${prod.description}
+            </p>
+          </div>
+        ` : ''}
+
+        <div class="pt-4 border-t border-slate-border flex justify-between items-center">
+          <button type="button" id="btn-close-modal-detail" class="px-4 py-2 text-xs font-bold border border-slate-border text-gray-600 rounded-lg hover:bg-slate-100 transition">
+            Cerrar
+          </button>
+          <a href="#/products/edit/${prod.id}" class="px-5 py-2 text-xs font-bold bg-electric-blue text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-sm">edit</span>
+            <span>Editar este Producto</span>
+          </a>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    document.getElementById('btn-close-product-detail')?.addEventListener('click', () => modal.classList.add('hidden'));
+    document.getElementById('btn-close-modal-detail')?.addEventListener('click', () => modal.classList.add('hidden'));
+  },
+
   bindEvents() {
     const searchInput = document.getElementById('product-search-input');
     const categorySelect = document.getElementById('product-category-filter');
@@ -229,11 +338,29 @@ export const ProductListView = {
       this.filterProducts();
     });
 
+    // Cerrar modal al dar click fuera
+    const detailModal = document.getElementById('modal-product-detail');
+    detailModal?.addEventListener('click', (e) => {
+      if (e.target === detailModal) detailModal.classList.add('hidden');
+    });
+
     // Acciones de tabla
     if (this.documentEventsBound) return;
     this.documentEventsBound = true;
 
     document.addEventListener('click', async (e) => {
+      // 1. Ver Detalles del Producto (Modal)
+      const btnView = e.target.closest('[data-action="view"]');
+      if (btnView) {
+        const id = btnView.dataset.id || (this.products && this.products[btnView.dataset.index]?.id);
+        const prod = this.allProducts.find(p => String(p.id) === String(id));
+        if (prod) {
+          this.showProductDetailModal(prod);
+        }
+        return;
+      }
+
+      // 2. Editar Producto
       const btnEdit = e.target.closest('[data-action="edit"]');
       if (btnEdit) {
         const id = btnEdit.dataset.id || (this.products && this.products[btnEdit.dataset.index]?.id);
@@ -243,10 +370,40 @@ export const ProductListView = {
         return;
       }
 
+      // 3. Borrar Producto
+      const btnDelete = e.target.closest('[data-action="delete"]');
+      if (btnDelete) {
+        const id = btnDelete.dataset.id || (this.products && this.products[btnDelete.dataset.index]?.id);
+        const prod = this.allProducts.find(p => String(p.id) === String(id));
+        if (!prod) return;
+
+        const confirmed = await ConfirmDialog.show({
+          title: 'Borrar Producto',
+          message: `¿Está seguro de eliminar definitivamente "${prod.name || 'este producto'}"? El producto será borrado del catálogo del sistema.`,
+          confirmText: 'Borrar Producto',
+          cancelText: 'Cancelar',
+          type: 'danger'
+        });
+
+        if (confirmed && id) {
+          try {
+            await ProductService.delete(id);
+            this.allProducts = this.allProducts.filter(p => String(p.id) !== String(id));
+            Toast.show('Producto eliminado con éxito', 'success');
+            this.filterProducts();
+          } catch (err) {
+            console.error(err);
+            Toast.show('Error al eliminar el producto', 'error');
+          }
+        }
+        return;
+      }
+
+      // 4. Toggle Visibilidad (Mostrar / Esconder)
       const btnToggle = e.target.closest('[data-action="toggle-product-visibility"]') || e.target.closest('[data-action="deactivate"]');
       if (btnToggle) {
         const id = btnToggle.dataset.id || (this.products && this.products[btnToggle.dataset.index]?.id);
-        const prod = this.allProducts.find(p => p.id == id);
+        const prod = this.allProducts.find(p => String(p.id) === String(id));
         if (!prod) return;
 
         const isCurrentlyActive = prod.is_active !== false;

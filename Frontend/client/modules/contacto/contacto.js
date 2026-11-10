@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.Navbar) window.Navbar.mount('#navbar-mount', 'contacto');
-  if (window.Footer) window.Footer.mount('#footer-mount');
+  if (window.Footer) window.Footer.mount('#footer-mount', 'contacto');
 
   const form = document.getElementById('contactForm');
 

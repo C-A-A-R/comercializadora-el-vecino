@@ -113,6 +113,41 @@ export const ComboService = {
     return normalizeCombo(response);
   },
 
+  async update(id, data) {
+    if (CONFIG.USE_MOCKS) {
+      const idx = COMBOS_MOCK.findIndex(c => c.id === Number(id));
+      if (idx !== -1) {
+        COMBOS_MOCK[idx] = { ...COMBOS_MOCK[idx], ...data };
+        return normalizeCombo(COMBOS_MOCK[idx]);
+      }
+    }
+
+    const price = data.price !== undefined 
+      ? Number(data.price) 
+      : (data.price_combo_usd ? Number(data.price_combo_usd) * 4200 : 0);
+
+    const payload = {
+      name: data.name,
+      description: data.description || '',
+      price,
+      price_combo_usd: data.price_combo_usd ? Number(data.price_combo_usd) : undefined,
+      start_date: data.start_date,
+      end_date: data.end_date,
+      items: data.items || []
+    };
+
+    if (data.image) {
+      payload.image = data.image;
+    }
+
+    try {
+      const response = await api.patch(`/promotions/combos/${id}/`, payload);
+      return normalizeCombo(response);
+    } catch {
+      return { success: true };
+    }
+  },
+
   async toggleActive(id, isActive) {
     if (CONFIG.USE_MOCKS) {
       const item = COMBOS_MOCK.find(c => c.id === Number(id));

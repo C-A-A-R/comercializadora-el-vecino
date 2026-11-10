@@ -52,9 +52,9 @@ export const DashboardView = {
             <p class="text-sm text-gray-500">Supervisión general de la tienda, métricas clave y rendimiento del catálogo.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2.5">
-            <a href="#/banners" class="px-3.5 py-2 bg-purple-50 text-purple-700 hover:bg-purple-100 font-bold text-xs rounded-xl border border-purple-200 transition flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-base">view_carousel</span>
-              Banners de Portada
+            <a href="#/special-dates" class="px-3.5 py-2 bg-purple-50 text-purple-700 hover:bg-purple-100 font-bold text-xs rounded-xl border border-purple-200 transition flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">event_upcoming</span>
+              Fechas Especiales & Avisos
             </a>
             <a href="#/reviews" class="px-3.5 py-2 bg-amber-50 text-amber-800 hover:bg-amber-100 font-bold text-xs rounded-xl border border-amber-200 transition flex items-center gap-1.5">
               <span class="material-symbols-outlined text-base">rate_review</span>

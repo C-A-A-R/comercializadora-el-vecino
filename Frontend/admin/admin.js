@@ -2,6 +2,7 @@ import { Router } from './core/router.js';
 import { AuthGuard } from './core/guards.js';
 import { renderSidebar } from './components/layout/Sidebar.js';
 import { renderHeader, bindHeaderEvents } from './components/layout/Header.js';
+import { renderAdminFooter } from './components/layout/Footer.js';
 import { DashboardView } from './modules/dashboard/dashboard.view.js';
 import { ProductListView } from './modules/products/product-list.view.js';
 import { ProductFormView } from './modules/products/product-form.view.js';
@@ -9,7 +10,7 @@ import { CategoryListView } from './modules/categories/category-list.view.js';
 import { PromotionsHubView } from './modules/promotions/promotions-hub.view.js';
 import { PromotionFormView } from './modules/promotions/promotion-form.view.js';
 import { ComboFormView } from './modules/combos/combo-form.view.js';
-import { BannerListView } from './modules/banners/banner-list.view.js';
+import { SpecialDatesView } from './modules/special-dates/special-dates.view.js';
 import { ReviewListView } from './modules/reviews/review-list.view.js';
 import { ReportView } from './modules/reports/report.view.js';
 
@@ -35,11 +36,12 @@ const appTarget = document.getElementById('app');
 function buildShell(contentHtml) {
   return `
     ${renderSidebar()}
-    <div class="flex-1 flex flex-col min-w-0">
+    <div class="flex-1 flex flex-col min-w-0 min-h-screen">
       ${renderHeader()}
-      <main id="main-content" class="p-6 flex-1 overflow-y-auto">
+      <main id="main-content" class="p-4 md:p-6 flex-1 min-w-0 overflow-y-auto">
         ${contentHtml}
       </main>
+      ${renderAdminFooter()}
     </div>
   `;
 }
@@ -57,6 +59,16 @@ export class AsyncRouter extends Router {
     if (hash.startsWith('/products/edit/')) {
       routeKey = '/products/edit';
       paramId = hash.split('/products/edit/')[1];
+    } else if (hash.startsWith('/combos/edit/')) {
+      routeKey = '/combos/edit';
+      paramId = hash.split('/combos/edit/')[1];
+    } else if (hash.startsWith('/promotions/edit/')) {
+      routeKey = '/promotions/edit';
+      paramId = hash.split('/promotions/edit/')[1];
+    } else if (hash === '/banners' || hash.startsWith('/banners/')) {
+      // Redireccionar banners al panel principal
+      window.location.hash = '#/dashboard';
+      return;
     }
 
     const route = this.routes[routeKey] || this.routes['404'];
@@ -138,6 +150,14 @@ const routes = {
       PromotionFormView.bindEvents();
     }
   },
+  '/promotions/edit': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async (id) => buildShell(await PromotionFormView.render(id)),
+    afterRender: () => {
+      bindHeaderEvents();
+      PromotionFormView.bindEvents();
+    }
+  },
   '/combos': {
     guard: () => AuthGuard.checkAccess('admin'),
     renderAsync: async () => buildShell(await PromotionsHubView.render()),
@@ -154,12 +174,20 @@ const routes = {
       ComboFormView.bindEvents();
     }
   },
-  '/banners': {
+  '/combos/edit': {
     guard: () => AuthGuard.checkAccess('admin'),
-    renderAsync: async () => buildShell(await BannerListView.render()),
+    renderAsync: async (id) => buildShell(await ComboFormView.render(id)),
     afterRender: () => {
       bindHeaderEvents();
-      BannerListView.bindEvents();
+      ComboFormView.bindEvents();
+    }
+  },
+  '/special-dates': {
+    guard: () => AuthGuard.checkAccess('admin'),
+    renderAsync: async () => buildShell(await SpecialDatesView.render()),
+    afterRender: () => {
+      bindHeaderEvents();
+      SpecialDatesView.bindEvents();
     }
   },
   '/reviews': {
@@ -200,6 +228,35 @@ const routes = {
   }
 };
 
+/**
+ * Control del Drawer en pantallas móviles (responsive)
+ */
+function setupMobileDrawer() {
+  document.addEventListener('click', (e) => {
+    const openBtn = e.target.closest('#open-sidebar');
+    if (openBtn) {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (sidebar) sidebar.classList.remove('-translate-x-full');
+      if (backdrop) backdrop.classList.remove('hidden');
+      return;
+    }
+
+    const closeBtn = e.target.closest('#toggle-sidebar');
+    const backdropClick = e.target.id === 'sidebar-backdrop';
+    const navLink = e.target.closest('#sidebar nav a');
+
+    if (closeBtn || backdropClick || navLink) {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (sidebar && window.innerWidth < 768) {
+        sidebar.classList.add('-translate-x-full');
+      }
+      if (backdrop) backdrop.classList.add('hidden');
+    }
+  });
+}
+
 // Inicialización robusta del enrutador asíncrono
 function startAdminApp() {
   console.log('[admin.js] Ejecutando bootstrap del panel...');
@@ -207,6 +264,7 @@ function startAdminApp() {
     const router = new AsyncRouter(routes, appTarget);
     router.init();
     window.adminRouter = router;
+    setupMobileDrawer();
   }
 }
 

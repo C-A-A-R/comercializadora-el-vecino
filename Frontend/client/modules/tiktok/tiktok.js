@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
   if (window.Navbar) window.Navbar.mount('#navbar-mount', 'tiktok');
-  if (window.Footer) window.Footer.mount('#footer-mount');
+  if (window.Footer) window.Footer.mount('#footer-mount', 'tiktok');
 
   const container = document.getElementById('tiktokGrid');
 

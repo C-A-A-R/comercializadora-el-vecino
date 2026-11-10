@@ -166,10 +166,11 @@ export const PromotionsHubView = {
               <table class="w-full text-left border-collapse">
                 <thead>
                   <tr class="bg-slate-surface border-b border-slate-border text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    <th class="px-5 py-4 w-80">Combo e Identificador</th>
+                    <th class="px-5 py-4 w-72">Combo e Identificador</th>
                     <th class="px-5 py-4">Productos Incluidos</th>
-                    <th class="px-5 py-4 text-center w-36">Estado</th>
-                    <th class="px-5 py-4 text-right w-28">Acciones</th>
+                    <th class="px-5 py-4 text-center w-36">Precio Fijo</th>
+                    <th class="px-5 py-4 text-center w-28">Estado</th>
+                    <th class="px-5 py-4 text-right w-36">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="hub-combos-table-body" class="divide-y divide-slate-border text-sm text-deep-obsidian">
@@ -300,11 +301,13 @@ export const PromotionsHubView = {
               <table class="w-full text-left border-collapse">
                 <thead>
                   <tr class="bg-slate-surface border-b border-slate-border text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    <th class="px-5 py-4 w-72">Promoción</th>
-                    <th class="px-5 py-4 min-w-[200px]">Producto Asociado</th>
-                    <th class="px-5 py-4 w-52">Vigencia</th>
-                    <th class="px-5 py-4 text-center w-32">Estado</th>
-                    <th class="px-5 py-4 text-right w-44">Acciones</th>
+                    <th class="px-5 py-4 w-20 text-center">Imagen</th>
+                    <th class="px-5 py-4 w-60">Promoción</th>
+                    <th class="px-5 py-4 min-w-[180px]">Producto Asociado</th>
+                    <th class="px-5 py-4 w-36 text-center">Descuento</th>
+                    <th class="px-5 py-4 w-44">Vigencia</th>
+                    <th class="px-5 py-4 text-center w-28">Estado</th>
+                    <th class="px-5 py-4 text-right w-36">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="hub-promos-table-body" class="divide-y divide-slate-border text-sm text-deep-obsidian">
@@ -463,6 +466,129 @@ export const PromotionsHubView = {
           </div>
         </form>
       </dialog>
+
+      <!-- Modal Detalle / Ver Combo -->
+      <dialog id="modal-view-combo" class="rounded-2xl border border-slate-border shadow-2xl p-6 max-w-2xl w-full backdrop:bg-slate-900/50">
+        <div class="space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-border pb-3">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-electric-blue text-2xl">package_2</span>
+              <div>
+                <h3 class="font-bold text-lg text-deep-obsidian font-display" id="view-combo-name">Detalle del Combo</h3>
+                <span class="text-xs font-mono font-bold text-gray-500" id="view-combo-sku">CMB-00</span>
+              </div>
+            </div>
+            <button type="button" id="btn-close-view-combo" class="text-gray-400 hover:text-gray-600 p-1 rounded-full">
+              <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+            <div class="md:col-span-5 space-y-3">
+              <img id="view-combo-image" src="" alt="Combo" class="w-full h-48 object-cover rounded-xl border border-slate-border shadow-sm">
+              <div class="bg-slate-surface p-3.5 rounded-xl border border-slate-border space-y-1">
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Precio Fijo del Combo</span>
+                <p class="text-2xl font-mono font-bold text-emerald-600" id="view-combo-price">$0 USD</p>
+                <p class="text-[11px] text-gray-400">Precio cerrado por paquete</p>
+              </div>
+              <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                <span class="text-[10px] font-bold text-electric-blue uppercase tracking-wider">Descripción</span>
+                <p class="text-xs text-gray-700 mt-1 leading-relaxed" id="view-combo-description">-</p>
+              </div>
+            </div>
+
+            <div class="md:col-span-7 space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider">Productos Incluidos</h4>
+                <span class="text-xs font-semibold text-gray-500" id="view-combo-items-count">0 artículos</span>
+              </div>
+              <div class="max-h-60 overflow-y-auto divide-y divide-slate-border border border-slate-border rounded-xl bg-slate-surface/40 p-2 space-y-1 custom-scrollbar" id="view-combo-items-list">
+                <!-- Inyectado dinámicamente -->
+              </div>
+              <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-800 space-y-1" id="view-combo-savings-box">
+                <!-- Ahorro inyectado dinámicamente -->
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-border">
+            <button type="button" id="btn-cancel-view-combo" class="px-4 py-2 border border-slate-border text-gray-600 rounded-lg text-xs font-bold hover:bg-slate-surface transition">
+              Cerrar
+            </button>
+            <a id="btn-edit-from-view-combo" href="#" class="px-4 py-2 bg-electric-blue hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">edit</span>
+              Editar Este Combo
+            </a>
+          </div>
+        </div>
+      </dialog>
+
+      <!-- Modal Detalle / Ver Promoción -->
+      <dialog id="modal-view-promo" class="rounded-2xl border border-slate-border shadow-2xl p-6 max-w-lg w-full backdrop:bg-slate-900/50">
+        <div class="space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-border pb-3">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-electric-blue text-2xl">sell</span>
+              <div>
+                <h3 class="font-bold text-lg text-deep-obsidian font-display" id="view-promo-name">Detalle de Promoción</h3>
+                <span class="text-xs font-semibold text-gray-500" id="view-promo-status-badge">Activa</span>
+              </div>
+            </div>
+            <button type="button" id="btn-close-view-promo" class="text-gray-400 hover:text-gray-600 p-1 rounded-full">
+              <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center gap-4 bg-slate-surface p-3.5 rounded-xl border border-slate-border">
+              <img id="view-promo-image" src="" alt="Promoción" class="w-16 h-16 object-cover rounded-xl border border-slate-border flex-shrink-0">
+              <div class="min-w-0 flex-1 space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Producto Destacado</span>
+                <p class="font-bold text-sm text-deep-obsidian truncate" id="view-promo-product-name">-</p>
+                <p class="text-xs text-gray-500" id="view-promo-product-sku">-</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-purple-50 p-3 rounded-xl border border-purple-200">
+                <span class="text-[10px] font-bold text-purple-700 uppercase tracking-wider">Descuento Aplicado</span>
+                <p class="text-xl font-mono font-bold text-purple-800 mt-0.5" id="view-promo-discount-val">0% OFF</p>
+                <p class="text-[11px] text-purple-600" id="view-promo-discount-type">Porcentual</p>
+              </div>
+
+              <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Precio Final Estimado</span>
+                <p class="text-xl font-mono font-bold text-emerald-800 mt-0.5" id="view-promo-final-price">$0 USD</p>
+                <p class="text-[11px] text-emerald-600">Precio con descuento</p>
+              </div>
+            </div>
+
+            <div class="bg-slate-surface p-3 rounded-xl border border-slate-border space-y-1.5 text-xs text-gray-700">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">Vigencia:</span>
+                <span class="font-bold text-deep-obsidian" id="view-promo-dates">-</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">Estado de Catálogo:</span>
+                <span class="font-bold" id="view-promo-active-label">Vigente</span>
+              </div>
+              <div class="pt-1 border-t border-slate-border text-gray-600 italic" id="view-promo-description">
+                -
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-border">
+            <button type="button" id="btn-cancel-view-promo" class="px-4 py-2 border border-slate-border text-gray-600 rounded-lg text-xs font-bold hover:bg-slate-surface transition">
+              Cerrar
+            </button>
+            <a id="btn-edit-from-view-promo" href="#" class="px-4 py-2 bg-electric-blue hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">edit</span>
+              Editar Esta Promoción
+            </a>
+          </div>
+        </div>
+      </dialog>
     `;
   },
 
@@ -470,7 +596,7 @@ export const PromotionsHubView = {
     if (!combos || combos.length === 0) {
       return `
         <tr>
-          <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+          <td colspan="5" class="px-6 py-12 text-center text-gray-500">
             <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">search_off</span>
             <p class="font-bold text-sm text-gray-700">No se encontraron combos</p>
             <p class="text-xs text-gray-400 mt-1">Intente con otro término o cree un nuevo combo.</p>
@@ -483,6 +609,7 @@ export const PromotionsHubView = {
       const imgUrl = combo.image_url || combo.image || 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=200';
       const sku = combo.sku || `CMB-${String(combo.id).padStart(2, '0')}`;
       const items = combo.items || [];
+      const fixedPrice = Number(combo.fixed_price_usd || combo.price || 0);
 
       const itemsBadgesHtml = items.map(item => {
         const prod = item.product || {};
@@ -521,6 +648,11 @@ export const PromotionsHubView = {
             </div>
           </td>
           <td class="px-5 py-4 whitespace-nowrap text-center">
+            <span class="inline-flex items-center gap-1 font-mono font-bold text-sm text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+              $${fixedPrice.toLocaleString()} USD
+            </span>
+          </td>
+          <td class="px-5 py-4 whitespace-nowrap text-center">
             <div class="flex flex-col items-center gap-1">
               <label class="relative inline-flex items-center cursor-pointer">
                 <input 
@@ -538,10 +670,13 @@ export const PromotionsHubView = {
             </div>
           </td>
           <td class="px-5 py-4 whitespace-nowrap text-right">
-            <div class="flex items-center justify-end gap-1.5">
-              <button data-action="select-hub-whatsapp" data-id="${combo.id}" class="p-1.5 text-gray-500 hover:text-whatsapp-green hover:bg-green-50 rounded-lg transition" title="Configurar mensaje WhatsApp">
-                <span class="material-symbols-outlined text-lg">chat</span>
+            <div class="flex items-center justify-end gap-1">
+              <button data-action="view-hub-combo" data-id="${combo.id}" class="p-1.5 text-gray-500 hover:text-electric-blue hover:bg-blue-50 rounded-lg transition" title="Ver detalles del combo">
+                <span class="material-symbols-outlined text-lg">visibility</span>
               </button>
+              <a href="#/combos/edit/${combo.id}" class="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar combo">
+                <span class="material-symbols-outlined text-lg">edit</span>
+              </a>
               <button data-action="delete-hub-combo" data-id="${combo.id}" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Eliminar combo">
                 <span class="material-symbols-outlined text-lg">delete</span>
               </button>
@@ -556,7 +691,7 @@ export const PromotionsHubView = {
     if (!promotions || promotions.length === 0) {
       return `
         <tr>
-          <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+          <td colspan="7" class="px-6 py-12 text-center text-gray-500">
             <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">sell</span>
             <p class="font-bold text-sm text-gray-700">No hay promociones registradas</p>
             <p class="text-xs text-gray-400 mt-1">Cree una nueva promoción para destacar productos individuales.</p>
@@ -569,6 +704,7 @@ export const PromotionsHubView = {
 
     return promotions.map(promo => {
       const prodName = promo.product?.name || promo.product_name || 'Producto en promoción';
+      const promoImg = promo.image || promo.image_url || promo.product?.image || 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=200';
       const start = promo.start_date ? new Date(promo.start_date) : null;
       const end = promo.end_date ? new Date(promo.end_date) : null;
 
@@ -587,9 +723,24 @@ export const PromotionsHubView = {
       const startStr = start ? start.toLocaleDateString() : '-';
       const endStr = end ? end.toLocaleDateString() : '-';
 
+      const isFixed = promo.discount_type === 'fixed';
+      const discountText = isFixed 
+        ? `-$${Number(promo.discount_value || 0).toLocaleString()} USD` 
+        : `${promo.discount_value || promo.discount_percentage || 0}% OFF`;
+
       return `
         <tr class="hover:bg-slate-surface/40 transition">
-          <!-- 1. Promoción -->
+          <!-- 1. Imagen -->
+          <td class="px-5 py-4 whitespace-nowrap text-center">
+            <img 
+              src="${promoImg}" 
+              alt="${promo.name}" 
+              class="w-12 h-12 object-cover rounded-xl border border-slate-border mx-auto shadow-xs" 
+              onerror="this.src='https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=200'" 
+            />
+          </td>
+
+          <!-- 2. Promoción -->
           <td class="px-5 py-4">
             <div class="space-y-0.5">
               <p class="font-bold text-deep-obsidian text-sm">${promo.name}</p>
@@ -597,12 +748,19 @@ export const PromotionsHubView = {
             </div>
           </td>
 
-          <!-- 2. Producto Asociado -->
+          <!-- 3. Producto Asociado -->
           <td class="px-5 py-4 font-semibold text-gray-800 text-xs">
             ${prodName}
           </td>
 
-          <!-- 3. Vigencia -->
+          <!-- 4. Descuento -->
+          <td class="px-5 py-4 whitespace-nowrap text-center">
+            <span class="inline-flex items-center gap-1 text-xs font-bold ${isFixed ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-purple-50 text-purple-700 border-purple-200'} px-2.5 py-1 rounded-lg border font-mono">
+              ${discountText}
+            </span>
+          </td>
+
+          <!-- 5. Vigencia -->
           <td class="px-5 py-4 whitespace-nowrap">
             <div class="space-y-1">
               <div class="flex items-center gap-1.5 text-xs text-gray-700">
@@ -613,7 +771,7 @@ export const PromotionsHubView = {
             </div>
           </td>
 
-          <!-- 4. Estado (Pausar / Activar Switch Toggle) -->
+          <!-- 6. Estado (Pausar / Activar Switch Toggle) -->
           <td class="px-5 py-4 whitespace-nowrap text-center">
             <div class="flex flex-col items-center gap-1">
               <label class="relative inline-flex items-center cursor-pointer">
@@ -632,25 +790,34 @@ export const PromotionsHubView = {
             </div>
           </td>
 
-          <!-- 5. Acciones (WhatsApp / Poner en Vigencia / Eliminar) -->
+          <!-- 7. Acciones (Ver / Editar / Vigencia / Eliminar) -->
           <td class="px-5 py-4 whitespace-nowrap text-right">
             <div class="flex items-center justify-end gap-1">
-              <!-- Botón Configurar WhatsApp -->
+              <!-- Botón Ver Promoción -->
               <button 
-                data-action="select-hub-promo-whatsapp" 
+                data-action="view-hub-promo" 
                 data-id="${promo.id}" 
-                class="p-1.5 text-gray-500 hover:text-whatsapp-green hover:bg-green-50 rounded-lg transition" 
-                title="Configurar mensaje de WhatsApp para esta promoción"
+                class="p-1.5 text-gray-500 hover:text-electric-blue hover:bg-blue-50 rounded-lg transition" 
+                title="Ver detalles de la promoción"
               >
-                <span class="material-symbols-outlined text-lg">chat</span>
+                <span class="material-symbols-outlined text-lg">visibility</span>
               </button>
+
+              <!-- Botón Editar Promoción -->
+              <a 
+                href="#/promotions/edit/${promo.id}" 
+                class="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" 
+                title="Editar promoción"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span>
+              </a>
 
               <!-- Botón Poner en Vigencia / Renovar -->
               <button 
                 data-action="renew-hub-promo" 
                 data-id="${promo.id}" 
                 data-name="${promo.name}" 
-                class="px-2.5 py-1 text-xs font-bold text-electric-blue bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition flex items-center gap-1" 
+                class="px-2 py-1 text-xs font-bold text-electric-blue bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition flex items-center gap-1" 
                 title="Poner en vigencia / Extender fecha"
               >
                 <span class="material-symbols-outlined text-sm">event_repeat</span>
@@ -893,6 +1060,24 @@ export const PromotionsHubView = {
         return;
       }
 
+      // Ver Combo
+      const btnViewCombo = e.target.closest('[data-action="view-hub-combo"]');
+      if (btnViewCombo) {
+        const id = btnViewCombo.dataset.id;
+        const combo = this.allCombos.find(c => c.id == id);
+        if (combo) this.openComboDetailModal(combo);
+        return;
+      }
+
+      // Ver Promoción
+      const btnViewPromo = e.target.closest('[data-action="view-hub-promo"]');
+      if (btnViewPromo) {
+        const id = btnViewPromo.dataset.id;
+        const promo = this.allPromotions.find(p => p.id == id);
+        if (promo) this.openPromoDetailModal(promo);
+        return;
+      }
+
       const btnDelCombo = e.target.closest('[data-action="delete-hub-combo"]');
       if (btnDelCombo) {
         const id = btnDelCombo.dataset.id;
@@ -966,6 +1151,16 @@ export const PromotionsHubView = {
 
     btnCloseRenew?.addEventListener('click', () => modalRenew?.close());
     btnCancelRenew?.addEventListener('click', () => modalRenew?.close());
+
+    // Modal Ver Combo
+    const modalViewCombo = document.getElementById('modal-view-combo');
+    document.getElementById('btn-close-view-combo')?.addEventListener('click', () => modalViewCombo?.close());
+    document.getElementById('btn-cancel-view-combo')?.addEventListener('click', () => modalViewCombo?.close());
+
+    // Modal Ver Promoción
+    const modalViewPromo = document.getElementById('modal-view-promo');
+    document.getElementById('btn-close-view-promo')?.addEventListener('click', () => modalViewPromo?.close());
+    document.getElementById('btn-cancel-view-promo')?.addEventListener('click', () => modalViewPromo?.close());
 
     document.querySelectorAll('.renew-days-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1158,5 +1353,144 @@ export const PromotionsHubView = {
       .replace(/{producto}/g, prodName)
       .replace(/{beneficio}/g, benefit)
       .replace(/{vigencia}/g, validez);
+  },
+
+  openComboDetailModal(combo) {
+    const modal = document.getElementById('modal-view-combo');
+    if (!modal) return;
+
+    const sku = combo.sku || `CMB-${String(combo.id).padStart(2, '0')}`;
+    const fixedPrice = Number(combo.fixed_price_usd || combo.price || 0);
+    const imgUrl = combo.image_url || combo.image || 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=600';
+    const items = combo.items || [];
+
+    const nameEl = document.getElementById('view-combo-name');
+    const skuEl = document.getElementById('view-combo-sku');
+    const imgEl = document.getElementById('view-combo-image');
+    const priceEl = document.getElementById('view-combo-price');
+    const descEl = document.getElementById('view-combo-description');
+    const countEl = document.getElementById('view-combo-items-count');
+
+    if (nameEl) nameEl.textContent = combo.name;
+    if (skuEl) skuEl.textContent = sku;
+    if (imgEl) imgEl.src = imgUrl;
+    if (priceEl) priceEl.textContent = `$${fixedPrice.toLocaleString()} USD`;
+    if (descEl) descEl.textContent = combo.description || 'Sin descripción detallada';
+    if (countEl) countEl.textContent = `${items.length} ${items.length === 1 ? 'artículo' : 'artículos'}`;
+
+    let totalRetail = 0;
+    const itemsListEl = document.getElementById('view-combo-items-list');
+    if (itemsListEl) {
+      if (items.length === 0) {
+        itemsListEl.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">No hay productos asociados a este combo</p>';
+      } else {
+        itemsListEl.innerHTML = items.map(item => {
+          const prod = item.product || {};
+          const pName = prod.name || 'Producto';
+          const pSku = prod.sku || `SKU-${prod.id || 'N/A'}`;
+          const pPrice = Number(prod.price_usd || prod.price || 0);
+          const qty = item.quantity || 1;
+          const subtotal = pPrice * qty;
+          totalRetail += subtotal;
+
+          return `
+            <div class="p-2 flex items-center justify-between gap-2 text-xs">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-5 h-5 rounded bg-blue-100 text-electric-blue text-[11px] font-bold flex items-center justify-center flex-shrink-0">
+                  ${qty}x
+                </span>
+                <div class="min-w-0">
+                  <p class="font-bold text-deep-obsidian truncate">${pName}</p>
+                  <p class="text-[10px] text-gray-400 font-mono">${pSku}</p>
+                </div>
+              </div>
+              <div class="text-right flex-shrink-0">
+                <span class="font-mono font-bold text-gray-700">$${subtotal.toLocaleString()} USD</span>
+                <span class="block text-[10px] text-gray-400">($${pPrice.toLocaleString()} c/u)</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    const savingsBox = document.getElementById('view-combo-savings-box');
+    if (savingsBox) {
+      const savings = Math.max(0, totalRetail - fixedPrice);
+      const savingsPct = totalRetail > 0 ? Math.round((savings / totalRetail) * 100) : 0;
+      savingsBox.innerHTML = `
+        <div class="flex justify-between items-center font-bold">
+          <span>Suma individual productos:</span>
+          <span class="font-mono text-gray-600 line-through">$${totalRetail.toLocaleString()} USD</span>
+        </div>
+        <div class="flex justify-between items-center font-bold">
+          <span>Precio Fijo Combo:</span>
+          <span class="font-mono text-emerald-700 text-sm">$${fixedPrice.toLocaleString()} USD</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px] text-emerald-800 font-semibold pt-1 border-t border-emerald-300">
+          <span>Ahorro del cliente:</span>
+          <span class="font-mono font-bold">$${savings.toLocaleString()} USD (${savingsPct}% OFF)</span>
+        </div>
+      `;
+    }
+
+    const editBtn = document.getElementById('btn-edit-from-view-combo');
+    if (editBtn) editBtn.href = `#/combos/edit/${combo.id}`;
+
+    modal.showModal();
+  },
+
+  openPromoDetailModal(promo) {
+    const modal = document.getElementById('modal-view-promo');
+    if (!modal) return;
+
+    const prod = promo.product || {};
+    const prodName = prod.name || promo.product_name || 'Producto en promoción';
+    const prodSku = prod.sku || 'SKU-N/A';
+    const prodPrice = Number(prod.price_usd || prod.price || 0);
+    const promoImg = promo.image || promo.image_url || prod.image || 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=600';
+
+    const isFixed = promo.discount_type === 'fixed';
+    const discountVal = Number(promo.discount_value || promo.discount_percentage || 0);
+    let finalPrice = prodPrice;
+    if (isFixed) {
+      finalPrice = Math.max(0, prodPrice - discountVal);
+    } else {
+      finalPrice = Math.max(0, prodPrice * (1 - (discountVal / 100)));
+    }
+
+    const start = promo.start_date ? new Date(promo.start_date).toLocaleDateString() : 'Inmediata';
+    const end = promo.end_date ? new Date(promo.end_date).toLocaleDateString() : 'Por tiempo limitado';
+
+    const nameEl = document.getElementById('view-promo-name');
+    const badgeEl = document.getElementById('view-promo-status-badge');
+    const imgEl = document.getElementById('view-promo-image');
+    const prodNameEl = document.getElementById('view-promo-product-name');
+    const prodSkuEl = document.getElementById('view-promo-product-sku');
+    const discValEl = document.getElementById('view-promo-discount-val');
+    const discTypeEl = document.getElementById('view-promo-discount-type');
+    const finalPriceEl = document.getElementById('view-promo-final-price');
+    const datesEl = document.getElementById('view-promo-dates');
+    const activeLabelEl = document.getElementById('view-promo-active-label');
+    const descEl = document.getElementById('view-promo-description');
+
+    if (nameEl) nameEl.textContent = promo.name;
+    if (badgeEl) badgeEl.textContent = promo.is_active ? 'Activa / Visible' : 'Pausada';
+    if (imgEl) imgEl.src = promoImg;
+    if (prodNameEl) prodNameEl.textContent = prodName;
+    if (prodSkuEl) prodSkuEl.textContent = `${prodSku} · Precio regular: $${prodPrice.toLocaleString()} USD`;
+
+    if (discValEl) discValEl.textContent = isFixed ? `-$${discountVal.toLocaleString()} USD` : `${discountVal}% OFF`;
+    if (discTypeEl) discTypeEl.textContent = isFixed ? 'Monto fijo en dólares' : 'Descuento porcentual';
+    if (finalPriceEl) finalPriceEl.textContent = prodPrice > 0 ? `$${finalPrice.toLocaleString()} USD` : 'A cotizar';
+
+    if (datesEl) datesEl.textContent = `${start} → ${end}`;
+    if (activeLabelEl) activeLabelEl.textContent = promo.is_active ? 'Publicada en Catálogo' : 'Oculta / Pausada';
+    if (descEl) descEl.textContent = promo.description || 'Promoción especial por tiempo limitado.';
+
+    const editBtn = document.getElementById('btn-edit-from-view-promo');
+    if (editBtn) editBtn.href = `#/promotions/edit/${promo.id}`;
+
+    modal.showModal();
   }
 };
